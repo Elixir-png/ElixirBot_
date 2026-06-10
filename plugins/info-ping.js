@@ -1,4 +1,4 @@
-// Plugin by Elixir & Punisher & 888 Staff
+// Plugin by Elixir, Punisher & 888 Staff
 import fs from 'fs';
 import os from 'os';
 import { performance } from 'perf_hooks';
