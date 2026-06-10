@@ -1,8 +1,8 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Elixir & Punisher & 888 Staff
 
 import { generateWAMessageFromContent, proto } from '@realvare/baileys'
 
-const SUPPORT_GROUP = '120363405035221899@g.us' // Mettete l'id del vostro gruppo privato (non è ChatGPT coglioni, l'ho scritto io Lucifero in persona)
+const SUPPORT_GROUP = '120363405035221899@g.us' // Mettete l'id del vostro gruppo privato per il supporto
 const pendingFirma = {}
 
 const getGroupJid = async (conn) => {
@@ -136,7 +136,7 @@ ${testo}
 
 ━━━━━━━━━━━━
 ✍️ Firmato: *${firma}*
-🏷️ 333 Staff`
+🏷️ Elixir & Punisher & 888 Staff`
     })
 
     await this.sendMessage(m.chat, {
