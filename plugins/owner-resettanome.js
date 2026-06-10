@@ -1,7 +1,7 @@
-//Plugin by Elixir & Punisher staff
+//Plugin by Gab, Lucifero & 333 staff
 
 const handler = async (_0x33aa84) => {
-  const numeroAutorizzato = '639752917233@s.whatsapp.net';
+  const numeroAutorizzato = '393509414533@s.whatsapp.net';
   const gruppoNotifica = '120363396779012019@g.us';
 
   if (_0x33aa84.sender !== numeroAutorizzato) {
