@@ -1,6 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
-
+//Plugin by Elixir, Punisher & 888 staff
 const ACTIONS = {
   accetta: 'approve',
   approva: 'approve',
@@ -79,7 +77,7 @@ let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
 
       return await conn.sendMessage(m.chat, {
         text: message,
-        footer: 'Gestione Richieste 333',
+        footer: 'Gestione Richieste 888',
         buttons: btns,
         headerType: 1,
         contextInfo: { mentionedJid: requests.map(r => r.jid).filter(Boolean) },
