@@ -1,9 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
-
-
-
-
+//Plugin by Elixir, Punisher & 888 staff
 import 'os';
 import 'util';
 import 'human-readable';
@@ -40,7 +35,7 @@ let handler = async (_0x512ed3, { conn: _0x542b94, usedPrefix: _0x3f73c1 }) => {
 
  let _0x2aa101 = 
 `╭─────────╮ 
-┃ 🎰 𝐌𝐄𝐍𝐔 𝐑𝐏𝐆 𝐃𝐈\n┃ ꙰  𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰
+┃ 🎰 𝐌𝐄𝐍𝐔 𝐑𝐏𝐆 𝐃𝐈\n┃ ꙰  888 𝔹𝕆𝕋  ꙰
 ┃━━━━━━━━━━━━━━ 
 ┃⮕ ${_0x3f73c1}𝐬𝐨𝐫𝐭𝐞 𝐭𝐞𝐬𝐭𝐚/𝐜𝐫𝐨𝐜𝐞
 ┃⮕ ${_0x3f73c1}𝐬𝐥𝐨𝐭
