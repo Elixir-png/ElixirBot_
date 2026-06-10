@@ -1,7 +1,3 @@
-//Codice di config.js
-
-//Codice di config.js
-
 import { watchFile, unwatchFile } from 'fs'
 import { fileURLToPath, pathToFileURL } from 'url'
 import chalk from 'chalk'
@@ -16,11 +12,11 @@ const pkg = JSON.parse(await fs.promises.readFile(new URL('./package.json', impo
 const moduleCache = new NodeCache({ stdTTL: 300 });
 
 	
-global.gab = ['393882471151',]
+global.gab = ['393784409415',]
 global.owner = [
-  ['393294241699', 'Lucifero', true],
-  ['393892430108', 'Gab', true],
-  ['66621409462', 'Matte', true],
+  ['639752917233', 'Elixir VoIP', true],
+  ['79524931364', 'Punisher', true],
+  ['xxx', 'xxx', true],
 ]
 
 
