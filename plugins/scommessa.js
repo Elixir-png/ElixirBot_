@@ -1,6 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
-
+//Plugin by Elixir, Punisher & 888 staff
 const FOOTBALL_API_KEY = "a906e1a601624a628eb189ffe0b9a438"
 
 global.scommesseGame = global.scommesseGame || {}
