@@ -48,7 +48,7 @@ Tutti i link verranno eliminati automaticamente.`;
         },
         externalAdReply: {
           title: '『 𝐀𝐍𝐓𝐈 - 𝐋𝐈𝐍𝐊 』 𝐎𝐍',
-          body: 'Vai al canale 333',
+          body: 'Vai al canale 𝟴𝟴𝟴',
           mediaType: 1,
           thumbnail: profilePic 
             ? await (await fetch(profilePic)).buffer() 
@@ -88,7 +88,7 @@ I link sono ora consentiti nel gruppo.`;
         },
         externalAdReply: {
           title: '『 𝐀𝐍𝐓𝐈 - 𝐋𝐈𝐍𝐊 』 𝐎𝐅𝐅',
-          body: 'Vai al canale 333',
+          body: 'Vai al canale 𝟴𝟴𝟴',
           mediaType: 1,
           thumbnail: profilePic 
             ? await (await fetch(profilePic)).buffer() 
