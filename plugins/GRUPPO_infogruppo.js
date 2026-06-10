@@ -15,7 +15,7 @@ const handler = async (m, { conn }) => {
   }
 
   const msg = await conn.sendMessage(m.chat,{
-    text:`╭──〔𝟑𝟑𝟑 𝔹𝕆𝕋 𝐀𝐕𝐕𝐈𝐀𝐓𝐎〕──╮
+    text:`╭──〔𝟴𝟴𝟴 𝗕𝗢𝗧 𝐀𝐕𝐕𝐈𝐀𝐓𝐎〕──╮
 
 ⌛ 𝐀𝐯𝐯𝐢𝐨 𝐬𝐜𝐚𝐧𝐬𝐢𝐨𝐧𝐞 𝐠𝐫𝐮𝐩𝐩𝐨...
 
