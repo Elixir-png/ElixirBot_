@@ -1,4 +1,4 @@
-//Plugin by Elixir & Punisher & 888 Staff
+//Plugin by Gab, Lucifero & 333 staff
 
 let handler = async (m, { conn }) => {
 
@@ -7,9 +7,9 @@ let handler = async (m, { conn }) => {
 
 Se vuoi supportare lo sviluppo del bot e del progetto puoi fare una piccola donazione qui:
 
-👉 https://www.paypal.me/ElixirBoT85
+👉 https://www.paypal.me/GabWTcomm
 
-Grazie per il supporto da parte dello staff di Elixir 🙏`;
+Grazie per il supporto da parte dello staff di 333 🙏`;
 
   await conn.sendMessage(m.chat, { text });
 };

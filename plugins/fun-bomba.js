@@ -1,4 +1,4 @@
-//Plugin by Elixir & Punisher & 888 Staff
+//Plugin by Gab, Lucifero & 333 staff
 
 
 
@@ -35,15 +35,15 @@ let handler = async (m, { conn, text, command }) => {
 
         let pName = `@${m.sender.split('@')[0]}`;
         let startCaption = `╔════════════════════╗\n`;
-        startCaption += `║      *ELIXIR BOT - BOMBA*      ║\n`;
+        startCaption += `║      *333 BOT - BOMBA*      ║\n`;
         startCaption += `╚═══════════════════════╝\n\n`;
         startCaption += `💣 *BOMBA ATTIVATA!*\n\n`;
         startCaption += `👤 Vittima: ${pName}\n`;
         startCaption += `⏳ Tempo restante: *${durata}s*\n`;
         startCaption += `🧨 Usa: *passa @utente* o rispondi con *passa*\n`;
-        startCaption += `❌ ELIXIR BOT non può ricevere la bomba!`;
+        startCaption += `❌ 333 BOT non può ricevere la bomba!`;
 
-        return conn.sendMessage(chat, { text: startCaption, mentions: [m.sender], footer: 'ELIXIR BOT' }, { quoted: m });
+        return conn.sendMessage(chat, { text: startCaption, mentions: [m.sender], footer: '333 BOT' }, { quoted: m });
     }
 };
 
@@ -124,7 +124,7 @@ async function esplosione(chatId, conn, m) {
     await conn.sendMessage(chatId, { 
         text: finale, 
         mentions: [b.vittima, ...b.passaggi],
-        footer: '*ELIXIR BOT*',
+        footer: '*333 BOT*',
         interactiveButtons: playAgainButtons()
     });
 

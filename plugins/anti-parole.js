@@ -1,4 +1,4 @@
-// Plugin by Elixir & Punisher & 888 Staff
+// Plugin by Lucifero
 
 function escapeRegex(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')

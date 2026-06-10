@@ -1,4 +1,11 @@
-//Plugin by Elixir & Punisher & 888 Staff
+//Plugin by Gab, Lucifero & 333 staff
+
+
+
+
+
+
+
 import yts from 'yt-search';
 import fs from 'fs';
 import path from 'path';
@@ -16,7 +23,7 @@ const EMOJIS = {
   DELETE: '🗑️'
 };
 
-const BOT_SIGNATURE = 'Elixir⇝𝐁Ꮻ𝐓';
+const BOT_SIGNATURE = '333⇝𝐁Ꮻ𝐓';
 
 const DB_FOLDER = './database';
 const PLAYLIST_FILE = path.join(DB_FOLDER, 'Musica.json');
@@ -211,7 +218,7 @@ const handler = async (m, { conn, text, args, command }) => {
           message: {
             interactiveMessage: {
               body: { text: result.message },
-              footer: { text: 'ELIXIR BOT - Playlist' },
+              footer: { text: '333 BOT - Playlist' },
               header: {
                 hasMediaAttachment: false
               },
