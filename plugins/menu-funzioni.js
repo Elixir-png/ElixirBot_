@@ -1,7 +1,4 @@
-//Codice di menu-funzioni.js
-
-//Plugin by Gab, Lucifero & 333 staff
-
+//Plugin by Elixir, Punisher & 888 staff
 import fs from 'fs'
 
 let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
@@ -31,7 +28,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
     },
     message: {
       locationMessage: {
-        name: '⚙️ 𝐌𝐞𝐧𝐮 𝐅𝐮𝐧𝐳𝐢𝐨𝐧𝐢 𝟑𝟑𝟑 𝐁𝐨𝐭',
+        name: '⚙️ 𝐌𝐞𝐧𝐮 𝐅𝐮𝐧𝐳𝐢𝐨𝐧𝐢 888 𝐁𝐨𝐭',
         jpegThumbnail: imgBuffer.toString('base64'),
         vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;333;;;\nFN:333\nEND:VCARD'
       }
