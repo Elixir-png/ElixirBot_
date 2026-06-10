@@ -43,7 +43,7 @@ let handler = async (m, { conn }) => {
     griglia[1] = "🩸";
     griglia[2] = "🩸";
     premio = 15000;
-    risultato = "𝐉𝐀𝐂𝐊𝐏𝐎𝐓 𝟑𝟑𝟑!! 𝐇𝐀𝐈 𝐕𝐈𝐍𝐓𝐎 𝟏𝟓𝟎𝟎𝟎€";
+    risultato = "𝐉𝐀𝐂𝐊𝐏𝐎𝐓 𝟴𝟴𝟴!! 𝐇𝐀𝐈 𝐕𝐈𝐍𝐓𝐎 𝟏𝟓𝟎𝟎𝟎€";
     user.money += premio;
   }
  
@@ -63,7 +63,7 @@ let handler = async (m, { conn }) => {
   }
 
   let messaggio = `
-╔══『 ꙰  𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰ 』══╗
+╔══『 𝟴𝟴𝟴 𝗕𝗢𝗧 』══╗
 ┃
 ┃   ${griglia[0]}  │  ${griglia[1]}  │  ${griglia[2]}
 ┃━━━━━━━━━━━━━━
