@@ -1,4 +1,5 @@
-//Plugin by Elixir, Punisher & 888 staffimport 'os';
+//Plugin by Elixir, Punisher & 888 staff
+import 'os';
 import 'util';
 import 'human-readable';
 import '@realvare/baileys';
