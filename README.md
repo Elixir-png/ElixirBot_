@@ -122,7 +122,7 @@ Hai problemi? Ecco come ricevere aiuto:
 2. 🐛 Apri una [Issue](https://github.com/Elixir-png/ElixirBot_/issues)
 3. 💬 Unisciti al nostro [Canale WhatsApp](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
 4. 📱 Contattami su WhatsApp: [+63 975 291 7233](https://wa.me/639752917233)
-5. 📷 Seguimi su Instagram: [@insta_gqbri](https://instagram.com/insta_gqbri)
+5. 📷 Seguimi su Instagram: [@eli.xir_gg](https://instagram.com/eli.xir_gg)
 6. 💬 Unisciti al canale Telegram
 7. 🎮 Entra nel server Discord Punisher
 
