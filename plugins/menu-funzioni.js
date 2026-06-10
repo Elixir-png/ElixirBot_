@@ -24,7 +24,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
     key: {
       participants: '0@s.whatsapp.net',
       fromMe: false,
-      id: '333Funzioni'
+      id: '888Funzioni'
     },
     message: {
       locationMessage: {
