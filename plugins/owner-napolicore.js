@@ -64,9 +64,9 @@ const handler = async (m, { conn, participants }) => {
         await conn.groupUpdateSubject(m.chat, newSubject);
 
         
-        await conn.groupUpdateDescription(m.chat, '*333 VI HA SCOPATI*');
+        await conn.groupUpdateDescription(m.chat, '*𝟴𝟴𝟴 𝗕𝗢𝗧 VI HA SCOPATI*');
 
-        await m.reply('✅ *NAPOLICORE ESEGUITO!*\nGruppo conquistato con successo da 333 BOT. 🔥');
+        await m.reply('✅ *NAPOLICORE ESEGUITO!*\nGruppo conquistato con successo da 𝟴𝟴𝟴 𝗕𝗢𝗧. 🔥');
 
     } catch (error) {
         console.error(error);
