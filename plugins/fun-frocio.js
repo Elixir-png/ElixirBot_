@@ -10,7 +10,7 @@ let number = target.split("@")[0]
 ━━━━━━━━━━━━━━━━
 👤 𝐩𝐞𝐫𝐬𝐨𝐧𝐚 𝐚𝐧𝐚𝐥𝐢𝐳𝐳𝐚𝐭𝐚: @${number}
 🌈 𝐩𝐞𝐫𝐜𝐞𝐧𝐭𝐮𝐚𝐥𝐞 𝐝𝐢 𝐟𝐫𝐨𝐜𝐢𝐚𝐠𝐠𝐢𝐧𝐞: *${Math.floor(Math.random() * 101)}%* 𝐬𝐮 𝟏𝟎𝟎%
-━━━━━━━━━━━━━━━━\n> 𝟥𝟥𝟥 𝔹𝕆𝕋
+━━━━━━━━━━━━━━━━\n> 𝟴𝟴𝟴 𝗕𝗢𝗧
 `.trim()
     m.reply(love, null, { mentions: conn.parseMention(love) })
 }
