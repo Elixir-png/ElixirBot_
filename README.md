@@ -13,7 +13,7 @@
 
 [![WhatsApp Channel](https://img.shields.io/badge/WhatsApp_Channel-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
 [![GitHub](https://img.shields.io/badge/GitHub-Elixir--png-black?style=for-the-badge&logo=github)](https://github.com/Elixir-png)
-[![Instagram](https://img.shields.io/badge/Instagram-insta__gqbri-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/insta_gqbri)
+[![Instagram](https://img.shields.io/badge/Instagram-insta__elixir-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/eli.xir_gg)
 [![Telegram](https://img.shields.io/badge/Telegram-Channel-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](#)
 [![Discord](https://img.shields.io/badge/Discord-Punisher-5865F2?style=for-the-badge&logo=discord&logoColor=white)](#)
 
