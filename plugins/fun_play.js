@@ -63,7 +63,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
 ⌛️ 𝐒𝐜𝐚𝐫𝐢𝐜𝐨 𝐥’𝐚𝐮𝐝𝐢𝐨...
 
-> 𝟥𝟥𝟥 𝔹𝕆𝕋 𝐝𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐞𝐫
+> 𝟴𝟴𝟴 𝗕𝗢𝗧 𝐝𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐞𝐫
 `
     await m.reply(infoMsg)
 
