@@ -5,7 +5,7 @@ import path from 'path'
 
 const pendingStaffJoin = {}
 
-const STAFF_GROUP = "120363403774208578@g.us" 
+const STAFF_GROUP = "120363427251015414@g.us" 
 
 const isStaff = (jid) =>
   (global.db.data.pluginPerms?.[jid] ?? []).includes('staff')
