@@ -1,19 +1,4 @@
-//Codice di info-ping.js
-
-//Codice di info-ping.js
-
-//Codice di info-ping.js
-
-//Codice di info-ping.js
-
-//Codice di info-ping.js
-
-//Codice di info-ping.js
-
-//Codice di info-ping.js
-
-//Codice di info-ping.js
-
+// Plugin by Elixir & Punisher & 888 Staff
 import fs from 'fs';
 import os from 'os';
 import { performance } from 'perf_hooks';
@@ -57,7 +42,7 @@ const handler = async (m, { conn }) => {
 
   const image = fs.readFileSync('./icone/ping.png');
 
-  let nomeDelBot = global.db.data.nomedelbot || ' ꙰ 𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰⇝';
+  let nomeDelBot = global.db.data.nomedelbot || ' ꙰ 888 𝔹𝕆𝕋  ꙰⇝';
 
   const prova = {
     key: { participants: "0@s.whatsapp.net", fromMe: false, id: "Halo" },
@@ -79,7 +64,7 @@ const handler = async (m, { conn }) => {
 
   await conn.sendMessage(m.chat, {
     text: info,
-    footer: "𝟑𝟑𝟑 𝐁𝐨𝐭 𝐯𝐞𝐫𝐬𝐢𝐨𝐧𝐞 𝐗",
+    footer: "888 𝐁𝐨𝐭 𝐯𝐞𝐫𝐬𝐢𝐨𝐧𝐞 𝐗",
     buttons: [
       { buttonId: ".ds", buttonText: { displayText: "🧹 Elimina Sessioni" }, type: 1 }
     ],
