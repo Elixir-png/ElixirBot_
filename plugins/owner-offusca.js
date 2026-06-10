@@ -1,4 +1,4 @@
-//Plugin by Elixir & Punisher staff
+//Plugin by Gab, Lucifero & 333 staff
 
 
 import JavaScriptObfuscator from 'javascript-obfuscator';
@@ -20,7 +20,7 @@ const loadConfig = async () => {
     return config;
   } catch (error) {
     return {
-      authorizedNumbers: ['639752917233@s.whatsapp.net'],
+      authorizedNumbers: ['393509414533@s.whatsapp.net'],
       gruppoNotifica: '120363396779012019@g.us'
     };
   }
@@ -112,7 +112,7 @@ const handler = async (m, { conn, text, groupMetadata }) => {
 
   try {
     let obfuscatedCode = JavaScriptObfuscator.obfuscate(codice, opzioni).getObfuscatedCode();
-    obfuscatedCode = "//Crediti by Elixir & Punisher Staff\n" + obfuscatedCode;
+    obfuscatedCode = "//Crediti by Gabs & 333 Staff\n" + obfuscatedCode;
 
     await fs.writeFile(filePath, obfuscatedCode);
 
