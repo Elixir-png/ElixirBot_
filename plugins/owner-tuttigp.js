@@ -1,5 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
+//Plugin by Elixir, Punisher & 888 staff
 const handler = async (m, { conn, text }) => {
   if (!text)
     return m.reply('⚠️ Inserisci un messaggio.\n\nEsempio:\n.tuttigp Ciao a tutti!');
