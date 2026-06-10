@@ -15,7 +15,7 @@
 [![GitHub](https://img.shields.io/badge/GitHub-Elixir--png-black?style=for-the-badge&logo=github)](https://github.com/Elixir-png)
 [![Instagram](https://img.shields.io/badge/Instagram-insta__elixir-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/eli.xir_gg)
 [![Telegram](https://img.shields.io/badge/Telegram-Channel-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](#)
-[![Discord](https://img.shields.io/badge/Discord-Punisher-5865F2?style=for-the-badge&logo=discord&logoColor=white)](#)
+[![Discord](https://img.shields.io/badge/Discord-Elixir-5865F2?style=for-the-badge&logo=discord&logoColor=white)](#)
 
 [![Stars](https://img.shields.io/github/stars/Elixir-png/ElixirBot_?style=for-the-badge&logo=github&color=yellow)](https://github.com/Elixir-png/ElixirBot_/stargazers)
 [![Forks](https://img.shields.io/github/forks/Elixir-png/ElixirBot_?style=for-the-badge&logo=github&color=blue)](https://github.com/Elixir-png/ElixirBot_/network/members)
