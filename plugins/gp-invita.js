@@ -1,7 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
-
-
+//Plugin by Elixir, Punisher & 888 staff
 let handler = async (m, { conn, args, text, usedPrefix, command, participants }) => {
     if (!text) throw `𝐈𝐧𝐬𝐞𝐫𝐢𝐬𝐜𝐢 𝐢𝐥 𝐧𝐮𝐦𝐞𝐫𝐨 𝐚 𝐜𝐮𝐢 𝐢𝐧𝐯𝐢𝐚𝐫𝐞 𝐥’𝐢𝐧𝐯𝐢𝐭𝐨 𝐚𝐥 𝐠𝐫𝐮𝐩𝐩𝐨\n𝐄𝐬𝐞𝐦𝐩𝐢𝐨: *${usedPrefix + command}* 393508337404`;
 
