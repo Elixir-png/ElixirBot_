@@ -20,12 +20,12 @@ global.owner = [
 ]
 
 
-global.nomepack = '333'
-global.nomebot = ' ꙰ 𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰'
-global.wm = '333'
-global.autore = 'gab'
-global.dev = 'lucifero'
-global.testobot = `333`
+global.nomepack = '𝟴𝟴𝟴 𝗕𝗢𝗧'
+global.nomebot = '𝟴𝟴𝟴 𝗕𝗢𝗧'
+global.wm = '𝟴𝟴𝟴 𝗕𝗢𝗧'
+global.autore = 'Elixir'
+global.dev = 'The Punisher'
+global.testobot = `𝟴𝟴𝟴 𝗕𝗢𝗧`
 global.versione = pkg.version
 global.errore = '⚠️ *Errore inatteso!* Usa il comando `.ticket` per avvisare gli owner.'
 
