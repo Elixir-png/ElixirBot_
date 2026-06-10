@@ -1,5 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
+//Plugin by Elixir, Punisher & 888 staff
 let handler = async (m, { conn }) => {
   let user = global.db.data.users[m.sender]
   let money = user.money || 0
