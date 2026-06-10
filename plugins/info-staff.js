@@ -1,4 +1,3 @@
-//Codice di info-staff.js
 //Plugin by Elixir & Punisher & 888 Staff
 
 let handler = async (m, { conn }) => {
@@ -13,7 +12,7 @@ const text =
 ┃ • 𝐏𝐮𝐧𝐢𝐬𝐡𝐞𝐫: wa.me/79524931364
 ┃
 ┃ 🧑‍💻 𝐒𝐓𝐀𝐅𝐅
-┃ • 𝐀𝐫𝐭𝐲: wa.me/393701330693
+┃ • 𝗚𝗵𝗼𝘀𝘁: wa.me/212785655331
 ┃━━━━━━━━━━━━━━
 ┃ 🌐 𝐋𝐈𝐍𝐊 𝐈𝐍𝐒𝐓𝐀𝐆𝐑𝐀𝐌
 ┃ • 𝐄𝐥𝐢𝐱𝐢𝐫: https://instagram.com/eli.xir_gg
