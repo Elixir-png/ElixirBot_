@@ -396,7 +396,7 @@ Este proyecto está liberado bajo licencia [MIT](LICENSE)
 ### 🌟 Made with ❤️ by Elixir-png
 
 [![GitHub](https://img.shields.io/badge/GitHub-Elixir--png-black?style=for-the-badge&logo=github)](https://github.com/Elixir-png)
-[![WhatsApp](https://img.shields.io/badge/WhatsApp-Punisher-25D366?style=for-the-badge&logo=whatsapp)](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-888-Bot-25D366?style=for-the-badge&logo=whatsapp)](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
 [![Instagram](https://img.shields.io/badge/Instagram-insta__gqbri-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/insta_gqbri)
 
 **💻 JavaScript | Python Developer**
