@@ -53,7 +53,7 @@ async function handler(m, { conn }) {
   const tag = who.split('@')[0]
 
   const confirmText = `
-🏦 𝐁𝐀𝐍𝐂𝐀 𝟑𝟑𝟑
+🏦 𝐁𝐀𝐍𝐂𝐀 𝟴𝟴𝟴 
 
 💸 Stai per inviare: *€${count}*
 🏷️ IBAN: ${ibanTarget}
