@@ -2,7 +2,7 @@
 let handler = async (m, { conn }) => {
 
 const text = 
-`╭─────────╮\n┃ 𝐈𝐍𝐅𝐎 𝐒𝐓𝐀𝐅𝐅  ꙰ 888 𝔹𝕆𝕋  ꙰ 
+`╭─────────╮\n┃ 𝐈𝐍𝐅𝐎 𝐒𝐓𝐀𝐅𝐅 𝟴𝟴𝟴 𝗕𝗢𝗧
 ┃
 ┃ 👑 𝐎𝐖𝐍𝐄𝐑
 ┃ • 𝗘𝗹𝗶𝘅𝗶𝗿: wa.me/639752917233
@@ -45,8 +45,8 @@ text,
 mentions,
 contextInfo: {
 externalAdReply: {
-title: '𝐒𝐓𝐀𝐅𝐅  ꙰ 888 𝔹𝕆𝕋  ꙰',
-body: '𝐞𝐧𝐭𝐫𝐚 𝐧𝐞𝐥 𝐜𝐚𝐧𝐚𝐥𝐞 𝐝𝐢 888 𝐛𝐨𝐭!',
+title: '𝐒𝐓𝐀𝐅𝐅 𝟴𝟴𝟴 𝗕𝗢𝗧',
+body: '𝐞𝐧𝐭𝐫𝐚 𝐧𝐞𝐥 𝐜𝐚𝐧𝐚𝐥𝐞 𝐝𝐢 𝟴𝟴𝟴 𝗕𝗢𝗧!',
 sourceUrl: 'https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24',
 mediaType: 1,
 renderLargerThumbnail: true
