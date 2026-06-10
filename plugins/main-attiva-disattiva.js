@@ -1,4 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Elixir, Punisher & 888 staff
 
 import fetch from 'node-fetch';
 import fs from 'fs';
@@ -6,19 +6,19 @@ import fs from 'fs';
 let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isROwner }) => {
   const userName = m.pushName || 'Utente';
 
-  const imgBuffer = fs.readFileSync('icone/333.jpg');
+  const imgBuffer = fs.readFileSync('icone/888.jpg');
 
   const fake = {
     key: {
       participants: '0@s.whatsapp.net',
       fromMe: false,
-      id: '333Attiva'
+      id: '888Attiva'
     },
     message: {
       locationMessage: {
         name: '⚙️ 𝐒𝐢𝐬𝐭𝐞𝐦𝐚 𝐅𝐮𝐧𝐳𝐢𝐨𝐧𝐢',
         jpegThumbnail: imgBuffer.toString('base64'),
-        vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;333;;;\nFN:333\nEND:VCARD'
+        vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;888;;;\nFN:888\nEND:VCARD'
       }
     },
     participant: '0@s.whatsapp.net'
@@ -216,30 +216,30 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
   ];
 
   if (!args.length) {
-    const bot333 = 'icone/333.jpg';
+    const bot888 = 'icone/888.jpg';
     let cards = [
       {
-        image: { url: bot333 },
+        image: { url: bot888 },
         title: 'Impostazioni Admin',
         body: 'Gestisci le funzioni del gruppo selezionando attiva o disattiva.',
-        footer: '333 bot',
+        footer: '888 bot',
         buttons: [{ name: 'single_select', buttonParamsJson: JSON.stringify({ title: 'Impostazioni gruppo', sections: createSections(adminFeatures) }) }]
       }
     ];
 
     if (isOwner || isROwner) {
       cards.push({
-        image: { url: bot333 },
+        image: { url: bot888 },
         title: 'Impostazioni Owner',
         body: 'Gestisci le funzioni proprietario selezionando attiva o disattiva.',
-        footer: '333 bot',
+        footer: '888 bot',
         buttons: [{ name: 'single_select', buttonParamsJson: JSON.stringify({ title: 'Seleziona azione', sections: createSections(ownerFeatures) }) }]
       });
     }
 
     return conn.sendMessage(m.chat, {
       text: '*Sistema di gestione funzioni*',
-      footer: '333 bot',
+      footer: '888 bot',
       cards
     }, { quoted: fake });
   }
