@@ -1,10 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
-
-
-
-
-
+//Plugin by Elixir, Punisher & 888 staff
 let handler = async (m, { isOwner, isAdmin, conn, text, participants, args, usedPrefix, command, groupMetadata }) => {
     if (command === 'tagall' || command === 'marcar') {
         if (!(isAdmin || isOwner)) {
@@ -60,7 +54,7 @@ let handler = async (m, { isOwner, isAdmin, conn, text, participants, args, used
             teks += `\n➤ @${name}`
         }
 
-        teks += `\n𝐁𝐘  ꙰  𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰`;
+        teks += `\n𝐁𝐘  ꙰  888 𝔹𝕆𝕋  ꙰`;
 
         await conn.sendMessage(m.chat, {
             text: teks,
