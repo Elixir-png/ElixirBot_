@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌙 333-Bot
+# 🌙 888-Bot
 ### Next Generation WhatsApp Bot
 
 [![Italiano](https://img.shields.io/badge/🇮🇹_Italiano-blue?style=for-the-badge)](#-italiano) 
@@ -11,17 +11,17 @@
 
 ### ⚡ Powered by Advanced AI Technology
 
-[![WhatsApp Channel](https://img.shields.io/badge/WhatsApp_Channel-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h)
-[![GitHub](https://img.shields.io/badge/GitHub-GabWT333-black?style=for-the-badge&logo=github)](https://github.com/GabWT333)
+[![WhatsApp Channel](https://img.shields.io/badge/WhatsApp_Channel-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
+[![GitHub](https://img.shields.io/badge/GitHub-Elixir--png-black?style=for-the-badge&logo=github)](https://github.com/Elixir-png)
 [![Instagram](https://img.shields.io/badge/Instagram-insta__gqbri-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/insta_gqbri)
 [![Telegram](https://img.shields.io/badge/Telegram-Channel-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](#)
-[![Discord](https://img.shields.io/badge/Discord-Server-5865F2?style=for-the-badge&logo=discord&logoColor=white)](#)
+[![Discord](https://img.shields.io/badge/Discord-Punisher-5865F2?style=for-the-badge&logo=discord&logoColor=white)](#)
 
-[![Stars](https://img.shields.io/github/stars/GabWT333/Gab333?style=for-the-badge&logo=github&color=yellow)](https://github.com/GabWT333/Gab333/stargazers)
-[![Forks](https://img.shields.io/github/forks/GabWT333/Gab333?style=for-the-badge&logo=github&color=blue)](https://github.com/GabWT333/Gab333/network/members)
-[![Repo Size](https://img.shields.io/github/repo-size/GabWT333/Gab333?style=for-the-badge&logo=github&color=green)](https://github.com/GabWT333/Gab333)
-[![Open Source](https://img.shields.io/badge/Open_Source-❤️-ff69b4?style=for-the-badge)](https://github.com/GabWT333/Gab333)
-[![Maintained](https://img.shields.io/badge/Maintained-Yes-success?style=for-the-badge)](https://github.com/GabWT333/Gab333/graphs/commit-activity)
+[![Stars](https://img.shields.io/github/stars/Elixir-png/ElixirBot_?style=for-the-badge&logo=github&color=yellow)](https://github.com/Elixir-png/ElixirBot_/stargazers)
+[![Forks](https://img.shields.io/github/forks/Elixir-png/ElixirBot_?style=for-the-badge&logo=github&color=blue)](https://github.com/Elixir-png/ElixirBot_/network/members)
+[![Repo Size](https://img.shields.io/github/repo-size/Elixir-png/ElixirBot_?style=for-the-badge&logo=github&color=green)](https://github.com/Elixir-png/ElixirBot_)
+[![Open Source](https://img.shields.io/badge/Open_Source-❤️-ff69b4?style=for-the-badge)](https://github.com/Elixir-png/ElixirBot_)
+[![Maintained](https://img.shields.io/badge/Maintained-Yes-success?style=for-the-badge)](https://github.com/Elixir-png/ElixirBot_/graphs/commit-activity)
 
 <img src="https://qu.ax/j6ZJa" width="600"/>
 
@@ -60,19 +60,19 @@ Prima di iniziare, assicurati di avere:
 
 Crea una copia personale del bot sul tuo account GitHub:
 
-<a href="https://github.com/GabWT333/Gab333/fork">
+<a href="https://github.com/Elixir-png/ElixirBot_/fork">
   <img src="https://img.shields.io/badge/🍴_FORK_IL_REPOSITORY-black?style=for-the-badge&logo=github&logoColor=white" alt="Fork Repository"/>
 </a>
 
 #### ⚙️ STEP 3: Configurazione
 
-1. Vai al file [`config.js`](https://github.com/GabWT333/Gab333/blob/master/config.js)
+1. Vai al file [`config.js`](https://github.com/Elixir-png/ElixirBot_/blob/master/config.js)
 2. Clicca sull'icona della matita ✏️ per modificare
 3. Trova la riga con il numero del proprietario
-4. Inserisci il **tuo numero WhatsApp** (formato internazionale: +39 350 833 7404)
+4. Inserisci il **tuo numero WhatsApp** (formato internazionale: +63 975 291 7233)
 5. Salva le modifiche
 
-<a href="https://github.com/GabWT333/Gab333/blob/master/config.js">
+<a href="https://github.com/Elixir-png/ElixirBot_/blob/master/config.js">
   <img src="https://img.shields.io/badge/📝_MODIFICA_CONFIG.JS-blue?style=for-the-badge&logo=javascript" alt="Edit Config"/>
 </a>
 
@@ -92,8 +92,8 @@ pkg install git nodejs ffmpeg imagemagick yarn -y
 
 # Download del bot
 cd ~
-git clone https://github.com/TUO-USERNAME/Gab333.git
-cd Gab333
+git clone https://github.com/Elixir-png/ElixirBot_.git
+cd ElixirBot_
 
 # Installazione e avvio
 yarn install
@@ -118,13 +118,13 @@ yarn start
 
 Hai problemi? Ecco come ricevere aiuto:
 
-1. 📖 Controlla la [Wiki](https://github.com/GabWT333/Gab333/wiki)
-2. 🐛 Apri una [Issue](https://github.com/GabWT333/Gab333/issues)
-3. 💬 Unisciti al nostro [Canale WhatsApp](https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h)
-4. 📱 Contattami su WhatsApp: [+39 350 833 7404](https://wa.me/393508337404)
+1. 📖 Controlla la [Wiki](https://github.com/Elixir-png/ElixirBot_/wiki)
+2. 🐛 Apri una [Issue](https://github.com/Elixir-png/ElixirBot_/issues)
+3. 💬 Unisciti al nostro [Canale WhatsApp](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
+4. 📱 Contattami su WhatsApp: [+63 975 291 7233](https://wa.me/639752917233)
 5. 📷 Seguimi su Instagram: [@insta_gqbri](https://instagram.com/insta_gqbri)
 6. 💬 Unisciti al canale Telegram
-7. 🎮 Entra nel server Discord
+7. 🎮 Entra nel server Discord Punisher
 
 ---
 
@@ -147,7 +147,7 @@ Questo progetto è rilasciato sotto licenza [MIT](LICENSE)
 
 Se ti piace questo bot, lascia una ⭐ su GitHub!
 
-[![Star History](https://img.shields.io/github/stars/GabWT333/Gab333?style=social)](https://github.com/GabWT333/Gab333/stargazers)
+[![Star History](https://img.shields.io/github/stars/Elixir-png/ElixirBot_?style=social)](https://github.com/Elixir-png/ElixirBot_/stargazers)
 
 </details>
 
@@ -178,19 +178,19 @@ Before starting, make sure you have:
 
 Create a personal copy of the bot on your GitHub account:
 
-<a href="https://github.com/GabWT333/Gab333/fork">
+<a href="https://github.com/Elixir-png/ElixirBot_/fork">
   <img src="https://img.shields.io/badge/🍴_FORK_REPOSITORY-black?style=for-the-badge&logo=github&logoColor=white" alt="Fork Repository"/>
 </a>
 
 #### ⚙️ STEP 3: Configuration
 
-1. Go to the [`config.js`](https://github.com/GabWT333/Gab333/blob/master/config.js) file
+1. Go to the [`config.js`](https://github.com/Elixir-png/ElixirBot_/blob/master/config.js) file
 2. Click the pencil icon ✏️ to edit
 3. Find the line with the owner number
-4. Insert **your WhatsApp number** (international format: +39 350 833 7404)
+4. Insert **your WhatsApp number** (international format: +63 975 291 7233)
 5. Save changes
 
-<a href="https://github.com/GabWT333/Gab333/blob/master/config.js">
+<a href="https://github.com/Elixir-png/ElixirBot_/blob/master/config.js">
   <img src="https://img.shields.io/badge/📝_EDIT_CONFIG.JS-blue?style=for-the-badge&logo=javascript" alt="Edit Config"/>
 </a>
 
@@ -210,8 +210,8 @@ pkg install git nodejs ffmpeg imagemagick yarn -y
 
 # Download bot
 cd ~
-git clone https://github.com/YOUR-USERNAME/Gab333.git
-cd Gab333
+git clone https://github.com/Elixir-png/ElixirBot_.git
+cd ElixirBot_
 
 # Install and start
 yarn install
@@ -237,13 +237,13 @@ yarn start
 
 Having problems? Here's how to get help:
 
-1. 📖 Check the [Wiki](https://github.com/GabWT333/Gab333/wiki)
-2. 🐛 Open an [Issue](https://github.com/GabWT333/Gab333/issues)
-3. 💬 Join our [WhatsApp Channel](https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h)
-4. 📱 Contact me on WhatsApp: [+39 350 833 7404](https://wa.me/393508337404)
+1. 📖 Check the [Wiki](https://github.com/Elixir-png/ElixirBot_/wiki)
+2. 🐛 Open an [Issue](https://github.com/Elixir-png/ElixirBot_/issues)
+3. 💬 Join our [WhatsApp Channel](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
+4. 📱 Contact me on WhatsApp: [+63 975 291 7233](https://wa.me/639752917233)
 5. 📷 Follow me on Instagram: [@insta_gqbri](https://instagram.com/insta_gqbri)
 6. 💬 Join our Telegram channel
-7. 🎮 Join our Discord server
+7. 🎮 Join the Punisher Discord server
 
 ---
 
@@ -266,7 +266,7 @@ This project is released under [MIT](LICENSE) license
 
 If you like this bot, leave a ⭐ on GitHub!
 
-[![Star History](https://img.shields.io/github/stars/GabWT333/Gab333?style=social)](https://github.com/GabWT333/Gab333/stargazers)
+[![Star History](https://img.shields.io/github/stars/Elixir-png/ElixirBot_?style=social)](https://github.com/Elixir-png/ElixirBot_/stargazers)
 
 </details>
 
@@ -297,19 +297,19 @@ Antes de comenzar, asegúrate de tener:
 
 Crea una copia personal del bot en tu cuenta de GitHub:
 
-<a href="https://github.com/GabWT333/Gab333/fork">
+<a href="https://github.com/Elixir-png/ElixirBot_/fork">
   <img src="https://img.shields.io/badge/🍴_HACER_FORK-black?style=for-the-badge&logo=github&logoColor=white" alt="Fork Repository"/>
 </a>
 
 #### ⚙️ PASO 3: Configuración
 
-1. Ve al archivo [`config.js`](https://github.com/GabWT333/Gab333/blob/master/config.js)
+1. Ve al archivo [`config.js`](https://github.com/Elixir-png/ElixirBot_/blob/master/config.js)
 2. Haz clic en el icono del lápiz ✏️ para editar
 3. Encuentra la línea con el número del propietario
-4. Inserta **tu número de WhatsApp** (formato internacional: +39 350 833 7404)
+4. Inserta **tu número de WhatsApp** (formato internacional: +63 975 291 7233)
 5. Guarda los cambios
 
-<a href="https://github.com/GabWT333/Gab333/blob/master/config.js">
+<a href="https://github.com/Elixir-png/ElixirBot_/blob/master/config.js">
   <img src="https://img.shields.io/badge/📝_EDITAR_CONFIG.JS-blue?style=for-the-badge&logo=javascript" alt="Edit Config"/>
 </a>
 
@@ -329,8 +329,8 @@ pkg install git nodejs ffmpeg imagemagick yarn -y
 
 # Descargar el bot
 cd ~
-git clone https://github.com/TU-USUARIO/Gab333.git
-cd Gab333
+git clone https://github.com/Elixir-png/ElixirBot_.git
+cd ElixirBot_
 
 # Instalar e iniciar
 yarn install
@@ -356,13 +356,13 @@ yarn start
 
 ¿Tienes problemas? Aquí te decimos cómo obtener ayuda:
 
-1. 📖 Consulta la [Wiki](https://github.com/GabWT333/Gab333/wiki)
-2. 🐛 Abre un [Issue](https://github.com/GabWT333/Gab333/issues)
-3. 💬 Únete a nuestro [Canal de WhatsApp](https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h)
-4. 📱 Contáctame en WhatsApp: [+39 350 833 7404](https://wa.me/393508337404)
+1. 📖 Consulta la [Wiki](https://github.com/Elixir-png/ElixirBot_/wiki)
+2. 🐛 Abre un [Issue](https://github.com/Elixir-png/ElixirBot_/issues)
+3. 💬 Únete a nuestro [Canal de WhatsApp](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
+4. 📱 Contáctame en WhatsApp: [+63 975 291 7233](https://wa.me/639752917233)
 5. 📷 Sígueme en Instagram: [@insta_gqbri](https://instagram.com/insta_gqbri)
 6. 💬 Únete al canal de Telegram
-7. 🎮 Únete al servidor de Discord
+7. 🎮 Únete al servidor Discord de Punisher
 
 ---
 
@@ -385,7 +385,7 @@ Este proyecto está liberado bajo licencia [MIT](LICENSE)
 
 ¡Si te gusta este bot, deja una ⭐ en GitHub!
 
-[![Star History](https://img.shields.io/github/stars/GabWT333/Gab333?style=social)](https://github.com/GabWT333/Gab333/stargazers)
+[![Star History](https://img.shields.io/github/stars/Elixir-png/ElixirBot_?style=social)](https://github.com/Elixir-png/ElixirBot_/stargazers)
 
 </details>
 
@@ -393,16 +393,16 @@ Este proyecto está liberado bajo licencia [MIT](LICENSE)
 
 <div align="center">
 
-### 🌟 Made with ❤️ by GabWT333
+### 🌟 Made with ❤️ by Elixir-png
 
-[![GitHub](https://img.shields.io/badge/GitHub-GabWT333-black?style=for-the-badge&logo=github)](https://github.com/GabWT333)
-[![WhatsApp](https://img.shields.io/badge/WhatsApp-Channel-25D366?style=for-the-badge&logo=whatsapp)](https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h)
+[![GitHub](https://img.shields.io/badge/GitHub-Elixir--png-black?style=for-the-badge&logo=github)](https://github.com/Elixir-png)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-Punisher-25D366?style=for-the-badge&logo=whatsapp)](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
 [![Instagram](https://img.shields.io/badge/Instagram-insta__gqbri-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/insta_gqbri)
 
 **💻 JavaScript | Python Developer**
 
-📱 **WhatsApp:** +39 350 833 7404
+📱 **WhatsApp:** +63 975 291 7233
 
-**© 2024 333-Bot - All Rights Reserved**
+**© 2024 888-Bot Punisher - All Rights Reserved**
 
 </div>
