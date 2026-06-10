@@ -28,7 +28,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
     },
     message: {
       locationMessage: {
-        name: '⚙️ 𝐌𝐞𝐧𝐮 𝐅𝐮𝐧𝐳𝐢𝐨𝐧𝐢 888 𝐁𝐨𝐭',
+        name: '⚙️ 𝐌𝐞𝐧𝐮 𝐅𝐮𝐧𝐳𝐢𝐨𝐧𝐢 𝟴𝟴𝟴 𝗕𝗢𝗧',
         jpegThumbnail: imgBuffer.toString('base64'),
         vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;888;;;\nFN:888\nEND:VCARD'
       }
@@ -69,7 +69,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
   const menuFunzioniText =
 `╭─────────╮
 ┃ ⚙️ 𝐌𝐄𝐍𝐔 𝐅𝐔𝐍𝐙𝐈𝐎𝐍𝐈 𝐃𝐈
-┃ ꙰  888� 𝔹𝕆𝕋  ꙰
+┃  𝟴𝟴𝟴 𝗕𝗢𝗧
 ┃━━━━━━━━━━━━━━
 ┃ 🔧 𝐅𝐔𝐍𝐙𝐈𝐎𝐍𝐈 𝐆𝐑𝐔𝐏𝐏𝐎
 ┃━━━━━━━━━━━━━━
