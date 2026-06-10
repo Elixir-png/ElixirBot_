@@ -39,7 +39,7 @@ function getRarita(atk) {
   if (atk >= 2500) return { stars: "★★★★☆", label: "ULTRA RARA"  }
   if (atk >= 2000) return { stars: "★★★☆☆", label: "RARA"        }
   if (atk >= 1500) return { stars: "★★☆☆☆", label: "NON COMUNE"  }
-  return                { stars: "★☆☆☆☆", label: "COMUNE"      }
+  return                  { stars: "★☆☆☆☆", label: "COMUNE"      }
 }
 
 function statBar(val, max = 5000) {
