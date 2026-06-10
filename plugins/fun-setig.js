@@ -1,4 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Elixir & Punisher & 888 Staff
 
 import fetch from "node-fetch";
 
@@ -51,11 +51,11 @@ Usa ''.rimuoviig'' per rimuoverlo
       forwardedNewsletterMessageInfo: {
         newsletterJid: '120363341274693350@newsletter',
         serverMessageId: '',
-        newsletterName: global.nomebot || '333'
+        newsletterName: global.nomebot || 'Elixir'
       },
       externalAdReply: {
         title: 'Instagram configurato ✅',
-        body: 'Vai al canale 333',
+        body: 'Vai al canale Elixir',
         mediaType: 1,
         thumbnail: thumb,
         renderLargerThumbnail: false,
