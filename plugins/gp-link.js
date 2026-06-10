@@ -1,7 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
-
-
+//Plugin by Elixir, Punisher & 888 staff
 let handler = async (m, { conn, usedPrefix, command }) => {
     if (!m.isGroup) return;
 
@@ -27,13 +24,13 @@ let handler = async (m, { conn, usedPrefix, command }) => {
                 message: {
                     interactiveMessage: {
                         header: {
-                            title: "⚡️ 𝟑𝟑𝟑𝐁𝐎𝐓 • 𝐋𝐈𝐍𝐊",
+                            title: "⚡️ 888𝐁𝐎𝐓 • 𝐋𝐈𝐍𝐊",
                             hasMediaAttachment: false
                         },
                         body: {
                             text: `╭─────────╮  
 ┃ 📢 𝐋𝐈𝐍𝐊 𝐔𝐅𝐅𝐈𝐂𝐈𝐀𝐋𝐄
-┃ ꙰  𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰
+┃ ꙰  888 𝔹𝕆𝕋  ꙰
 ┃━━━━━━━━━━━━━━
 ┃⮕ 𝐆𝐫𝐮𝐩𝐩𝐨: ${groupName}
 ┃
@@ -43,7 +40,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 ╰─────────╯`
                         },
                         footer: {
-                            text: "💡 𝟑𝟑𝟑𝐁𝐎𝐓"
+                            text: "💡 888𝐁𝐎𝐓"
                         },
                         nativeFlowMessage: {
                             buttons: interactiveButtons
