@@ -241,7 +241,7 @@ Having problems? Here's how to get help:
 2. 🐛 Open an [Issue](https://github.com/Elixir-png/ElixirBot_/issues)
 3. 💬 Join our [WhatsApp Channel](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
 4. 📱 Contact me on WhatsApp: [+63 975 291 7233](https://wa.me/639752917233)
-5. 📷 Follow me on Instagram: [@insta_gqbri](https://instagram.com/insta_gqbri)
+5. 📷 Follow me on Instagram: [@eli.xir_gg](https://instagram.com/eli.xir_gg)
 6. 💬 Join our Telegram channel
 7. 🎮 Join the Punisher Discord server
 
@@ -360,7 +360,7 @@ yarn start
 2. 🐛 Abre un [Issue](https://github.com/Elixir-png/ElixirBot_/issues)
 3. 💬 Únete a nuestro [Canal de WhatsApp](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
 4. 📱 Contáctame en WhatsApp: [+63 975 291 7233](https://wa.me/639752917233)
-5. 📷 Sígueme en Instagram: [@insta_gqbri](https://instagram.com/insta_gqbri)
+5. 📷 Sígueme en Instagram: [@eli.xir_gg](https://instagram.com/eli.xir_gg)
 6. 💬 Únete al canal de Telegram
 7. 🎮 Únete al servidor Discord de Punisher
 
