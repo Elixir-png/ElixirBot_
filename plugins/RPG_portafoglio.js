@@ -1,5 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
+//Plugin by Elixir, Punisher & 888 staff
 import { importCanvas } from '../lib/canvas-fallback.js'
 import fs from 'fs'
 import path from 'path'
@@ -221,7 +220,7 @@ const handler = async (m, { conn, args }) => {
     __dirname,
     '..',
     'icone',
-    '333bank.jpg'
+    '888bank.jpg'
   )
 
   if (!fs.existsSync(cardImgPath)) {
@@ -258,7 +257,7 @@ const handler = async (m, { conn, args }) => {
       {
         image: imgBuffer,
         mimetype: 'image/jpeg',
-        caption: `💳 *333 Bank* — @${who.split('@')[0]}\n💰 Totale: ${total.toLocaleString('it-IT')} €`,
+        caption: `💳 *888 Bank* — @${who.split('@')[0]}\n💰 Totale: ${total.toLocaleString('it-IT')} €`,
         mentions: [who]
       },
       { quoted: m }
