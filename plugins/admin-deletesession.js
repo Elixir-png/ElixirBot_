@@ -1,10 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
-
-
-
-
-
+//Plugin by Elixir, Punisher & 888 staff
 import { existsSync, promises as fsPromises } from 'fs';
 import path from 'path';
 
@@ -20,7 +14,7 @@ const handler = async (message, { conn, usedPrefix }) => {
   }, { quoted: message });
 
   try {
-    const sessionFolder = "./333BotSession/";
+    const sessionFolder = "./888BotSession/";
 
     if (!existsSync(sessionFolder)) {
       return await conn.sendMessage(message.chat, {
@@ -49,7 +43,7 @@ const handler = async (message, { conn, usedPrefix }) => {
     await conn.sendMessage(message.chat, { text: "❌ 𝐄𝐫𝐫𝐨𝐫𝐞 𝐝𝐢 𝐞𝐥𝐢𝐦𝐢𝐧𝐚𝐳𝐢𝐨𝐧𝐞!" }, { quoted: message });
   }
 
-  const botName = global.db.data.nomedelbot || " ꙰ 𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰";
+  const botName = global.db.data.nomedelbot || " ꙰ 888 𝔹𝕆𝕋  ꙰";
   const quotedMessage = {
     key: {
       participants: "0@s.whatsapp.net",
