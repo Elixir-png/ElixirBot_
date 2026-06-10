@@ -11,7 +11,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     profilePicBuffer = await (await fetch('https://telegra.ph/file/22b3e3d2a7b9f346e21b3.png')).buffer();
   }
 
-  const botName = global.db.data.nomedelbot || " ꙰ 888 𝔹𝕆𝕋  ꙰";
+  const botName = global.db.data.nomedelbot || "𝟴𝟴𝟴 𝗕𝗢𝗧";
   const botVersion = global.db.data.version || "10.0.0";
 
   const fake = {
@@ -31,7 +31,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 
   const commandList = `
 ╭─────────╮  
-┃ ⚡️ 𝐌𝐄𝐍𝐔 𝐏𝐑𝐈𝐍𝐂𝐈𝐏𝐀𝐋𝐄 𝐃𝐈\n┃ ꙰  888 𝔹𝕆𝕋  ꙰
+┃ ⚡️ 𝐌𝐄𝐍𝐔 𝐏𝐑𝐈𝐍𝐂𝐈𝐏𝐀𝐋𝐄 𝐃𝐈\n┃ 𝟴𝟴𝟴 𝗕𝗢𝗧
 ┃━━━━━━━━━━━━━━
 ┃⮕ ${usedPrefix}𝐒𝐓𝐀𝐅𝐅
 ┃⮕ ${usedPrefix}𝐅𝐔𝐍𝐙𝐈𝐎𝐍𝐈
