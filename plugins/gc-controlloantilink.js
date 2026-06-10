@@ -1,4 +1,4 @@
-//Plugin by Elixir & Punisher & 888 Staff
+//Plugin by Gab, Lucifero & 333 staff
 
  
 let handler = async (m, { conn, command, text }) => {
@@ -44,17 +44,17 @@ Tutti i link verranno eliminati automaticamente.`;
         forwardedNewsletterMessageInfo: {
           newsletterJid: '120363341274693350@newsletter',
           serverMessageId: -1,
-          newsletterName: global.nomebot || 'Elixir'
+          newsletterName: global.nomebot || '333'
         },
         externalAdReply: {
           title: '『 𝐀𝐍𝐓𝐈 - 𝐋𝐈𝐍𝐊 』 𝐎𝐍',
-          body: 'Vai al canale Elixir',
+          body: 'Vai al canale 333',
           mediaType: 1,
           thumbnail: profilePic 
             ? await (await fetch(profilePic)).buffer() 
             : await (await fetch('https://telegra.ph/file/a3b727e38149464863380.png')).buffer(),
           renderLargerThumbnail: false,
-          sourceUrl: 'https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24'
+          sourceUrl: 'https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h'
         }
       }
     });
@@ -84,17 +84,17 @@ I link sono ora consentiti nel gruppo.`;
         forwardedNewsletterMessageInfo: {
           newsletterJid: '120363341274693350@newsletter',
           serverMessageId: -1,
-          newsletterName: global.nomebot || 'Elixir'
+          newsletterName: global.nomebot || '333'
         },
         externalAdReply: {
           title: '『 𝐀𝐍𝐓𝐈 - 𝐋𝐈𝐍𝐊 』 𝐎𝐅𝐅',
-          body: 'Vai al canale Elixir',
+          body: 'Vai al canale 333',
           mediaType: 1,
           thumbnail: profilePic 
             ? await (await fetch(profilePic)).buffer() 
             : await (await fetch('https://telegra.ph/file/a3b727e38149464863380.png')).buffer(),
           renderLargerThumbnail: false,
-          sourceUrl: 'https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24'
+          sourceUrl: 'https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h'
         }
       }
     });

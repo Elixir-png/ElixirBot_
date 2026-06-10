@@ -1,4 +1,4 @@
-//Plugin by Elixir & Punisher & 888 Staff
+//Plugin by Gab, Lucifero & 333 staff
 
 
 import { totalmem, freemem, cpus } from 'os'
@@ -44,7 +44,7 @@ const handler = async (m, { conn }) => {
   const text = `
 ┏━━━━━━━━━━━━━━━━━━━━━
 ┃ ⚡ *PERFORMANCE MONITOR*
-┃ 「 ELIXIR BOT SYSTEM 」
+┃ 「 333 BOT SYSTEM 」
 ┗━━━━━━━━━━━━━━━━━━━━━
 
 ╭─────────────────────
@@ -87,7 +87,7 @@ const handler = async (m, { conn }) => {
 ╰─────────────────────
 
 ┏━━━━━━━━━━━━━━━━━━━━━
-┃ ✨ Powered by *ELIXIR BOT*
+┃ ✨ Powered by *333 BOT*
 ┃ 🚀 Performance Optimized
 ┗━━━━━━━━━━━━━━━━━━━━━
 `.trim()

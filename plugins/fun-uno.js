@@ -1,4 +1,4 @@
-//Plugin by Elixir & Punisher & 888 Staff
+//Plugin by Gab, Lucifero & 333 staff
 
 import { createCanvas } from 'canvas'
 
@@ -40,7 +40,7 @@ async function generaGrafica(s) {
     ctx.fillStyle = 'rgba(255,255,255,0.10)'
     ctx.font = 'bold 90px Arial'
     ctx.textAlign = 'center'
-    ctx.fillText('ELIXIR BOT', 500, 320)
+    ctx.fillText('333 BOT', 500, 320)
 
     const drawCard = (x, y, label, color, hidden = false, scale = 1) => {
         const w = 80 * scale
@@ -64,7 +64,7 @@ async function generaGrafica(s) {
 
             ctx.fillStyle = '#fff'
             ctx.font = `bold ${16 * scale}px Arial`
-            ctx.fillText('Elixir', x + (w / 2), y + (h / 2) + 6)
+            ctx.fillText('333', x + (w / 2), y + (h / 2) + 6)
         } else {
             ctx.fillStyle = color
             ctx.beginPath()
@@ -164,7 +164,7 @@ function botTurno(s) {
             ? ['Rosso', 'Blu', 'Verde', 'Giallo'][Math.floor(Math.random() * 4)]
             : scelta.split(' ')[0]
 
-        let res = `\n🤖 ELIXIR BOT mette: *${scelta}*`
+        let res = `\n🤖 333 BOT mette: *${scelta}*`
 
         if (scelta.includes('+2')) {
             for (let i = 0; i < 2; i++) {
@@ -194,7 +194,7 @@ function botTurno(s) {
 
         s.botHand.push(s.mazzo.shift())
 
-        return `\n🤖 ELIXIR BOT pesca.`
+        return `\n🤖 333 BOT pesca.`
     }
 }
 
@@ -225,7 +225,7 @@ let handler = async (m, { conn }) => {
         mimetype: 'image/jpeg',
         fileName: 'uno.jpg',
         caption:
-`🃏 *UNO MATCH - ELIXIR BOT*
+`🃏 *UNO MATCH - 333 BOT*
 
 🎨 Colore attuale: *${unoSession[chat].currentColor}*`
     }, { quoted: m })
@@ -339,7 +339,7 @@ handler.before = async (m, { conn }) => {
 
     if (s.botHand.length === 0) {
         delete unoSession[chat]
-        return m.reply('💀 ELIXIR BOT ha vinto!')
+        return m.reply('💀 333 BOT ha vinto!')
     }
 
     let img = await generaGrafica(s)
