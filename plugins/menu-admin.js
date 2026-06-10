@@ -1,12 +1,4 @@
-//Codice di menu-admin.js
-
-//Plugin by Gab, Lucifero & 333 staff
-
-
-
-
-
-
+//Plugin by Elixir, Punisher & 888 staff
 import 'os';
 import 'util';
 import 'human-readable';
@@ -43,7 +35,7 @@ let handler = async (_0x512ed3, { conn: _0x542b94, usedPrefix: _0x3f73c1 }) => {
 
  let _0x2aa101 = 
 `╭─────────╮ 
-┃ 👑 𝐌𝐄𝐍𝐔 𝐀𝐃𝐌𝐈𝐍 𝐃𝐈\n┃ ꙰  𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰
+┃ 👑 𝐌𝐄𝐍𝐔 𝐀𝐃𝐌𝐈𝐍 𝐃𝐈\n┃ ꙰  888 𝔹𝕆𝕋  ꙰
 ┃━━━━━━━━━━━━━━ 
 ┃⮕ ${_0x3f73c1}𝐩𝐫𝐨𝐦𝐮𝐨𝐯𝐢 / 𝐩
 ┃⮕ ${_0x3f73c1}𝐫𝐞𝐭𝐫𝐨𝐜𝐞𝐝𝐢 / 𝐫
