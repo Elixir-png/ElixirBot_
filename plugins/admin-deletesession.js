@@ -43,7 +43,7 @@ const handler = async (message, { conn, usedPrefix }) => {
     await conn.sendMessage(message.chat, { text: "❌ 𝐄𝐫𝐫𝐨𝐫𝐞 𝐝𝐢 𝐞𝐥𝐢𝐦𝐢𝐧𝐚𝐳𝐢𝐨𝐧𝐞!" }, { quoted: message });
   }
 
-  const botName = global.db.data.nomedelbot || " ꙰ 888 𝔹𝕆𝕋  ꙰";
+  const botName = global.db.data.nomedelbot || "𝟴𝟴𝟴 𝗕𝗢𝗧";
   const quotedMessage = {
     key: {
       participants: "0@s.whatsapp.net",
