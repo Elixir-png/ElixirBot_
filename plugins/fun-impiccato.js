@@ -189,7 +189,7 @@ ${scoreArr}`,
 
   await conn.sendMessage(m.chat, {
     text:
-`🎮 𝐈𝐌𝐏𝐈𝐂𝐂𝐀𝐓𝐎 ꙰  𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰
+`🎮 𝐈𝐌𝐏𝐈𝐂𝐂𝐀𝐓𝐎 𝟴𝟴𝟴 𝗕𝗢𝗧
 
 ${ascii(game.errori)}
 
