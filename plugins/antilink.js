@@ -1,4 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Elixir & Punisher & 888 Staff
 
 import jsQR from 'jsqr'
 import webp from 'node-webpmux'
@@ -88,12 +88,12 @@ export async function before(m, { conn, isAdmin, isBotAdmin }) {
         forwardedNewsletterMessageInfo: {
           newsletterJid: '120363341274693350@newsletter',
           serverMessageId: -1,
-          newsletterName: global.nomebot || '333'
+          newsletterName: global.nomebot || 'Elixir'
         }
       }
     })
 
-    try {
+      try {
       await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
     } catch (e) {
       console.error('Errore durante espulsione:', e)
@@ -181,7 +181,7 @@ async function handleQrMedia(m, buffer, isSticker = false) {
           forwardedNewsletterMessageInfo: {
             newsletterJid: '120363341274693350@newsletter',
             serverMessageId: -1,
-            newsletterName: global.nomebot || '333'
+            newsletterName: global.nomebot || 'Elixir'
           }
         }
       })
