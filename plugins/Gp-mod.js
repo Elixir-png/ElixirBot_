@@ -1,4 +1,4 @@
-// Plugin di Blood - Gestione Moderatori (Finti Admin)
+// Plugin by Elixir, Punisher & 888 staff
 let handler = async (m, { conn, text, command, usedPrefix, isOwner, isAdmin }) => {
     if (!isOwner && !isAdmin) return m.reply("❌ Questo comando è riservato al proprietario del bot o agli admin del gruppo.")
 
