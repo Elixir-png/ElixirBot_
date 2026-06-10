@@ -1,6 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
-
+//Plugin by Elixir, Punisher & 888 staff
 let handler = async (m, { conn, command, usedPrefix }) => {
     const chat = global.db.data.chats[m.chat] || {}
 
@@ -11,10 +9,10 @@ let handler = async (m, { conn, command, usedPrefix }) => {
         chat.oldDesc = groupMetadata.desc || "Nessuna descrizione"
         global.db.data.chats[m.chat] = chat
 
-        let newName = `${chat.oldName} | SVƬ BY 333 BӨƬ`
+        let newName = `${chat.oldName} | SVƬ BY 888 BӨƬ`
         await conn.groupUpdateSubject(m.chat, newName)
 
-        await conn.groupUpdateDescription(m.chat, "333 BӨƬ DӨMIПΛ SЦI VӨSƬЯI GЯЦPPI 🛡️")
+        await conn.groupUpdateDescription(m.chat, "888 BӨƬ DӨMIПΛ SЦI VӨSƬЯI GЯЦPPI 🛡️")
 
         await conn.groupSettingUpdate(m.chat, 'announcement')
 
@@ -53,7 +51,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
 
         await conn.sendMessage(m.chat, { 
             text: resMsg, 
-            footer: '333 Bot versione X' 
+            footer: '888 Bot versione X' 
         }, { quoted: m })
     }
 }
