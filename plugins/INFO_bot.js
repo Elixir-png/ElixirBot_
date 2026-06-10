@@ -40,7 +40,7 @@ let handler = async (m, { conn }) => {
   const memMB = (mem.rss / 1024 / 1024).toFixed(1)
 
   await m.reply(
-`╔═ 📊 𝐁𝐎𝐓 𝐒𝐓𝐀𝐓𝐒 𝟑𝟑𝟑 ═╗
+`╔═ 📊 𝐁𝐎𝐓 𝐒𝐓𝐀𝐓𝐒 𝟴𝟴𝟴 𝗕𝗢𝗧  ═╗
 ┃
 ┃ ⏱️ Uptime: *${uptimeStr}*
 ┃ 🧠 RAM: *${memMB} MB*
