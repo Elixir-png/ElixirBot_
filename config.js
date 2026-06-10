@@ -12,27 +12,27 @@ const pkg = JSON.parse(await fs.promises.readFile(new URL('./package.json', impo
 const moduleCache = new NodeCache({ stdTTL: 300 });
 
 	
-global.gab = ['393784409415',]
+global.gab = ['639752917233',]
 global.owner = [
   ['639752917233', 'Elixir VoIP', true],
   ['79524931364', 'Punisher', true],
-  ['xxx', 'xxx', true],
+  ['639753555926', 'Elixir', true],
 ]
 
 
-global.nomepack = '333'
-global.nomebot = ' ꙰ 𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰'
-global.wm = '333'
-global.autore = 'gab'
-global.dev = 'lucifero'
-global.testobot = `333`
+global.nomepack = 'Elixir'
+global.nomebot = ' ꙰ 𝐄𝐋𝐈𝐗𝐈𝐑 𝐁𝐎𝐓  ꙰'
+global.wm = 'Elixir'
+global.autore = 'Elixir'
+global.dev = 'Elixir & Punisher'
+global.testobot = `Elixir`
 global.versione = pkg.version
 global.errore = '⚠️ *Errore inatteso!* Usa il comando `.ticket` per avvisare gli owner.'
 
 
-global.repobot = 'https://github.com/GabWT333/Gab333'
-global.canale = 'https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h'
-global.gruppo = 'https://chat.whatsapp.com/KqBeKHgrc53BNdvuPTKLTL' 
+global.repobot = 'https://github.com/Elixir-png/ElixirBot_'
+global.canale = 'https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24'
+global.gruppo = 'https://chat.whatsapp.com/E7nsqdge32AGdX2y9FyyNN' 
 
 
 global.cheerio = cheerio
