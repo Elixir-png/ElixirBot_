@@ -18,7 +18,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
 
   const { antiprivato, soloCreatore, read, anticall } = bot
 
-  const imgBuffer = fs.readFileSync('icone/333.jpg')
+  const imgBuffer = fs.readFileSync('icone/888.jpg')
 
   const fake = {
     key: {
@@ -30,7 +30,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
       locationMessage: {
         name: '⚙️ 𝐌𝐞𝐧𝐮 𝐅𝐮𝐧𝐳𝐢𝐨𝐧𝐢 888 𝐁𝐨𝐭',
         jpegThumbnail: imgBuffer.toString('base64'),
-        vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;333;;;\nFN:333\nEND:VCARD'
+        vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;888;;;\nFN:888\nEND:VCARD'
       }
     },
     participant: '0@s.whatsapp.net'
@@ -69,7 +69,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
   const menuFunzioniText =
 `╭─────────╮
 ┃ ⚙️ 𝐌𝐄𝐍𝐔 𝐅𝐔𝐍𝐙𝐈𝐎𝐍𝐈 𝐃𝐈
-┃ ꙰  𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰
+┃ ꙰  888� 𝔹𝕆𝕋  ꙰
 ┃━━━━━━━━━━━━━━
 ┃ 🔧 𝐅𝐔𝐍𝐙𝐈𝐎𝐍𝐈 𝐆𝐑𝐔𝐏𝐏𝐎
 ┃━━━━━━━━━━━━━━
