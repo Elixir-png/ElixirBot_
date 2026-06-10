@@ -1,11 +1,4 @@
 //Plugin by Elixir & Punisher & 888 Staff
-
-
-
-
-
-
-
 import yts from 'yt-search';
 import fs from 'fs';
 import path from 'path';
