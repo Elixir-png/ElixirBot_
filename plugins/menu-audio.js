@@ -1,7 +1,4 @@
-//Codice di menu-audio.js
-
-//Plugin fatto da 333 Staff.
-import 'os';
+//Plugin by Elixir, Punisher & 888 staffimport 'os';
 import 'util';
 import 'human-readable';
 import '@realvare/baileys';
@@ -37,7 +34,7 @@ let handler = async (_0x512ed3, { conn: _0x542b94, usedPrefix: _0x3f73c1 }) => {
 
  let _0x2aa101 = 
 `╭─────────╮ 
-┃ 🎵 𝐌𝐄𝐍𝐔 𝐀𝐔𝐃𝐈𝐎 𝐃𝐈\n┃ ꙰  𝟥𝟥𝟥 𝔹𝕆𝕋  ꙰
+┃ 🎵 𝐌𝐄𝐍𝐔 𝐀𝐔𝐃𝐈𝐎 𝐃𝐈\n┃ ꙰  888 𝔹𝕆𝕋  ꙰
 ┃━━━━━━━━━━━━━━ 
 ┃⮕ ${_0x3f73c1}𝐩𝐥𝐚𝐲
 ┃⮕ ${_0x3f73c1}𝐩𝐥𝐚𝐲𝐥𝐢𝐬𝐭
