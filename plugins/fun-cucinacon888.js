@@ -1,5 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
+//Plugin by Elixir, Punisher & 888 staff
 const handler = async (m, { conn, text, command }) => {
     const menuPiatti = [
         "Spaghetti alla Carbonara", "Lasagna alla Bolognese", "Pizza Margherita", "Risotto alla Milanese",
