@@ -1,7 +1,4 @@
-//Codice di menu-giochi.js
-
-//Codice di menu-giochi.js
-
+//Plugin by Elixir, Punisher & 888 staff
 import 'os';
 import 'util';
 import 'human-readable';
