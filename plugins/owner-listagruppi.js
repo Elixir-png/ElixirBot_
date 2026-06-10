@@ -1,7 +1,7 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Elixir & Punisher & 888 Staff
 
 let handler = async (m, { conn }) => {
-    const botName = global.db.data?.nomedelbot || "꙰  333 BOT ꙰";
+    const botName = global.db.data?.nomedelbot || "꙰  ELIXIR BOT ꙰";
     let output = [`𝐋𝐈𝐒𝐓𝐀 𝐃𝐄𝐈 𝐆𝐑𝐔𝐏𝐏𝐈 𝐃𝐈 ${botName}`, ''];
 
     const groups = await conn.groupFetchAllParticipating()
