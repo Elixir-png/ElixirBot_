@@ -493,10 +493,10 @@ if (user.banned) {
 
         let chat = global.db.data.chats[m.chat] || (global.db.data.chats[m.chat] = {
             isBanned: false, welcome: false, goodbye: false, ai: false,
-            vocali: false, antiporno: false, antioneview: false,
+            vocali: false, antiporno: true, antioneview: false,
             autolevelup: false, antivoip: false, rileva: false,
-            modoadmin: false, antiLink: false, antiLink2: false,
-            slowmode: false, reaction: false, antispam: false, expired: 0, users: {}, topUsers: {}, topRich: {}, topBlasphemy: {}
+            modoadmin: true, antiLink: true, antiLink2: false,
+            slowmode: false, reaction: false, antispam: true, expired: 0, users: {}, topUsers: {}, topRich: {}, topBlasphemy: {}
         })
         if (!chat.topUsers) chat.topUsers = {}
         if (!chat.topRich) chat.topRich = {}
