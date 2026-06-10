@@ -15,7 +15,7 @@ const encodePlugin = (code) => {
   const encoded = xored.toString('base64')
 
   return (
-    `//Codificato by 333 STAFF\n` +
+    `//Codificato by 888 STAFF\n` +
     `import{writeFileSync,unlinkSync}from'fs';\n` +
     `import{tmpdir}from'os';\n` +
     `import{join}from'path';\n` +
