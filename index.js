@@ -136,7 +136,7 @@ async function epicStartup() {
   await typeWriter('                     Ultimo Aggiornamento: 21/05/2026', 40, '\x1b[33m');
   
   console.log('\n');
-  await typeWriter('                    Edit by Gab, Lucifero & 333 Staff', 35, '\x1b[36m');
+  await typeWriter('                    Edit by Elixir, Punisher & Elixir Staff', 35, '\x1b[36m');
   
   console.log('\n\n');
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
