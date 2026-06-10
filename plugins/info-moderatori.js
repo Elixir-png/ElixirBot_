@@ -1,4 +1,4 @@
-//Plugin by 333 staff
+//Plugin Elixir & 888 staff
 
 let handler = async (m, { conn }) => {
   if (!m.isGroup) return m.reply('❌ Questo comando funziona solo nei gruppi.')
