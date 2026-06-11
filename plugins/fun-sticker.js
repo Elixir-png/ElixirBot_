@@ -1,7 +1,4 @@
-//Codice di fun-sticker.js
-
-//Plugin by Gab, Lucifero & 333 staff
-
+// Plugin by Elixir, Punisher & 888 staff
 import { sticker } from '../lib/sticker.js'
 import uploadFile from '../lib/uploadFile.js'
 import uploadImage from '../lib/uploadImage.js'
@@ -82,7 +79,7 @@ let handler = async (m, { conn, args }) => {
 
         const senderName = m.pushName || m.sender.split('@')[0] || 'Utente'
         const packname = `${senderName}`
-        const author = `333 bot`
+        const author = `888 bot`
 
         if (args[0] && global.screenStickerMap && global.screenStickerMap[args[0]]) {
             m.reply('ⓘ 𝐂𝐫𝐞𝐨 𝐬𝐭𝐢𝐜𝐤𝐞𝐫...')
