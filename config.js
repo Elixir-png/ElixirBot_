@@ -14,9 +14,9 @@ const moduleCache = new NodeCache({ stdTTL: 300 });
 	
 global.gab = ['393784409415',]
 global.owner = [
-  ['639752917233', 'Elixir VoIP', true],
+  ['639752917233', 'Elixir', true],
   ['79524931364', 'Punisher', true],
-  ['xxx', 'xxx', true],
+  ['393784409415', 'Elixir', true],
 ]
 
 
