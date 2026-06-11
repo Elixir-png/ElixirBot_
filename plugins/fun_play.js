@@ -40,9 +40,9 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   }
 
   const vid = global.playChoice[m.sender]
-  if (!vid) return m.reply("❌ Nessuna richiesta attiva")
+  if (!vid) return m.reply("❌ Nessuna richiesta attiva. Cerca prima una canzone con .play")
 
-  if (command === "play_audio") {
+  if (command === "playaud") {
     await conn.sendMessage(m.chat, { react: { text: "🎵", key: m.key } })
 
     let downloadUrl = null
@@ -62,7 +62,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     }
 
     if (!downloadUrl) {
-      return m.reply('🚀 *𝙋𝙡𝙖𝙮 𝙀𝙧𝙧𝙤𝙧:* Al momento i server di download sono sovraccarichi o offline. Riprova tra poco.')
+      return m.reply('🚀 *𝙋𝙡𝙖𝙮 𝙀𝙧𝙧𝙤rer:* Al momento i server di download sono sovraccarichi o offline. Riprova tra poco.')
     }
 
     const tmpDir = os.tmpdir()
@@ -83,8 +83,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             if (err) reject(err)
             else resolve()
           }
-        );
-      });
+        )
+      })
 
       await conn.sendMessage(m.chat, {
         audio: await fsPromises.readFile(voicePath),
@@ -103,7 +103,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     }
   }
 
-  if (command === "play_video") {
+  if (command === "playvid") {
     await conn.sendMessage(m.chat, { react: { text: "🎬", key: m.key } })
 
     let downloadUrl = null
@@ -123,7 +123,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     }
 
     if (!downloadUrl) {
-      return m.reply('🚀 *𝙋𝙡𝙖𝙮 𝙀𝙧𝙧𝙤𝙧:* Al momento i server di download sono sovraccarichi o offline. Riprova tra poco.')
+      return m.reply('🚀 *𝙋𝙡𝙖𝙮 𝙀𝙧𝙧𝙤rer:* Al momento i server di download sono sovraccarichi o offline. Riprova tra poco.')
     }
 
     const tmpDir = os.tmpdir()
@@ -132,14 +132,14 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     try {
       const response = await fetch(downloadUrl)
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const arrayBuffer = await response.arrayBuffer()
       await fsPromises.writeFile(inputPath, Buffer.from(arrayBuffer))
 
       await conn.sendMessage(m.chat, {
         video: await fsPromises.readFile(inputPath),
         mimetype: 'video/mp4',
-        caption: `✅ * canzoni salvate da 𝗧𝗛𝗘 888-𝗕𝗢𝗧*`
+        caption: `✅ *canzoni salvate da 𝗧𝗛𝗘 888-𝗕𝗢𝗧*`
       }, { quoted: m })
 
       await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key } })
