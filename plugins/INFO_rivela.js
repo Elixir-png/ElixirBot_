@@ -1,5 +1,5 @@
 // Plugin by Elixir, Punisher & 888 staff
-import { downloadContentFromMessage } from '@realvare/based'
+import { downloadMediaMessage } from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn }) => {
     try {
@@ -13,50 +13,23 @@ let handler = async (m, { conn }) => {
         if (type === 'viewOnceMessage' || type === 'viewOnceMessageV2') {
             msg = msg[type].message
             type = Object.keys(msg)[0]
-        } else {
-            const isVo = m.quoted.viewOnce || msg?.[type]?.viewOnce
-            if (!isVo) throw '『 ⚠️ 』- `Questo non è un contenuto visualizzabile una volta`'
+        }
+
+        const isVo = m.quoted.viewOnce || m.quoted.message?.[m.quoted.mtype]?.viewOnce || msg?.[type]?.viewOnce
+        if (!isVo) {
+            throw '『 ⚠️ 』- `Questo non è un contenuto visualizzabile una volta`'
         }
 
         let buffer
-        const downloadFromStream = async (stream) => {
-            let buf = Buffer.from([])
-            for await (const chunk of stream) {
-                buf = Buffer.concat([buf, chunk])
-            }
-            return buf
-        }
-
-        if (/videoMessage/.test(type)) {
-            try {
-                const stream = await downloadContentFromMessage(msg.videoMessage || msg, 'video')
-                buffer = await downloadFromStream(stream)
-            } catch (err) {
-                console.warn('Fallback al metodo download() per video:', err.message)
-                buffer = await m.quoted.download().catch(() => null)
-            }
-        } else if (/imageMessage/.test(type)) {
-            try {
-                const stream = await downloadContentFromMessage(msg.imageMessage || msg, 'image')
-                buffer = await downloadFromStream(stream)
-            } catch (err) {
-                console.warn('Fallback al metodo download() per immagine:', err.message)
-                buffer = await m.quoted.download().catch(() => null)
-            }
-        } else if (/audioMessage/.test(type)) {
-            try {
-                const stream = await downloadContentFromMessage(msg.audioMessage || msg, 'audio')
-                buffer = await downloadFromStream(stream)
-            } catch (err) {
-                console.warn('Fallback al metodo download() per audio:', err.message)
-                buffer = await m.quoted.download().catch(() => null)
-            }
-        } else {
-            throw '❌ Formato non supportato o non è un View Once valido'
+        try {
+            buffer = await downloadMediaMessage(m.quoted, 'buffer', {})
+        } catch (err) {
+            console.warn('Metodo nativo fallito, provo download alternativo:', err.message)
+            buffer = await m.quoted.download().catch(() => null)
         }
 
         if (!buffer || buffer.length === 0) {
-            throw '❌ Impossibile scaricare il contenuto'
+            throw '❌ Impossibile scaricare o decifrare il contenuto View Once'
         }
 
         const caption = msg?.[type]?.caption || m.quoted?.caption || ''
@@ -66,10 +39,12 @@ let handler = async (m, { conn }) => {
         } else if (/imageMessage/.test(type)) {
             await conn.sendFile(m.chat, buffer, 'image.jpg', caption, m)
         } else if (/audioMessage/.test(type)) {
-            await conn.sendFile(m.chat, buffer, 'audio.mp3', '', m, false, {
+            await conn.sendFile(m.chat, buffer, 'audio.mp4', '', m, false, {
                 mimetype: 'audio/mp4',
                 ptt: msg?.[type]?.ptt || m.quoted?.ptt || false
             })
+        } else {
+            throw '❌ Formato non supportato o non è un View Once valido'
         }
 
     } catch (e) {
