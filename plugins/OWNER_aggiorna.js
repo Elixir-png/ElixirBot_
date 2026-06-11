@@ -1,6 +1,5 @@
 // Plugin by Elixir, Punisher & 888 staff
 import { execSync } from 'child_process'
-import path from 'path'
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -11,7 +10,11 @@ function truncate(text = '', max = 3500) {
   return str.length > max ? str.slice(0, max) + '\n...' : str
 }
 
-let handler = async (m, { conn }) => {
+let handler = async (m, { conn, text, command }) => {
+  if (!m.isCreator && conn.user.jid !== m.sender) {
+    return m.reply('⚠️ *Questo comando è riservato al proprietario del bot.*')
+  }
+
   try {
     await m.react('🔄')
 
@@ -98,7 +101,7 @@ let handler = async (m, { conn }) => {
 
 handler.help = ['aggiorna']
 handler.tags = ['creatore']
-handler.command = ['aggiorna', 'update', 'aggiornabot']
+handler.command = /^(aggiorna|update|aggiornabot)$/i
 handler.owner = true
 
 export default handler
