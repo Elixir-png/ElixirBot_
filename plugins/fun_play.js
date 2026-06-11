@@ -12,7 +12,7 @@ global.playChoice = global.playChoice || {}
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
   if (command === "play") {
-    if (!text) return m.reply(`⚡ *𝗧𝗛𝗘 𝗣𝗨𝗡𝗜𝗦𝗛𝗘𝗥-𝗕𝗢𝗧*\n\n💡 _Scrivi:_ ${usedPrefix + command} nome canzone`)
+    if (!text) return m.reply(`⚡ *𝗧𝗛𝗘 888-𝗕𝗢𝗧*\n\n💡 _Scrivi:_ ${usedPrefix + command} nome canzone`)
 
     const search = await yts(text)
     const vid = search.videos[0]
@@ -32,8 +32,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
       caption: infoMsg,
       footer: '\n 𝗧𝗛𝗘 888-𝗕𝗢𝗧',
       buttons: [
-        { buttonId: `${usedPrefix}play_audio`, buttonText: { displayText: '🎵 𝗔𝗨𝗗𝗜𝗢 (𝗠🇵𝟯)' }, type: 1 },
-        { buttonId: `${usedPrefix}play_video`, buttonText: { displayText: '🎬 𝗩𝗜𝗗𝗘𝗢 (𝗠🇵𝟰)' }, type: 1 }
+        { buttonId: `${usedPrefix}playaud`, buttonText: { displayText: '🎵 𝗔𝗨𝗗𝗜𝗢 (ᴍᴘ3)' }, type: 1 },
+        { buttonId: `${usedPrefix}playvid`, buttonText: { displayText: '🎬 𝗩𝗜𝗗𝗘𝗢 (ᴍᴘ4)' }, type: 1 }
       ],
       headerType: 4
     }, { quoted: m })
