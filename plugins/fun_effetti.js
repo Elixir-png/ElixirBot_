@@ -7,32 +7,34 @@ import { join } from 'path'
 let dailyUsage = {}
 
 const apis = {
-    sra: 'https://some-random-api.com',
+    sra: 'https://some-random-api.com/',
     popcat: 'https://popcat.xyz',
 }
 
 const effetti = {
-    triggered: { api: 'sra', path: 'overlay/triggered', isGif: true },
-    jail: { api: 'sra', path: 'overlay/jail' },
-    comunista: { api: 'sra', path: 'overlay/comrade' },
-    passed: { api: 'sra', path: 'overlay/passed' },
-    wasted: { api: 'sra', path: 'overlay/wasted' },
-    pixelate: { api: 'sra', path: 'filter/pixelate' },
-    simpcard: { api: 'sra', path: 'misc/simpcard' },
-    horny: { api: 'sra', path: 'misc/horny' },
-    lolice: { api: 'sra', path: 'misc/lolice' },
-    blur: { api: 'sra', path: 'filter/blur' },
-    blurple: { api: 'sra', path: 'filter/blurple' },
-    bisex: { api: 'sra', path: 'misc/bisexual' },
-    heart: { api: 'sra', path: 'misc/heart' },
-    love: { api: 'sra', path: 'misc/heart' },
-    lgbt: { api: 'sra', path: 'misc/lgbt' },
-    nonbinary: { api: 'sra', path: 'misc/nonbinary' },
-    tonikawa: { api: 'sra', path: 'misc/tonikawa' },
-    dog: { api: 'sra', path: 'misc/its-so-stupid', needsText: true, textHint: 'un testo qualsiasi', textParam: 'dog' },
-    lied: { api: 'sra', path: 'misc/lied', textParam: 'username', useAuthorName: true },
-    namecard: { api: 'sra', path: 'misc/namecard', needsText: true, textHint: 'Compleanno (es: 01/01/2000)', textParam: 'birthday', useAuthorName: true, defaultText: '01/01/2000' },
-    ytc: { api: 'sra', path: 'misc/youtube-comment', needsText: true, textHint: 'un commento', textParam: 'comment', useAuthorName: true },
+    triggered: { api: 'sra', path: 'canvas/overlay/triggered', isGif: true },
+    jail: { api: 'sra', path: 'canvas/overlay/jail' },
+    comunista: { api: 'sra', path: 'canvas/overlay/comrade' },
+    passed: { api: 'sra', path: 'canvas/overlay/passed' },
+    wasted: { api: 'sra', path: 'canvas/overlay/wasted' },
+    gay: { api: 'sra', path: 'canvas/overlay/gay' },
+    pixelate: { api: 'sra', path: 'canvas/filter/pixelate' },
+    simpcard: { api: 'sra', path: 'canvas/misc/simpcard' },
+    horny: { api: 'sra', path: 'canvas/misc/horny' },
+    lolice: { api: 'sra', path: 'canvas/misc/lolice' },
+    blur: { api: 'sra', path: 'canvas/filter/blur' },
+    blurple: { api: 'sra', path: 'canvas/filter/blurple' },
+    bisex: { api: 'sra', path: 'canvas/misc/bisexual' },
+    heart: { api: 'sra', path: 'canvas/misc/heart' },
+    love: { api: 'sra', path: 'canvas/misc/heart' },
+    lesbian: { api: 'sra', path: 'canvas/misc/lesbian' },
+    lgbt: { api: 'sra', path: 'canvas/misc/lgbt' },
+    nonbinary: { api: 'sra', path: 'canvas/misc/nonbinary' },
+    tonikawa: { api: 'sra', path: 'canvas/misc/tonikawa' },
+    dog: { api: 'sra', path: 'canvas/misc/its-so-stupid', needsText: true, textHint: 'un testo qualsiasi', textParam: 'dog' },
+    lied: { api: 'sra', path: 'canvas/misc/lied', textParam: 'username', useAuthorName: true },
+    namecard: { api: 'sra', path: 'canvas/misc/namecard', needsText: true, textHint: 'Compleanno (es: 01/01/2000)', textParam: 'birthday', useAuthorName: true, defaultText: '01/01/2000' },
+    ytc: { api: 'sra', path: 'canvas/misc/youtube-comment', needsText: true, textHint: 'un commento', textParam: 'comment', useAuthorName: true },
     petpet: { api: 'popcat', path: 'pet', isGif: true, avatarParam: 'image' },
     wanted: { api: 'popcat', path: 'wanted', avatarParam: 'image' }
 }
@@ -189,8 +191,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     }
 }
 
-handler.help = ['wasted', 'wanted','triggered', 'jail', 'comunista', 'passed', 'pixelate', 'simpcard', 'horny', 'lolice', 'blur', 'blurple', 'bisex', 'love', 'heart', 'dog', 'lgbt', 'lied', 'namecard', 'nonbinary', 'tonikawa', 'ytc', 'petpet']
+handler.help = ['wasted', 'wanted','triggered', 'jail', 'comunista', 'gay', 'passed', 'pixelate', 'simpcard', 'horny', 'lolice', 'blur', 'blurple', 'bisex', 'love', 'heart', 'dog', 'lesbian', 'lgbt', 'lied', 'namecard', 'nonbinary', 'tonikawa', 'ytc', 'petpet']
 handler.tags = ['giochi']
-handler.command = /^(wanted|wasted|triggered|jail|comunista|passed|pixelate|simpcard|horny|lolice|blur|blurple|bisex|love|heart|dog|lgbt|lied|namecard|nonbinary|tonikawa|ytc|petpet)$/i
+handler.command = /^(wanted|wasted|triggered|jail|comunista|gay|passed|pixelate|simpcard|horny|lolice|blur|blurple|bisex|love|heart|dog|lesbian|lgbt|lied|namecard|nonbinary|tonikawa|ytc|petpet)$/i
 
 export default handler
