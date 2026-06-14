@@ -12,7 +12,7 @@ let handler = async (m, { conn }) => {
 
         if (type === 'viewOnceMessage' || type === 'viewOnceMessageV2') {
             msg = msg[type].message
-            type = Object.keys(msg)
+            type = Object.keys(msg)[0]
         }
 
         const isVo = m.quoted.viewOnce || m.quoted.message?.[m.quoted.mtype]?.viewOnce || msg?.[type]?.viewOnce
@@ -68,10 +68,11 @@ let handler = async (m, { conn }) => {
         } else if (/imageMessage/.test(type)) {
             await conn.sendFile(m.chat, buffer, 'image.jpg', caption, m)
         } else if (/audioMessage/.test(type)) {
-            await conn.sendFile(m.chat, buffer, 'audio.mp3', '', m, false, {
+            await conn.sendMessage(m.chat, {
+                audio: buffer,
                 mimetype: 'audio/mp4',
                 ptt: msg?.[type]?.ptt || m.quoted?.ptt || false
-            })
+            }, { quoted: m })
         }
 
     } catch (e) {
