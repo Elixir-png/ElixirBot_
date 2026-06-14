@@ -1,5 +1,5 @@
 // Plugin by Elixir, Punisher & 888 staff
-import { downloadContentFromMessage } from '@realvare/based'
+import { downloadContentFromMessage } from '@realvare/baileys'
 
 let handler = async (m, { conn }) => {
     try {
