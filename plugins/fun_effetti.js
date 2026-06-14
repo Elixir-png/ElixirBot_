@@ -7,7 +7,7 @@ import { join } from 'path'
 let dailyUsage = {}
 
 const apis = {
-    sra: 'https://some-random-api.com',
+    sra: 'https://some-random-api.ml',
     popcat: 'https://popcat.xyz',
 }
 
@@ -58,7 +58,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         }
     }
 
-    if (config.needsText && !text.trim()) {
+    if (config.needsText && (!text || !text.trim())) {
         return m.reply(`🤕 Serve ${config.textHint} per l'effetto ${effect}.\nEsempio: ${usedPrefix + command} [testo] @user`)
     }
 
@@ -75,7 +75,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         }
 
         const name = await conn.getName(who) || 'User'
-        const url = new URL(config.path, apis[config.api])
+        const apiBase = apis[config.api]
+        const url = new URL(config.path, apiBase)
         const avatarParam = config.avatarParam || 'avatar'
         url.searchParams.set(avatarParam, pp)
 
@@ -84,18 +85,25 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             if (config.useAuthorName && !config.needsText) {
                 textValue = name
             } else if (config.needsText) {
-                textValue = text.replace(/@\d+/g, '').trim() || config.defaultText || ''
+                textValue = (text || '').replace(/@\d+/g, '').trim() || config.defaultText || ''
             }
             if (textValue) url.searchParams.set(config.textParam, textValue)
             if (config.useAuthorName) url.searchParams.set('username', name)
         }
 
+        console.log(`[effetti] Richiesta API: ${url.toString()}`)
         const res = await fetch(url.toString())
-        if (!res.ok) throw `Errore API [${res.status}]`
+        if (!res.ok) {
+            console.error(`[effetti] API error ${res.status} per effetto '${effect}' su ${url.toString()}`)
+            throw `Errore API [${res.status}] per l'effetto '${effect}'`
+        }
 
-        const buffer = await res.arrayBuffer()
-        if (!buffer || buffer.length < 100) throw 'Risposta API non valida o file corrotto.'
-        const buf = Buffer.from(buffer)
+        const arrayBuffer = await res.arrayBuffer()
+        if (!arrayBuffer || arrayBuffer.byteLength < 100) {
+            console.error(`[effetti] Risposta troppo piccola (${arrayBuffer?.byteLength || 0} bytes) per effetto '${effect}'`)
+            throw 'Risposta API non valida o file corrotto.'
+        }
+        const buf = Buffer.from(arrayBuffer)
 
         if (config.isGif) {
             const timestamp = Date.now()
@@ -103,6 +111,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             tempw = join('temp', `${timestamp}.webp`)
 
             await fs.writeFile(tempg, buf)
+            console.log(`[effetti] GIF salvata (${buf.length} bytes), conversione in WebP...`)
 
             await new Promise((resolve, reject) => {
                 ffmpeg(tempg)
@@ -112,7 +121,10 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                     ])
                     .toFormat('webp')
                     .save(tempw)
-                    .on('end', resolve)
+                    .on('end', () => {
+                        console.log(`[effetti] WebP generato per '${effect}'`)
+                        resolve()
+                    })
                     .on('error', (err) => reject(new Error(err.message)))
             })
 
@@ -150,8 +162,9 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         }
 
     } catch (e) {
-        console.error(e)
-        await m.reply(global.errore || '❌ Si è verificato un errore.')
+        console.error(`[effetti] ERRORE per comando '${command}':`, e)
+        const errorMessage = typeof e === 'string' ? e : (global.errore || '❌ Si è verificato un errore durante l\'elaborazione dell\'effetto.')
+        await m.reply(errorMessage)
     } finally {
         if (tempg) await fs.unlink(tempg).catch(() => null)
         if (tempw) await fs.unlink(tempw).catch(() => null)
