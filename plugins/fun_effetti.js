@@ -7,7 +7,7 @@ import { join } from 'path'
 let dailyUsage = {}
 
 const apis = {
-    sra: 'https://some-random-api.ml',
+    sra: 'https://some-random-api.com',
     popcat: 'https://popcat.xyz',
 }
 
@@ -92,7 +92,25 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         }
 
         console.log(`[effetti] Richiesta API: ${url.toString()}`)
-        const res = await fetch(url.toString())
+        let res
+        try {
+            res = await fetch(url.toString())
+        } catch (fetchErr) {
+            console.error(`[effetti] Errore di rete per '${effect}':`, fetchErr.message)
+            const isNetworkError = fetchErr.message && (
+                fetchErr.message.includes('ENOTFOUND') ||
+                fetchErr.message.includes('ECONNREFUSED') ||
+                fetchErr.message.includes('ECONNRESET') ||
+                fetchErr.message.includes('ENETUNREACH') ||
+                fetchErr.message.includes('request failed') ||
+                fetchErr.message.includes('network')
+            )
+            if (isNetworkError) {
+                throw `⚠️ Il server degli effetti è momentaneamente offline, riprova più tardi.`
+            }
+            throw fetchErr
+        }
+
         if (!res.ok) {
             console.error(`[effetti] API error ${res.status} per effetto '${effect}' su ${url.toString()}`)
             throw `Errore API [${res.status}] per l'effetto '${effect}'`
