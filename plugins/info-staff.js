@@ -10,7 +10,7 @@ let handler = async (m, { conn }) => {
 *│ ✦ 𝐍𝐨𝐦𝐞:* Elixir
 *│ ✦ 𝐑𝐮𝐨𝐥𝐨:* Owner / Developer
 *│ ✦ 𝐂𝐨𝐧𝐭𝐚𝐭𝐭𝐨:* @639752917233
-*│ ✦ 𝐈𝐆:* ://instagram.com
+*│ ✦ 𝐈𝐆:* instagram.com/eli.xir_gg
 *│ ✦ 𝐓𝐆:* @ElixirKG
 *╰────────────────────╯*
 
@@ -18,7 +18,7 @@ let handler = async (m, { conn }) => {
 *│ ✦ Punisher*
 *│   ├ 𝐑𝐮𝐨𝐥𝐨:* Co-Owner
 *│   ├ 𝐂𝐨𝐧𝐭𝐚𝐭𝐭𝐨:* @79524931364
-*│   ├ 𝐈𝐆:* ://instagram.com
+*│   ├ 𝐈𝐆:* instagram.com/arty.340
 *│   └ 𝐓𝐆:* @punishth*
 *╰────────────────────╯*
 
@@ -29,9 +29,9 @@ let handler = async (m, { conn }) => {
 *╰────────────────────╯*
 
 *╭─── 📌 𝐈𝐍𝐅𝐎 𝐔𝐓𝐈𝐋𝐈 ───╮*
-*│ ✦ 𝐆𝐢𝐭𝐇𝐮𝐛:* ://github.com_
+*│ ✦ 𝐆𝐢𝐭𝐇𝐮𝐛:* github.com/Elixir-png/ElixirBot_
 *│ ✦ 𝐄𝐦𝐚𝐢𝐥:* ElixirBoTSupporto@proton.me
-*│ ✦ 𝐂𝐚𝐧𝐚𝐥𝐞:* ://whatsapp.com
+*│ ✦ 𝐂𝐚𝐧𝐚𝐥𝐞:* whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24
 *╰────────────────────╯*
 
 > *𝟴𝟴𝟴 𝗕𝗢𝗧*`
