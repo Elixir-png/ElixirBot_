@@ -1,19 +1,20 @@
 // Plugin by Elixir, Punisher & 888 staff
 import fs from 'fs'
 import path from 'path'
+import os from 'os'
 
-const dataDir = path.join(process.cwd(), 'data')
-const backupFile = path.join(dataDir, 'backups.json')
+const dirPath = path.join(process.cwd(), 'data')
+const filePath = path.join(dirPath, 'backups.json')
 
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true })
+if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true })
 }
 
-function getBackups() {
+function getDatabase() {
     try {
-        if (fs.existsSync(backupFile)) {
-            const raw = fs.readFileSync(backupFile, 'utf-8')
-            if (raw.trim()) return JSON.parse(raw)
+        if (fs.existsSync(filePath)) {
+            const raw = fs.readFileSync(filePath, 'utf-8')
+            return JSON.parse(raw)
         }
     } catch (e) {
         console.error('[backup-system] Errore lettura backups.json:', e.message)
@@ -21,17 +22,17 @@ function getBackups() {
     return {}
 }
 
-function saveBackups(data) {
+function saveDatabase(data) {
     try {
-        fs.writeFileSync(backupFile, JSON.stringify(data, null, 2), 'utf-8')
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8')
     } catch (e) {
         console.error('[backup-system] Errore scrittura backups.json:', e.message)
     }
 }
 
-let handler = async (m, { conn, text, command }) => {
-    if (command === 'backupgruppo' || command === 'backupgroup') {
-        if (!m.isGroup) return m.reply('⚠️ Questo comando può essere eseguito solo all\'interno dei gruppi.')
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+    if (/^(backupgruppo|backupgroup)$/i.test(command)) {
+        if (!m.isGroup) return conn.reply(m.chat, '⚠️ Questo comando può essere eseguito solo all\'interno dei gruppi.', m)
         
         try {
             await m.react('📥')
@@ -50,74 +51,68 @@ let handler = async (m, { conn, text, command }) => {
                 participants: participants
             }
             
-            let backupKey = text ? text.replace(/[^a-zA-Z0-9]/g, '_') : meta.id.split('@')[0]
+            let db = getDatabase()
+            let backupKey = text ? text.trim().replace(/[^a-zA-Z0-9]/g, '_') : meta.subject.replace(/[^a-zA-Z0-9]/g, '_')
             
-            let backups = getBackups()
-            backups[backupKey] = backupData
-            saveBackups(backups)
+            db[backupKey] = backupData
+            saveDatabase(db)
             
-            let tempFile = path.join(dataDir, `temp_backup_${Date.now()}.json`)
-            try {
-                fs.writeFileSync(tempFile, JSON.stringify(backupData, null, 2), 'utf-8')
-                await conn.sendFile(m.sender, tempFile, `${backupKey}_backup.json`, '', m)
-            } finally {
-                try { fs.unlinkSync(tempFile) } catch (e) { console.error('[backup-system] Errore pulizia temp file:', e.message) }
-            }
+            let tmpFileName = `backup_${backupKey}_${Date.now()}.json`
+            let tmpPath = path.join(os.tmpdir(), tmpFileName)
+            fs.writeFileSync(tmpPath, JSON.stringify(backupData, null, 2), 'utf-8')
             
-            await m.reply(`📥 *Backup salvato con successo!*\nArchiviato nel database centrale con chiave: \`${backupKey}\` e inviato nei tuoi DM privati come copia di sicurezza.`)
+            let groupNumber = meta.id.split('@')[0]
+            let caption = `\`── ✅ BACKUP CENTRALIZZATO ──\`\n\n` +
+                          `\`[🏰] Gruppo:\` *${meta.subject}*\n` +
+                          `\`[🔑] Chiave:\` \`${backupKey}\`\n` +
+                          `\`[👥] Membri:\` *${participants.length}*\n\n` +
+                          `\`[⚡] 888 SYSTEM\``
+                          
+            await conn.sendFile(m.sender, tmpPath, tmpFileName, caption, m)
+            await conn.reply(m.chat, `📥 *Backup centralizzato salvato!*\nRegistrato nel database \`data/backups.json\` sotto la chiave: \`${backupKey}\` e inviato nei tuoi DM privati.`, m)
             await m.react('✅')
-            console.log(`[backup-system] Backup creato con successo per il gruppo ${meta.subject} con chiave ${backupKey}`)
+            
+            if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath)
             
         } catch (err) {
             console.error('[backup-system] Errore durante il backup:', err)
-            await m.reply('❌ Errore critico durante l\'estrazione dei metadati del gruppo.')
+            await conn.reply(m.chat, '❌ Errore critico durante l\'estrazione dei metadati del gruppo.', m)
             await m.react('❌')
         }
         return
     }
 
-    if (command === 'ripristinagruppo' || command === 'restoregrup') {
-        if (!m.isGroup) return m.reply('⚠️ Questo comando deve essere lanciato all\'interno del gruppo in cui vuoi ripristinare i dati.')
-        if (!text) return m.reply('💡 _Uso:_ Inserisci il nome del backup o l\'ID del gruppo.\nEsempio: `.ripristinagruppo NomeBackup` o `.ripristinagruppo 120363...`')
+    if (/^(ripristinagruppo|restoregrup)$/i.test(command)) {
+        if (!m.isGroup) return conn.reply(m.chat, '⚠️ Questo comando deve essere lanciato all\'interno del gruppo in cui vuoi ripristinare i dati.', m)
+        if (!text) return conn.reply(m.chat, `💡 _Uso:_ Inserisci il nome del backup o l\'ID del gruppo.\nEsempio: \`${usedPrefix + command} NomeBackup\``, m)
         
         try {
             await m.react('🔄')
-            let backups = getBackups()
-            let searchText = text.toLowerCase()
+            let db = getDatabase()
+            let searchKey = text.trim().toLowerCase()
             
-            let foundKey = null
-            let foundBackup = null
+            let backupKey = Object.keys(db).find(key => 
+                key.toLowerCase() === searchKey || 
+                (db[key].groupId && db[key].groupId.toLowerCase().includes(searchKey))
+            )
             
-            for (let key of Object.keys(backups)) {
-                if (key.toLowerCase().includes(searchText)) {
-                    foundKey = key
-                    foundBackup = backups[key]
-                    break
-                }
-                if (backups[key].groupId && backups[key].groupId.toLowerCase().includes(searchText)) {
-                    foundKey = key
-                    foundBackup = backups[key]
-                    break
-                }
-            }
-            
-            if (!foundBackup) {
+            if (!backupKey) {
                 await m.react('❌')
-                return m.reply('❌ Nessun backup trovato nel database con il nome o ID specificato.')
+                return conn.reply(m.chat, '❌ Nessun backup trovato nel database centrale corrispondente alla ricerca.', m)
             }
             
-            console.log(`[backup-system] Avvio ripristino dal backup: ${foundKey}`)
+            let backup = db[backupKey]
             
-            await conn.groupUpdateSubject(m.chat, foundBackup.subject)
+            await conn.groupUpdateSubject(m.chat, backup.subject)
             
-            if (foundBackup.desc) {
-                await conn.groupUpdateDescription(m.chat, foundBackup.desc)
+            if (backup.desc) {
+                await conn.groupUpdateDescription(m.chat, backup.desc)
             }
             
             let currentMeta = await conn.groupMetadata(m.chat)
             let currentParticipants = currentMeta.participants.map(p => p.id)
             
-            let adminsToPromote = foundBackup.participants
+            let adminsToPromote = backup.participants
                 .filter(p => p.admin && currentParticipants.includes(p.jid))
                 .map(p => p.jid)
                 
@@ -126,18 +121,17 @@ let handler = async (m, { conn, text, command }) => {
             }
             
             let resultMsg = `\`── 🎉 RIPRISTINO COMPLETATO ──\`\n\n` +
-                            `\`[🏰] Nuovo Nome:\` *${foundBackup.subject}*\n` +
+                            `\`[🏰] Nuovo Nome:\` *${backup.subject}*\n` +
                             `\`[🛡️] Admin Ripristinati:\` *${adminsToPromote.length}*\n` +
-                            `\`[📦] Backup Usato:\` \`${foundKey}\`\n\n` +
+                            `\`[🔑] Chiave DB:\` \`${backupKey}\`\n\n` +
                             `\`[⚡] 888 SYSTEM\``
                             
-            await m.reply(resultMsg)
+            await conn.reply(m.chat, resultMsg, m)
             await m.react('✅')
-            console.log(`[backup-system] Ripristino completato con successo nel gruppo: ${m.chat}`)
             
         } catch (err) {
             console.error('[backup-system] Errore critico durante il ripristino:', err)
-            await m.reply('❌ Errore durante l\'applicazione dei metadati del backup. Verifica i permessi amministrativi del bot.')
+            await conn.reply(m.chat, '❌ Errore durante l\'applicazione dei metadati del backup. Verifica i permessi amministrativi del bot.', m)
             await m.react('❌')
         }
     }
