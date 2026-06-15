@@ -19,7 +19,7 @@ let handler = async (m, { conn }) => {
 *│   ├ 𝐑𝐮𝐨𝐥𝐨:* Co-Owner
 *│   ├ 𝐂𝐨𝐧𝐭𝐚𝐭𝐭𝐨:* @79524931364
 *│   ├ 𝐈𝐆:* instagram.com/arty.340
-*│   └ 𝐓𝐆:* @punishth*
+*│   └ 𝐓𝐆:* @punishth
 *╰────────────────────╯*
 
 *╭─── 🛡️ 𝐒𝐓𝐀𝐅𝐅 ───╮*
