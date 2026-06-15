@@ -1,4 +1,4 @@
-// Plugin creato da elixir
+// Plugin by Elixir
 let handler = async (m, { conn, participants, isBotAdmin }) => {
     if (!m.isGroup) return;
 
