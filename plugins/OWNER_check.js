@@ -80,7 +80,7 @@ let handler = async (m, { conn, text }) => {
     console.log(`[check] Target: ${who}, Device: ${device}, MsgType: ${msgType}`)
 
     let loadingMsg = await conn.sendMessage(m.chat, { 
-      text: '⚡ `⚡ [ELIXIR] Estrazione pacchetti dati e analisi hardware...` ⚡' 
+      text: '⚡ `⚡ [𝟴𝟴𝟴 𝗕𝗢𝗧] Estrazione pacchetti dati e analisi hardware...` ⚡' 
     }, { quoted: m });
 
     let ppUrl;
@@ -165,9 +165,23 @@ let handler = async (m, { conn, text }) => {
     const buffer = canvas.toBuffer();
     
     console.log(`[check] Report grafico generato per ${tagUtente}`)
+
+    let reportDidascalia = `╭━━━〔 🎰 *SCANNER DEVICE* 〕━━━┈
+┃ *Bot:* 𝟴𝟴𝟴 𝗕𝗢𝗧
+┃ *Categoria:* Utility & Controllo
+┃━━━━━━━━━━━━━━━━━━
+┃ 🔍 *Risultati Rilevamento:*
+┃ ⮕ *Target:* @${tagUtente}
+┃ ⮕ *Hardware:* \`${device}\`
+┃ 
+┃ ⚙️ *Stato Analisi:*
+┃ ⮕ Completato 100%
+┃ ⮕ Stringa ID: \`${msgID || 'N/D'}\`
+╰━━━━━━━━━━━━━━━━━━┈`.trim();
+
     await conn.sendMessage(m.chat, { 
       image: buffer, 
-      caption: `\`[⚡] ELIXIR SCANNER\`\n> Target tracciato con successo: @${tagUtente}`,
+      caption: reportDidascalia,
       mentions: [who]
     }, { quoted: loadingMsg });
 
@@ -182,4 +196,4 @@ handler.tags = ['owner'];
 handler.command = /^(check|device)$/i; 
 handler.owner = true;
 
-export default handler
+export default handler;
