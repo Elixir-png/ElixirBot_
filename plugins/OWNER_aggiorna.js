@@ -118,3 +118,4 @@ handler.command = /^(aggiorna|update|aggiornabot)$/i
 handler.owner = true
 
 export default handler
+
