@@ -1,4 +1,4 @@
-// Plugin by Elixir & 8888 staff
+// Plugin by Elixir & 888 staff
 import yts from 'yt-search';
 import fg from 'api-dylux';
 import fetch from 'node-fetch';
