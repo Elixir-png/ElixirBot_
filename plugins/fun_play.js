@@ -1,4 +1,3 @@
-// Plugin by Elixir & 888 staff
 import yts from 'yt-search'
 import { exec, execSync } from 'child_process'
 import fs from 'fs'
@@ -11,6 +10,9 @@ async function checkBinaries() {
   } catch {
     execSync('curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp', { stdio: 'inherit' })
   }
+  try {
+    execSync('yt-dlp -U', { stdio: 'pipe', timeout: 15000 })
+  } catch {}
   try {
     execSync('ffmpeg -version', { stdio: 'pipe' })
   } catch {
@@ -36,30 +38,12 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
       url = vid.url
 
       if (command === 'play') {
-        let infoMsg = `┏━━━━━━━━━━━━━━━━━━━┓\n   🎧  *Play 888 BOT* 🎧\n┗━━━━━━━━━━━━━━━━━━━┛\n\n◈ 📌 *Titolo:* ${vid.title}\n◈ ⏱️ *Durata:* ${vid.timestamp}\n\n*Seleziona il formato:*`
-
-        let buttonsPayload = {
-          buttons: [
-            { buttonId: `${usedPrefix}playaud ${url}`, buttonText: { displayText: '🎵 Audio (MP3)' }, type: 1 },
-            { buttonId: `${usedPrefix}playvid ${url}`, buttonText: { displayText: '🎬 Video (MP4)' }, type: 1 }
-          ],
-          headerType: 4,
-          viewOnce: true
-        }
+        let infoMsg = `┏━━━━━━━━━━━━━━━━━━━┓\n   🎧  *Play 888 BOT* 🎧\n┗━━━━━━━━━━━━━━━━━━━┛\n\n📌 *Titolo:* ${vid.title}\n⏱️ *Durata:* ${vid.timestamp}\n\n📝 *Per scaricare rispondi con:*\n   🎵 ${usedPrefix}playaud\n   🎬 ${usedPrefix}playvid`
 
         return await conn.sendMessage(m.chat, {
           image: { url: vid.thumbnail },
           caption: infoMsg
-        }, {
-          quoted: m,
-          message: {
-            viewOnceMessage: {
-              message: {
-                buttonsMessage: buttonsPayload
-              }
-            }
-          }
-        })
+        }, { quoted: m })
       }
     }
 
@@ -72,8 +56,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     await new Promise((resolve, reject) => {
       let cmd = isAudio
-        ? `yt-dlp -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o "${outputPath}" "${url}"`
-        : `yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "${outputPath}" "${url}"`
+        ? `yt-dlp -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 --no-warnings --force-overwrites -o "${outputPath}" "${url}"`
+        : `yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" --no-warnings --force-overwrites -o "${outputPath}" "${url}"`
 
       exec(cmd, (err) => {
         if (err) reject(err)
