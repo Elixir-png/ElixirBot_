@@ -1,3 +1,4 @@
+// Plugin by Elixir, Punisher & 888 staff
 import fs from 'fs'
 
 let handler = async (m, { conn, command }) => {
