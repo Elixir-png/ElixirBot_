@@ -1,93 +1,74 @@
-// Plugin by Elixir, Punisher & 888 Staff
-import { spawn } from 'child_process'
-import fs from 'fs'
-import path from 'path'
-import fetch from 'node-fetch'
+import fetch from 'node-fetch';
+import ffmpeg from 'fluent-ffmpeg';
+import { promises as fs } from 'fs';
+import { join } from 'path';
 
-const ICON_PATH = path.join(process.cwd(), 'icone', 'Whatsapp.jpeg')
-const WASTED_URL = 'https://i.pinimg.com/736x/41/ac/14/41ac1493368265524def85e647f6693f.jpg'
-
-const getMentionedUser = (msg) => {
-  if (!msg) return null
-  if (msg.quoted?.sender) return msg.quoted.sender
-  if (Array.isArray(msg.mentionedJid) && msg.mentionedJid.length) return msg.mentionedJid
-  if (msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.length) return msg.message.extendedTextMessage.contextInfo.mentionedJid
-  if (Array.isArray(msg.mentioned) && msg.mentioned.length) return msg.mentioned
-  return msg.sender || null
-}
+const WASTED_URL = 'https://pinimg.com';
 
 let handler = async (m, { conn }) => {
-  try {
-    const who = getMentionedUser(m)
-    let imgBuffer = null
-
-    const q = m.quoted ? m.quoted : m
-    const mime = (q.msg || q).mimetype || ''
+    let who = m.quoted ? m.quoted.sender : m.mentionedJid?.[0] ? m.mentionedJid[0] : m.sender;
     
-    if (/image/.test(mime)) {
-      await m.reply('⏳ Elaboro l\'immagine allegata...')
-      imgBuffer = await q.download()
-    } else {
-      await m.reply('⏳ Recupero la foto profilo ed elaboro...')
-      let profileUrl = ICON_PATH
-      try {
-        profileUrl = await conn.profilePictureUrl(who, 'image')
-      } catch {
-        profileUrl = ICON_PATH
-      }
-      
-      if (profileUrl && profileUrl !== ICON_PATH) {
-        const response = await fetch(profileUrl)
-        if (response.ok) {
-          const arrayBuffer = await response.arrayBuffer()
-          imgBuffer = Buffer.from(arrayBuffer)
+    let pathUserImg;
+    let pathWastedImg;
+    let pathOutImg;
+
+    try {
+        const pp = await conn.profilePictureUrl(who, 'image').catch(() => null);
+        if (!pp) {
+            const notification = who === m.sender ? 
+                'non hai una foto profilo 🤕' : 
+                `@${who.split('@')[0]} non ha una foto profilo 🤕`;
+            return m.reply(notification, null, { mentions: [who] });
         }
-      }
+
+        await m.reply('⏳ Recupero la foto profilo ed elaboro...');
+
+        const resProfile = await fetch(pp);
+        if (!resProfile.ok) throw new Error('Impossibile scaricare la foto profilo.');
+        const bufProfile = Buffer.from(await resProfile.arrayBuffer());
+
+        const resWasted = await fetch(WASTED_URL);
+        if (!resWasted.ok) throw new Error('Impossibile scaricare la grafica Wasted.');
+        const bufWasted = Buffer.from(await resWasted.arrayBuffer());
+
+        const timestamp = Date.now();
+        pathUserImg = join('temp', `user_${timestamp}.jpg`);
+        pathWastedImg = join('temp', `wasted_${timestamp}.jpg`);
+        pathOutImg = join('temp', `out_${timestamp}.png`);
+
+        await fs.writeFile(pathUserImg, bufProfile);
+        await fs.writeFile(pathWastedImg, bufWasted);
+
+        await new Promise((resolve, reject) => {
+            ffmpeg(pathUserImg)
+                .input(pathWastedImg)
+                .complexFilter([
+                    '[0:v]scale=512:512,hue=s=0,drawbox=y=(ih-120)/2:h=120:color=black@0.5:t=fill[bg]',
+                    '[1:v]scale=340:-1[logo]',
+                    '[bg][logo]overlay=(W-w)/2:(H-h)/2[out]'
+                ])
+                .outputOptions(['-map', '[out]', '-frames:v', '1'])
+                .output(pathOutImg)
+                .on('end', resolve)
+                .on('error', (err) => reject(new Error(`FFmpeg error: ${err.message}`)))
+                .run();
+        });
+
+        const resultBuf = await fs.readFile(pathOutImg);
+        await conn.sendMessage(m.chat, { image: resultBuf, caption: '💀 *W A S T E D*', mentions: [who] }, { quoted: m });
+
+    } catch (e) {
+        console.error('Errore wasted:', e);
+        m.reply('❌ Si è verificato un errore durante l\'elaborazione dell\'immagine.');
+    } finally {
+        if (pathUserImg) { try { await fs.unlink(pathUserImg); } catch {} }
+        if (pathWastedImg) { try { await fs.unlink(pathWastedImg); } catch {} }
+        if (pathOutImg) { try { await fs.unlink(pathOutImg); } catch {} }
     }
+};
 
-    if (!imgBuffer) {
-      if (fs.existsSync(ICON_PATH)) {
-        imgBuffer = fs.readFileSync(ICON_PATH)
-      } else {
-        return m.reply('❌ Impossibile recuperare un\'immagine valida da modificare.')
-      }
-    }
+handler.help = ['wasted'];
+handler.tags = ['giochi'];
+handler.command = /^(wasted)$/i;
 
-    const filter = `[0:v]scale=512:512,hue=s=0,drawbox=y=(ih-120)/2:h=120:color=black@0.5:t=fill[bg];` +
-                   `[1:v]scale=340:-1[logo];` +
-                   `[bg][logo]overlay=(W-w)/2:(H-h)/2[out]`
-
-    const args = ['-y', '-i', 'pipe:0', '-i', WASTED_URL, '-filter_complex', filter, '-map', '[out]', '-frames:v', '1', '-f', 'image2', 'pipe:1']
-
-    const resultBuf = await new Promise((resolve, reject) => {
-      const ff = spawn('ffmpeg', args)
-      const chunks = []
-      let stderr = ''
-      
-      ff.stdout.on('data', (chunk) => chunks.push(chunk))
-      ff.stderr.on('data', (chunk) => { stderr += chunk.toString() })
-      ff.on('error', reject)
-      ff.on('close', (code) => {
-        if (code !== 0) return reject(new Error(`ffmpeg exit code ${code}: ${stderr}`))
-        resolve(Buffer.concat(chunks))
-      })
-
-      ff.stdin.write(imgBuffer)
-      ff.stdin.end()
-    })
-
-    if (!resultBuf || !resultBuf.length) {
-      return m.reply('❌ Errore durante l\'applicazione del filtro Wasted.')
-    }
-
-    await conn.sendFile(m.chat, resultBuf, 'wasted.png', '💀 *W A S T E D*', m)
-  } catch (e) {
-    console.error('Wasted handler error:', e)
-    try { await m.reply('Errore: ' + (e.message || e)) } catch {}
-  }
-}
-
-handler.help = ['wasted']
-handler.tags = ['fun']
-handler.command = ['wasted']
-export default handler
+export default handler;
