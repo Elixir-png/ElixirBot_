@@ -1,65 +1,45 @@
-//Plugin by Gab, Lucifero & 333 staff
+// Plugin by Elixir & 888 staff
+function ensureUser(jid) {
+  if (!global.db.data.users[jid]) {
+    global.db.data.users[jid] = { messaggi: 0 }
+  }
+}
 
-const handler = async (message) => {
-  const userId = (message.mentionedJid && message.mentionedJid[0]) || message.sender;
-  const userData = global.db.data.users[userId];
-  
-  if (!userData) {
-    return message.reply("Inserisci la menzione nel comando!");
+function ensureChat(chatId) {
+  if (!global.db.data.chats[chatId]) {
+    global.db.data.chats[chatId] = { topUsers: {} }
   }
-  
-  const numberMatch = message.text.match(/\d+/);
-  const messageCount = numberMatch ? parseInt(numberMatch[0]) : 0;
-  
-  if (messageCount <= 0) {
-    return message.reply("Inserisci un numero valido di messaggi da rimuovere!");
+  if (!global.db.data.chats[chatId].topUsers) {
+    global.db.data.chats[chatId].topUsers = {}
   }
-  
-  if (!userData.messaggi || userData.messaggi < messageCount) {
-    const username = userId.split('@')[0];
-    return message.reply(
-      `L'utente @${username} non ha abbastanza messaggi da rimuovere.`,
-      null,
-      { mentions: [userId] }
-    );
-  }
-  
-  userData.messaggi -= messageCount;
-  
-  const quotedMessage = {
-    key: {
-      participants: "users",
-      fromMe: false,
-      id: "Halo"
-    },
-    message: {
-      extendedTextMessage: {
-        text: "Eseguito con successo ✓",
-        vcard:
-          `BEGIN:VCARD
-VERSION:3.0
-N:;Unlimited;;;
-FN:Unlimited
-ORG:Unlimited
-TITLE:
-item1.TEL;waid=19709001746:+1 (970) 900-1746
-item1.X-ABLabel:Unlimited
-X-WA-BIZ-DESCRIPTION:ofc
-X-WA-BIZ-NAME:Unlimited
-END:VCARD`
-      }
-    },
-    participant: "0@s.whatsapp.net"
-  };
-  
-  conn.reply(
-    message.chat,
-    `Ho rimosso *${messageCount}* messaggi a questo utente!`,
-    null,
-    { quoted: quotedMessage }
-  );
-};
+}
 
-handler.command = /^(rimuovi)$/i;
-handler.rowner = true;
-export default handler;
+let handler = async (m, { conn, args }) => {
+  let target = m.mentionedJid?.[0] || (m.quoted?.sender) || args[0]?.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+
+  if (!target || !target.includes('@s.whatsapp.net')) {
+    return conn.reply(m.chat, 'Menziona o rispondi a un utente valido.', m)
+  }
+
+  let amount = parseInt(args[1])
+  if (isNaN(amount) || amount <= 0) {
+    return conn.reply(m.chat, 'Inserisci un numero valido di messaggi.', m)
+  }
+
+  ensureUser(target)
+
+  let user = global.db.data.users[target]
+  user.messaggi = Math.max(0, (user.messaggi || 0) - amount)
+
+  if (m.isGroup) {
+    ensureChat(m.chat)
+    global.db.data.chats[m.chat].topUsers[target] = Math.max(0, (global.db.data.chats[m.chat].topUsers[target] || 0) - amount)
+  }
+
+  conn.reply(m.chat, `✅ Rimossi *${amount}* messaggi a @${target.split('@')[0]}.`, m, { mentions: [target] })
+}
+
+handler.command = /^(rimuovi)$/i
+handler.rowner = true
+
+export default handler
