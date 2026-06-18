@@ -1,62 +1,83 @@
-// Plugin by Elixir, Punisher & 888 staff
-import fetch from 'node-fetch';
-import ffmpeg from 'fluent-ffmpeg';
-import { promises as fs } from 'fs';
-import { join } from 'path';
+// by Elixir, Punisher & 888 staff
+import fetch from 'node-fetch'
 
-let handler = async (m, { conn }) => {
-    let who = m.quoted ? m.quoted.sender : m.mentionedJid?.[0] ? m.mentionedJid[0] : m.sender;
-    
-    let pathUserImg;
-    let pathOutImg;
+const apis = {
+  sra: 'https://api.some-random-api.com/canvas/'
+}
 
-    try {
-        const pp = await conn.profilePictureUrl(who, 'image').catch(() => null);
-        if (!pp) {
-            const notification = who === m.sender ? 
-                'non hai una foto profilo 🤕' : 
-                `@${who.split('@')[0]} non ha una foto profilo 🤕`;
-            return m.reply(notification, null, { mentions: [who] });
-        }
+const effetti = {
+  wasted: { api: 'sra', path: 'overlay/wasted' },
+  bisex: { api: 'sra', path: 'misc/bisexual' },
+  comunista: { api: 'sra', path: 'overlay/comrade' },
+  simpcard: { api: 'sra', path: 'misc/simpcard' }
+}
 
-        await m.reply('⏳ Recupero la foto profilo ed elaboro...');
+const S = v => String(v || '')
 
-        const resProfile = await fetch(pp);
-        if (!resProfile.ok) throw new Error('Impossibile scaricare la foto profilo.');
-        const bufProfile = Buffer.from(await resProfile.arrayBuffer());
+let handler = async (m, { conn, usedPrefix, command }) => {
+  const effect = S(command).toLowerCase()
+  const config = effetti[effect]
 
-        const timestamp = Date.now();
-        pathUserImg = join('temp', `user_${timestamp}.jpg`);
-        pathOutImg = join('temp', `out_${timestamp}.png`);
+  if (!config) {
+    return m.reply('*𝐄𝐟𝐟𝐞𝐭𝐭𝐨 𝐧𝐨𝐧 𝐭𝐫𝐨𝐯𝐚𝐭𝐨 𝐨 𝐧𝐨𝐧 𝐬𝐮𝐩𝐩𝐨𝐫𝐭𝐚𝐭𝐨.*')
+  }
 
-        await fs.writeFile(pathUserImg, bufProfile);
+  const who = m.quoted?.sender || m.mentionedJid?.[0] || m.sender
 
-        await new Promise((resolve, reject) => {
-            ffmpeg(pathUserImg)
-                .complexFilter([
-                    '[0:v]scale=512:512,drawbox=y=(ih-120)/2:h=120:color=black@0.5:t=fill,drawtext=text=\'wasted\':fontcolor=0x3333FF:fontsize=96:x=(w-tw)/2:y=(h-th)/2:borderw=12:bordercolor=black[out]'
-                ])
-                .outputOptions(['-map', '[out]', '-frames:v', '1'])
-                .output(pathOutImg)
-                .on('end', resolve)
-                .on('error', (err) => reject(new Error(`FFmpeg error: ${err.message}`)))
-                .run();
-        });
+  if (!who) {
+    return m.reply(`*𝐓𝐚𝐠𝐠𝐚 𝐪𝐮𝐚𝐥𝐜𝐮𝐧𝐨 𝐨 𝐫𝐢𝐬𝐩𝐨𝐧𝐝𝐢 𝐚 𝐮𝐧 𝐦𝐞𝐬𝐬𝐚𝐠𝐠𝐢𝐨.*
 
-        const resultBuf = await fs.readFile(pathOutImg);
-        await conn.sendMessage(m.chat, { image: resultBuf }, { quoted: m });
+*𝐄𝐬𝐞𝐦𝐩𝐢𝐨:* ${usedPrefix + effect} @user`)
+  }
 
-    } catch (e) {
-        console.error('Errore wasted:', e);
-        m.reply('❌ Si è verificato un errore durante l\'elaborazione dell\'immagine.');
-    } finally {
-        if (pathUserImg) { try { await fs.unlink(pathUserImg); } catch {} }
-        if (pathOutImg) { try { await fs.unlink(pathOutImg); } catch {} }
+  try {
+    const pp = await conn.profilePictureUrl(who, 'image').catch(() => null)
+
+    if (!pp) {
+      const notification = who === m.sender
+        ? '*𝐍𝐨𝐧 𝐡𝐚𝐢 𝐮𝐧𝐚 𝐟𝐨𝐭𝐨 𝐩𝐫𝐨𝐟𝐢𝐥𝐨.*'
+        : `*@${who.split('@')[0]} 𝐧𝐨𝐧 𝐡𝐚 𝐮𝐧𝐚 𝐟𝐨𝐭𝐨 𝐩𝐫𝐨𝐟𝐢𝐥𝐨.*`
+
+      return m.reply(notification, null, { mentions: [who] })
     }
-};
 
-handler.help = ['wasted'];
-handler.tags = ['giochi'];
-handler.command = /^(wasted)$/i;
+    const url = new URL(config.path, apis[config.api])
+    url.searchParams.set('avatar', pp)
 
-export default handler;
+    const res = await fetch(url.toString())
+
+    if (!res.ok) {
+      throw new Error(`API ${res.status}`)
+    }
+
+    const buffer = Buffer.from(await res.arrayBuffer())
+
+    if (!buffer || buffer.length < 100) {
+      throw new Error('Buffer non valido')
+    }
+
+    await conn.sendMessage(
+      m.chat,
+      {
+        image: buffer,
+        caption: `*╭━━━━━━━🖼️━━━━━━━╮*
+*✦ 𝐄𝐅𝐅𝐄𝐓𝐓𝐎 𝐀𝐏𝐏𝐋𝐈𝐂𝐀𝐓𝐎 ✦*
+*╰━━━━━━━🖼️━━━━━━━╯*
+
+*🎨 𝐄𝐟𝐟𝐞𝐭𝐭𝐨:* *${effect}*`,
+        mentions: [who]
+      },
+      { quoted: m }
+    )
+
+  } catch (e) {
+    console.error('Errore effettiimmagine:', e)
+    m.reply('*𝐄𝐫𝐫𝐨𝐫𝐞 𝐝𝐮𝐫𝐚𝐧𝐭𝐞 𝐥’𝐚𝐩𝐩𝐥𝐢𝐜𝐚𝐳𝐢𝐨𝐧𝐞 𝐝𝐞𝐥𝐥’𝐞𝐟𝐟𝐞𝐭𝐭𝐨.*')
+  }
+}
+
+handler.help = ['wasted', 'bisex', 'comunista', 'simpcard']
+handler.tags = ['giochi']
+handler.command = /^(wasted|bisex|comunista|simpcard)$/i
+
+export default handler
