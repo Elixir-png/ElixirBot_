@@ -185,10 +185,15 @@ let handler = async (m, { conn, args, groupMetadata }) => {
 
     await m.reply('⏳ Genero l\'immagine...')
     let targetName = null
-    if (!groupMetadata && m.chat?.endsWith('@g.us')) {
+
+    if (m.quoted?.sender === who && m.quoted?.pushName) {
+      targetName = m.quoted.pushName
+    }
+
+    if (!targetName && !groupMetadata && m.chat?.endsWith('@g.us')) {
       groupMetadata = await conn.groupMetadata?.(m.chat).catch(() => null)
     }
-    if (groupMetadata?.participants) {
+    if (!targetName && groupMetadata?.participants) {
       const participant = groupMetadata.participants.find((p) => p.id === who)
       if (participant) {
         targetName = participant.notify || participant.name || participant.vname || null
@@ -196,7 +201,10 @@ let handler = async (m, { conn, args, groupMetadata }) => {
     }
     if (!targetName && conn.getName) {
       try {
-        targetName = await Promise.resolve(conn.getName(who))
+        let fetchedName = await Promise.resolve(conn.getName(who))
+        if (fetchedName && !fetchedName.includes('@') && !/^\d+$/.test(fetchedName.replace(/[\s+]/g, ''))) {
+          targetName = fetchedName
+        }
       } catch (e) {
         targetName = null
       }
@@ -205,12 +213,10 @@ let handler = async (m, { conn, args, groupMetadata }) => {
       const contact = conn.contacts[who]
       targetName = contact.name || contact.notify || contact.vname || null
     }
-    if (!targetName && m.quoted?.sender === who && m.quoted?.pushName) {
-      targetName = m.quoted.pushName
+
+    if (!targetName || /^\d+$/.test(targetName.replace(/[\s+]/g, ''))) {
+      targetName = "Utente WhatsApp"
     }
-    
-    const cleanedCheck = normalizeText(targetName)
-    targetName = cleanedCheck.length > 0 ? targetName : who.split('@')[0]
     
     let profileUrl = ICON_PATH
 
