@@ -857,8 +857,6 @@ if (user.banned) {
             if (user) {
                 user.exp += m.exp || 0
                 user.euro -= m.euro * 1 || 0
-                user.messaggi = (user.messaggi || 0) + 1
-                user.messages = (user.messages || 0) + 1
                 if (m.isCommand) {
                     user.comandiEseguiti = (user.comandiEseguiti || 0) + 1
                     if (isAdmin) {
@@ -875,9 +873,6 @@ if (user.banned) {
                     if (!chat.users) chat.users = {}
                     if (!chat.users[normalizedSender]) chat.users[normalizedSender] = { messages: 0 }
                     chat.users[normalizedSender].messages++
-
-                    if (!chat.topUsers) chat.topUsers = {}
-                    chat.topUsers[normalizedSender] = (chat.topUsers[normalizedSender] || 0) + 1
 
                     if (!chat.topRich) chat.topRich = {}
                     const wallet = Number(user.money) || 0
