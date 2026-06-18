@@ -1,14 +1,10 @@
 // Plugin by Elixir & 888 staff
 import yts from 'yt-search';
-import fg from 'api-dylux';
 import fetch from 'node-fetch';
 import { exec } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-
-const DYLUX_KEY = global.dyluxkey || 'dylux-';
-const LOLHUMAN_KEY = global.lolkey || 'INSERISCI_QUI_LA_KEY';
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
   if (!text) return m.reply(`⚡ *888 𝚩𝚯𝐓*\n\n💡 _Scrivi:_ ${usedPrefix + command} nome canzone`);
@@ -46,25 +42,22 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     const methods = [
       async () => {
-        let res = isAudio ? await fg.yta(url) : await fg.ytv(url);
-        if (res && res.dl_url) return res.dl_url;
-        throw new Error('no url');
-      },
-      async () => {
         let api = isAudio ? 'ytmp3' : 'ytmp4';
-        let res = await fetch(`https://api.vreden.my.id/api/${api}?url=${url}`);
+        let res = await fetch(`https://vreden.my.id/api/${api}?url=${url}`);
         let json = await res.json();
         return json.result?.download?.url || json.result?.url;
       },
       async () => {
-        let res = await fetch(`https://api.lolhuman.xyz/api/yt${isAudio ? 'mp3' : 'mp4'}?url=${url}&apikey=${LOLHUMAN_KEY}`);
+        let api = isAudio ? 'ytmp3' : 'ytmp4';
+        let res = await fetch(`https://anya.biz.id/api/${api}?url=${url}`);
         let json = await res.json();
-        return json.result?.link?.url || json.result?.link;
+        return json.result?.download?.url || json.result?.url;
       },
       async () => {
-        let res = await fetch(`https://${isAudio ? 'audio' : 'video'}.eu.org/download?url=${url}`);
+        let api = isAudio ? 'ytmp3' : 'ytmp4';
+        let res = await fetch(`https://tio.my.id/api/${api}?url=${url}`);
         let json = await res.json();
-        return json.url || json.download_url || json.result?.url;
+        return json.result?.download?.url || json.result?.url;
       },
       async () => {
         const tmpDir = os.tmpdir();
