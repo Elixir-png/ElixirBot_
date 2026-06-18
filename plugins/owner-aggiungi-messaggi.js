@@ -1,56 +1,45 @@
-//Plugin by Gab, Lucifero & 333 staff
+// Plugin by Elixir & 888 staff
+function ensureUser(jid) {
+  if (!global.db.data.users[jid]) {
+    global.db.data.users[jid] = { messaggi: 0 }
+  }
+}
 
-const handler = async (message) => {
-  const userId = message.mentionedJid?.[0] || message.sender;
-  const userData = global.db.data.users[userId];
+function ensureChat(chatId) {
+  if (!global.db.data.chats[chatId]) {
+    global.db.data.chats[chatId] = { topUsers: {} }
+  }
+  if (!global.db.data.chats[chatId].topUsers) {
+    global.db.data.chats[chatId].topUsers = {}
+  }
+}
 
-  if (!userData) {
-    return message.reply("Inserisci la menzione nel comando!");
+let handler = async (m, { conn, args }) => {
+  let target = m.mentionedJid?.[0] || (m.quoted?.sender) || args[0]?.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+
+  if (!target || !target.includes('@s.whatsapp.net')) {
+    return conn.reply(m.chat, 'Menziona o rispondi a un utente valido.', m)
   }
 
-  const numberMatch = message.text.match(/\d+/);
-  const messageCount = numberMatch ? parseInt(numberMatch[0]) : 0;
-
-  if (messageCount <= 0) {
-    return message.reply("Inserisci un numero valido di messaggi da aggiungere!");
+  let amount = parseInt(args[1])
+  if (isNaN(amount) || amount <= 0) {
+    return conn.reply(m.chat, 'Inserisci un numero valido di messaggi.', m)
   }
 
-  userData.messaggi = (userData.messaggi || 0) + messageCount;
+  ensureUser(target)
 
-  const quotedMessage = {
-    key: {
-      participants: "0@s.whatsapp.net",
-      fromMe: false,
-      id: "Halo"
-    },
-    message: {
-      extendedTextMessage: {
-        text: "Eseguito con successo ✓",
-        vcard: `BEGIN:VCARD
-VERSION:3.0
-N:;Unlimited;;;
-FN:Unlimited
-ORG:Unlimited
-TITLE:
-item1.TEL;waid=19709001746:+1 (970) 900-1746
-item1.X-ABLabel:Unlimited
-X-WA-BIZ-DESCRIPTION:ofc
-X-WA-BIZ-NAME:Unlimited
-END:VCARD`
-      }
-    },
-    participant: "0@s.whatsapp.net"
-  };
+  let user = global.db.data.users[target]
+  user.messaggi = (user.messaggi || 0) + amount
 
-  conn.reply(
-    message.chat,
-    `Ho aggiunto *${messageCount}* messaggi a questo utente!`,
-    null,
-    { quoted: quotedMessage }
-  );
-};
+  if (m.isGroup) {
+    ensureChat(m.chat)
+    global.db.data.chats[m.chat].topUsers[target] = (global.db.data.chats[m.chat].topUsers[target] || 0) + amount
+  }
 
-handler.command = /^(aggiungi)$/i;
-handler.rowner = true;
+  conn.reply(m.chat, `✅ Aggiunti *${amount}* messaggi a @${target.split('@')[0]}.`, m, { mentions: [target] })
+}
 
-export default handler;
+handler.command = /^(aggiungi)$/i
+handler.rowner = true
+
+export default handler
