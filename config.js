@@ -12,12 +12,22 @@ const pkg = JSON.parse(await fs.promises.readFile(new URL('./package.json', impo
 const moduleCache = new NodeCache({ stdTTL: 300 });
 
 	
-global.gab = ['393784409415', '6282364029306','639753555926','393206032199','79524931364',]
-global.owner = [
-  ['639752917233', 'Elixir', true],
-  ['79524931364', 'Punisher', true],
-  ['393784409415', 'Elixir', true],
+global.gab = [
+  '393784409415',
+  '639752917233',
+  '13018239629',
+  '79524931364',
+  '212785655331'
 ]
+
+global.owner = [
+  ['393784409415', 'Elixir-39', true],
+  ['639752917233', 'Elixir-63', true],
+  ['13018239629', 'ElixirBot', true],
+  ['79524931364', 'Punisher', true],
+  ['212785655331', 'Ghost', true]
+]
+
 
 
 global.nomepack = '𝟴𝟴𝟴 𝗕𝗢𝗧'
