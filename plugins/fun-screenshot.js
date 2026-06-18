@@ -10,14 +10,13 @@ const FONT_FILES = [
 ]
 const FONT_FILE = FONT_FILES.find((f) => fs.existsSync(f)) || FONT_FILES[1]
 
-// Converte i font speciali/strani in testo standard e rimuove le emoji
 const normalizeText = (text) => {
   if (!text) return ''
   return String(text)
-    .normalize('NFD')                         // Scompone i caratteri accentati e speciali
-    .replace(/[\u0300-\u036f]/g, '')          // Rimuove i segni diacritici
-    .replace(/[^\x20-\x7E]/g, '')             // Rimuove emoji, simboli strani e font non standard
-    .replace(/\s+/g, ' ')                     // Compatta gli spazi doppi
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\x20-\x7E]/g, '')
+    .replace(/\s+/g, ' ')
     .trim()
 }
 
@@ -68,7 +67,6 @@ const wrapText = (text, maxLen = 34) => {
 }
 
 const renderPreview = async (name, message, profileUrl) => {
-  // Pulisce e normalizza il nome per FFmpeg prima dell'escape
   const cleanName = normalizeText(name) || "Utente WhatsApp"
   const nameTxt = escapeFfmpeg(cleanName)
   
@@ -88,23 +86,18 @@ const renderPreview = async (name, message, profileUrl) => {
 
   const filter =
   `[1:v]scale=280:280,format=rgba[avatar_scaled];` +
-
   `color=c=black:s=280x280,format=rgba,` +
   `geq=r='if(lte(hypot(X-140,Y-140),140),255,0)':` +
   `g='if(lte(hypot(X-140,Y-140),140),255,0)':` +
   `b='if(lte(hypot(X-140,Y-140),140),255,0)'[mask];` +
-
   `[avatar_scaled][mask]alphamerge[avatar_round];` +
-
   `[0:v][avatar_round]overlay=70:(main_h-280)/2:format=auto,` +
-
   `drawtext=${fontSpec}:` +
   `text='${nameTxt}':` +
   `fontcolor=white:` +
   `fontsize=${nameFontSize}:` +
   `x=390:` +
   `y=(main_h/2)-100,` +
-
   `${msgDrawtext}`
 
   const inputs = [ICON_PATH, profileUrl || ICON_PATH]
@@ -216,8 +209,6 @@ let handler = async (m, { conn, args, groupMetadata }) => {
       targetName = m.quoted.pushName
     }
     
-    // Se il nome contiene solo emoji o caratteri strani cancellati da normalizeText, 
-    // usa direttamente il numero di telefono per evitare scritte vuote
     const cleanedCheck = normalizeText(targetName)
     targetName = cleanedCheck.length > 0 ? targetName : who.split('@')[0]
     
