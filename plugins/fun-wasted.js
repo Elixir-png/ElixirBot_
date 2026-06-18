@@ -2,20 +2,17 @@
 import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
+import fetch from 'node-fetch'
 
 const ICON_PATH = path.join(process.cwd(), 'icone', 'Whatsapp.jpeg')
-const FONT_FILES = [
-  '/usr/share/fonts/truetype/ancient-scripts/Symbola_hint.ttf',
-  '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
-]
-const FONT_FILE = FONT_FILES.find((f) => fs.existsSync(f)) || FONT_FILES[1]
+const WASTED_URL = 'https://i.pinimg.com/736x/41/ac/14/41ac1493368265524def85e647f6693f.jpg'
 
 const getMentionedUser = (msg) => {
   if (!msg) return null
   if (msg.quoted?.sender) return msg.quoted.sender
-  if (Array.isArray(msg.mentionedJid) && msg.mentionedJid.length) return msg.mentionedJid[0]
-  if (msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.length) return msg.message.extendedTextMessage.contextInfo.mentionedJid[0]
-  if (Array.isArray(msg.mentioned) && msg.mentioned.length) return msg.mentioned[0]
+  if (Array.isArray(msg.mentionedJid) && msg.mentionedJid.length) return msg.mentionedJid
+  if (msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.length) return msg.message.extendedTextMessage.contextInfo.mentionedJid
+  if (Array.isArray(msg.mentioned) && msg.mentioned.length) return msg.mentioned
   return msg.sender || null
 }
 
@@ -56,10 +53,11 @@ let handler = async (m, { conn }) => {
       }
     }
 
-    const fontSpec = `fontfile='${FONT_FILE}'`
-    const filter = `[0:v]scale=512:512,hue=s=0,drawtext=${fontSpec}:text='WASTED':fontcolor=0x3333CC:fontsize=96:x=(w-tw)/2:y=(h-th)/2:borderw=5:bordercolor=black[out]`
+    const filter = `[0:v]scale=512:512,hue=s=0,drawbox=y=(ih-120)/2:h=120:color=black@0.5:t=fill[bg];` +
+                   `[1:v]scale=340:-1[logo];` +
+                   `[bg][logo]overlay=(W-w)/2:(H-h)/2[out]`
 
-    const args = ['-y', '-i', 'pipe:0', '-filter_complex', filter, '-map', '[out]', '-frames:v', '1', '-f', 'image2', 'pipe:1']
+    const args = ['-y', '-i', 'pipe:0', '-i', WASTED_URL, '-filter_complex', filter, '-map', '[out]', '-frames:v', '1', '-f', 'image2', 'pipe:1']
 
     const resultBuf = await new Promise((resolve, reject) => {
       const ff = spawn('ffmpeg', args)
