@@ -1,4 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Elixir, Punisher & 888 staff
 
 let handler = async (m, { text }) => {
 
@@ -106,7 +106,7 @@ let handler = async (m, { text }) => {
 ➤ ${voto}/10
 
 ╰━━━━━━━━━━━━╯
-> *BY 333 BOT*
+> *BY 888 BOT*
 `
 
   m.reply(risposta.trim())
