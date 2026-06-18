@@ -34,7 +34,7 @@ let handler = async (m, { conn }) => {
         await new Promise((resolve, reject) => {
             ffmpeg(pathUserImg)
                 .complexFilter([
-                    '[0:v]scale=512:512,hue=s=0,drawbox=y=(ih-120)/2:h=120:color=black@0.5:t=fill,drawtext=text=\'wasted\':fontcolor=0x3333FF:fontsize=72:x=(w-tw)/2:y=(h-th)/2:borderw=6:bordercolor=black[out]'
+                    '[0:v]scale=512:512,drawbox=y=(ih-120)/2:h=120:color=black@0.5:t=fill,drawtext=text=\'wasted\':fontcolor=0x3333FF:fontsize=96:x=(w-tw)/2:y=(h-th)/2:borderw=12:bordercolor=black[out]'
                 ])
                 .outputOptions(['-map', '[out]', '-frames:v', '1'])
                 .output(pathOutImg)
@@ -44,7 +44,7 @@ let handler = async (m, { conn }) => {
         });
 
         const resultBuf = await fs.readFile(pathOutImg);
-        await conn.sendMessage(m.chat, { image: resultBuf, caption: '💀 *W A S T E D*', mentions: [who] }, { quoted: m });
+        await conn.sendMessage(m.chat, { image: resultBuf }, { quoted: m });
 
     } catch (e) {
         console.error('Errore wasted:', e);
