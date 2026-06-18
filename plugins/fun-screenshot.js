@@ -1,4 +1,4 @@
-// Plugin by Lucifero & 333 Staff
+// Plugin by Elixir, Punisher & 888 Staff
 import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
@@ -9,6 +9,17 @@ const FONT_FILES = [
   '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
 ]
 const FONT_FILE = FONT_FILES.find((f) => fs.existsSync(f)) || FONT_FILES[1]
+
+// Converte i font speciali/strani in testo standard e rimuove le emoji
+const normalizeText = (text) => {
+  if (!text) return ''
+  return String(text)
+    .normalize('NFD')                         // Scompone i caratteri accentati e speciali
+    .replace(/[\u0300-\u036f]/g, '')          // Rimuove i segni diacritici
+    .replace(/[^\x20-\x7E]/g, '')             // Rimuove emoji, simboli strani e font non standard
+    .replace(/\s+/g, ' ')                     // Compatta gli spazi doppi
+    .trim()
+}
 
 const escapeFfmpeg = (text) => {
   return String(text || '')
@@ -57,7 +68,10 @@ const wrapText = (text, maxLen = 34) => {
 }
 
 const renderPreview = async (name, message, profileUrl) => {
-  const nameTxt = escapeFfmpeg(name)
+  // Pulisce e normalizza il nome per FFmpeg prima dell'escape
+  const cleanName = normalizeText(name) || "Utente WhatsApp"
+  const nameTxt = escapeFfmpeg(cleanName)
+  
   const msgLines = wrapText(message, 34).slice(0, 10)
   const lineCount = msgLines.length
   const fontSpec = `fontfile='${FONT_FILE}'`
@@ -169,11 +183,11 @@ let handler = async (m, { conn, args, groupMetadata }) => {
     const messageText = getMessageText(m, args)
 
     if (!who) {
-      return m.reply('⚠️ Tagga o rispondi a una persona con il messaggio da usare.\nEsempio: .prova @utente ciao')
+      return m.reply('⚠️ Tagga o rispondi a una persona con il messaggio da usare.\nEsempio: .screenshot @utente ciao')
     }
 
     if (!messageText) {
-      return m.reply('⚠️ Scrivi il testo da mostrare.\nEsempio: .prova @utente ciao')
+      return m.reply('⚠️ Scrivi il testo da mostrare.\nEsempio: .screenshot @utente ciao')
     }
 
     await m.reply('⏳ Genero l\'immagine...')
@@ -201,7 +215,12 @@ let handler = async (m, { conn, args, groupMetadata }) => {
     if (!targetName && m.quoted?.sender === who && m.quoted?.pushName) {
       targetName = m.quoted.pushName
     }
-    targetName = targetName || who.split('@')[0]
+    
+    // Se il nome contiene solo emoji o caratteri strani cancellati da normalizeText, 
+    // usa direttamente il numero di telefono per evitare scritte vuote
+    const cleanedCheck = normalizeText(targetName)
+    targetName = cleanedCheck.length > 0 ? targetName : who.split('@')[0]
+    
     let profileUrl = ICON_PATH
 
     try {
