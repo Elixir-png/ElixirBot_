@@ -1,15 +1,13 @@
+// Plugin by Elixir, Punisher & 888 staff
 import fetch from 'node-fetch';
 import ffmpeg from 'fluent-ffmpeg';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 
-const WASTED_URL = 'https://pinimg.com';
-
 let handler = async (m, { conn }) => {
     let who = m.quoted ? m.quoted.sender : m.mentionedJid?.[0] ? m.mentionedJid[0] : m.sender;
     
     let pathUserImg;
-    let pathWastedImg;
     let pathOutImg;
 
     try {
@@ -27,25 +25,16 @@ let handler = async (m, { conn }) => {
         if (!resProfile.ok) throw new Error('Impossibile scaricare la foto profilo.');
         const bufProfile = Buffer.from(await resProfile.arrayBuffer());
 
-        const resWasted = await fetch(WASTED_URL);
-        if (!resWasted.ok) throw new Error('Impossibile scaricare la grafica Wasted.');
-        const bufWasted = Buffer.from(await resWasted.arrayBuffer());
-
         const timestamp = Date.now();
         pathUserImg = join('temp', `user_${timestamp}.jpg`);
-        pathWastedImg = join('temp', `wasted_${timestamp}.jpg`);
         pathOutImg = join('temp', `out_${timestamp}.png`);
 
         await fs.writeFile(pathUserImg, bufProfile);
-        await fs.writeFile(pathWastedImg, bufWasted);
 
         await new Promise((resolve, reject) => {
             ffmpeg(pathUserImg)
-                .input(pathWastedImg)
                 .complexFilter([
-                    '[0:v]scale=512:512,hue=s=0,drawbox=y=(ih-120)/2:h=120:color=black@0.5:t=fill[bg]',
-                    '[1:v]scale=340:-1[logo]',
-                    '[bg][logo]overlay=(W-w)/2:(H-h)/2[out]'
+                    '[0:v]scale=512:512,hue=s=0,drawbox=y=(ih-120)/2:h=120:color=black@0.5:t=fill,drawtext=text=\'wasted\':fontcolor=0x3333FF:fontsize=72:x=(w-tw)/2:y=(h-th)/2:borderw=6:bordercolor=black[out]'
                 ])
                 .outputOptions(['-map', '[out]', '-frames:v', '1'])
                 .output(pathOutImg)
@@ -62,7 +51,6 @@ let handler = async (m, { conn }) => {
         m.reply('❌ Si è verificato un errore durante l\'elaborazione dell\'immagine.');
     } finally {
         if (pathUserImg) { try { await fs.unlink(pathUserImg); } catch {} }
-        if (pathWastedImg) { try { await fs.unlink(pathWastedImg); } catch {} }
         if (pathOutImg) { try { await fs.unlink(pathOutImg); } catch {} }
     }
 };
