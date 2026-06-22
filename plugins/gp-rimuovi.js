@@ -52,6 +52,7 @@ handler.help = ['rimuovi']
 handler.tags = ['gruppo']
 handler.command = /^(kick|rimuovi|paki|ban|abdul)$/i 
 handler.group = true
+handler.mods = true
 handler.admin = true
 handler.botAdmin = true
 
