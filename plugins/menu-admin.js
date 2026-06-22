@@ -51,7 +51,6 @@ let handler = async (m, { conn, usedPrefix: prefix }) => {
 ┃  ⮕ ${prefix}retrocedi / r
 ┃  ⮕ ${prefix}kick / puffo / sparisci
 ┃  ⮕ ${prefix}inattivi
-┃  ⮕ ${prefix}invita
 ┃  ⮕ ${prefix}richieste
 ┃ 
 ┃ ⚙️ *Impostazioni Gruppo:*
