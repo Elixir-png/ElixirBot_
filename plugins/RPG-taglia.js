@@ -1,58 +1,74 @@
 //Plugin by Elixir, Punisher & 888 staff
-let handler = m => m
 
-handler.before = async function (m) {
+let handler = async (m, { conn, text, usedPrefix: prefix }) => {
+  if (!m.isGroup) return m.reply('❌ Questo comando funziona solo nei gruppi.')
 
-    if (!m.isGroup) return
-    if (!m.text) return
+  let args = text.trim().split(/\s+/)
+  let who = m.mentionedJid && m.mentionedJid[0]
+  let amount = parseInt(args[args.length - 1])
 
-    global.bounty = global.bounty || {}
+  if (!who || isNaN(amount) || amount < 100) {
+    return m.reply(`🤑 *COME IMPOSTARE UNA TAGLIA*\n\n➤ ${prefix}settaglia @user <importo>\n\nEsempio: ${prefix}settaglia @utente 500\n\n• Minimo 100€\n• I soldi vengono presi dal tuo portafoglio\n• Se nessuno riscatta la taglia in 30s, riavrai i tuoi soldi`)
+  }
 
-    let data = global.bounty[m.chat] || {}
+  if (who === m.sender) return m.reply('❌ Non puoi mettere una taglia su te stesso.')
 
-    if (data.last && Date.now() - data.last < 30 * 60 * 1000) return
+  if (who === conn.user.jid) return m.reply('❌ Non puoi mettere una taglia sul bot.')
 
-    if (data.active) return
+  let users = global.db.data.users
+  users[m.sender] = users[m.sender] || { money: 0 }
 
-    if (Math.random() > 0.005) return
+  if ((users[m.sender].money || 0) < amount) {
+    return m.reply(`❌ Non hai abbastanza soldi! Hai solo ${users[m.sender].money || 0}€, ti servono ${amount}€.`)
+  }
 
-    let metadata = await this.groupMetadata(m.chat)
-    let members = metadata.participants.map(p => p.id)
+  global.bounty = global.bounty || {}
+  if (global.bounty[m.chat]?.active) {
+    return m.reply('❌ C\'è già una taglia attiva in questo gruppo! Riscatta prima quella.')
+  }
 
-    let target = members[Math.floor(Math.random() * members.length)]
+  users[m.sender].money -= amount
 
-    let reward = Math.floor(Math.random() * (10000 - 100 + 1)) + 100
+  global.bounty[m.chat] = {
+    active: true,
+    target: who,
+    reward: amount,
+    last: Date.now(),
+    setter: m.sender
+  }
 
-    global.bounty[m.chat] = {
-        active: true,
-        target,
-        reward,
-        last: Date.now()
+  await conn.sendMessage(m.chat, {
+    text: `🎯 𝐓𝐀𝐆𝐋𝐈𝐀 𝐏𝐀𝐆𝐀𝐌𝐄𝐍𝐓𝐎 𝐈𝐌𝐏𝐎𝐒𝐓𝐀𝐓𝐀!
+    
+👤 @${who.split('@')[0]} ha una taglia di ${amount}€
+💰 Pagata da @${m.sender.split('@')[0]}
+
+💥 Scrivi ''.spara'' entro 30 secondi per riscattarla!`,
+    contextInfo: {
+      mentionedJid: [who, m.sender]
+    }
+  })
+
+  setTimeout(async () => {
+    let current = global.bounty?.[m.chat]
+    if (!current || !current.active) return
+    if (current.setter !== m.sender) return
+
+    current.active = false
+    
+    let setterUser = global.db.data.users[current.setter]
+    if (setterUser) {
+      setterUser.money = (setterUser.money || 0) + current.reward
     }
 
-    await this.sendMessage(m.chat, {
-        text: `🎯 𝐓𝐀𝐆𝐋𝐈𝐀 𝐀𝐓𝐓𝐈𝐕𝐀!
-
-👤 @${target.split('@')[0]} 𝐡𝐚 𝐮𝐧𝐚 𝐭𝐚𝐠𝐥𝐢𝐚 𝐝𝐢 ${reward}€
-
-💥 𝐒𝐜𝐫𝐢𝐯𝐢 ’’.𝐬𝐩𝐚𝐫𝐚’’ 𝐞𝐧𝐭𝐫𝐨 𝟑𝟎 𝐬𝐞𝐜𝐨𝐧𝐝𝐢 𝐩𝐞𝐫 𝐫𝐢𝐬𝐜𝐚𝐭𝐭𝐚𝐫𝐥𝐚!`,
-        contextInfo: {
-            mentionedJid: [target]
-        }
+    await conn.sendMessage(m.chat, {
+      text: `⌛ Tempo scaduto! @${current.setter.split('@')[0]} si riprende i suoi ${current.reward}€.`,
+      mentions: [current.setter]
     })
-
-    setTimeout(async () => {
-
-        let current = global.bounty[m.chat]
-        if (!current || !current.active) return
-
-        current.active = false
-
-        await this.sendMessage(m.chat, {
-            text: `⌛ Tempo scaduto! Nessuno ha preso la taglia.`
-        })
-
-    }, 30000)
+  }, 30000)
 }
+
+handler.command = /^(settaglia|bounty)$/i
+handler.group = true
 
 export default handler
