@@ -71,7 +71,8 @@ let handler = async (_0x512ed3, { conn: _0x542b94, usedPrefix: _0x3f73c1 }) => {
 ┃  ⮕ ${_0x3f73c1}calcioscommesse
 ┃  ⮕ ${_0x3f73c1}premiotop
 ┃  ⮕ ${_0x3f73c1}quiz
-┃  ⮕ ${_0x3f73c1}rank
+┃  ⮕ ${_0x3f73c1}rank (@user)
+┃  ⮕ ${_0x3f73c1}topranks
 ╰━━━━━━━━━━━━━━━━━━┈
 > ⚠️ In caso di bug o problemi tecnici, 
 > utilizza il comando *${_0x3f73c1}ticket* per 
