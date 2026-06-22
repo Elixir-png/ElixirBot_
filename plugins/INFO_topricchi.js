@@ -1,4 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Elixir, Punisher & 888 staff
 
 const handler = async (m, { conn, groupMetadata }) => {
   if (!m.isGroup) return await conn.sendMessage(m.chat, { text: 'Questo comando funziona solo nei gruppi.' })
@@ -11,33 +11,23 @@ const handler = async (m, { conn, groupMetadata }) => {
   }
 
   const usersDb = global.db.data.users || {}
-  const chat = global.db.data.chats[m.chat] || {}
-  const topRich = chat.topRich || {}
 
-  let values = Object.entries(topRich)
-    .map(([jid, total]) => ({
-      jid,
-      total: Number(total) || 0,
-      wallet: Number(usersDb[jid]?.money) || 0,
-      bank: Number(usersDb[jid]?.bank) || 0
-    }))
-    .filter(user => user.jid && user.total > 0)
+  const groupMemberJids = new Set(participants.map(p => p.id))
 
-  if (!values.length) {
-    values = participants
-      .map(p => p.id)
-      .filter(jid => jid && !jid.endsWith('@g.us'))
-      .map(jid => {
-        const user = usersDb[jid] || {}
-        return {
-          jid,
-          wallet: Number(user.money) || 0,
-          bank: Number(user.bank) || 0,
-          total: (Number(user.money) || 0) + (Number(user.bank) || 0)
-        }
-      })
-      .filter(user => user.total > 0)
-  }
+  let values = Array.from(groupMemberJids)
+    .filter(jid => jid && !jid.endsWith('@g.us'))
+    .map(jid => {
+      const user = usersDb[jid] || {}
+      const wallet = Number(user.money) || 0
+      const bank = Number(user.bank) || 0
+      return {
+        jid,
+        wallet,
+        bank,
+        total: wallet + bank
+      }
+    })
+    .filter(user => user.total > 0)
 
   if (!values.length) {
     return await conn.sendMessage(m.chat, { text: 'Nessun dato di ricchezza disponibile per i membri di questo gruppo.' })
