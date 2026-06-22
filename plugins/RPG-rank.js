@@ -1,8 +1,9 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Elixir, Punisher & 888 staff
 
 let handler = async (m, { conn }) => {
-
-  const user = global.db.data.users[m.sender] || (global.db.data.users[m.sender] = {})
+  let target = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : (m.quoted ? m.quoted.sender : m.sender)
+  
+  const user = global.db.data.users[target] || (global.db.data.users[target] = {})
 
   if (typeof user.lvl !== 'number') user.lvl = Number(user.level ?? user.rankData?.level ?? 0) || 0
   if (typeof user.msgCount !== 'number') user.msgCount = Number(user.rankData?.messages ?? 0) || 0
@@ -25,7 +26,7 @@ let handler = async (m, { conn }) => {
   let text = `
 📊 *RANK SYSTEM*
 
-👤 @${m.sender.split('@')[0]}
+👤 @${target.split('@')[0]}
 
 🏆 Livello: ${user.lvl}
 💬 Progress: ${user.msgCount}/${LEVEL_STEP}
@@ -38,7 +39,7 @@ ${bar} ${percent}%
 
   await conn.sendMessage(m.chat, {
     text,
-    mentions: [m.sender]
+    mentions: [target]
   }, { quoted: m })
 }
 
