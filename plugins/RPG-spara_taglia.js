@@ -1,4 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Elixir, Punisher & 888 staff
 
 let handler = async (m, { conn }) => {
 
@@ -54,14 +54,17 @@ Sei fuori gioco per questa taglia.`,
 
     data.active = false
 
+    let paidBy = data.setter ? `💰 Pagata da @${data.setter.split('@')[0]}` : '💰 Taglia automatica'
+
     await conn.reply(m.chat,
 `💥 COLPO PERFETTO!
 
 🏆 @${m.sender.split('@')[0]} ha preso ${reward}€!
 
-🎯 Taglia riscattata.`,
+🎯 Taglia riscattata.
+${paidBy}`,
     m,
-    { mentions: [m.sender] })
+    { mentions: data.setter ? [m.sender, data.setter] : [m.sender] })
 }
 
 handler.command = /^spara$/i
