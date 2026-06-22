@@ -26,7 +26,7 @@ let handler = async (m, { conn }) => {
   text += '• .giuria @user motivo - Avvia processo giuria\n'
   text += '• .banlist - Mostra lista bannati\n'
   text += '• .hidetag - Tag nascosto\n'
-  text += '• .invita <numero> - Invita utente\n'
+  text += '• .kick @user - Rimuovi utente\n'
   text += '• .admins - Sveglia admin\n'
   text += '• .tagall - Menziona tutti\n'
   text += '• .muta / .smuta - Muta/smuta utente\n'
