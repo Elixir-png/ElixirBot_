@@ -1,7 +1,7 @@
 //Plugin by Elixir, Punisher & 888 staff
 
 let handler = async (m, { conn, args, command }) => {
-  // Determine target user
+
   let target = m.mentionedJid?.[0] || (m.quoted?.sender) || m.sender
   
   let amount = parseInt(args[0])
@@ -9,14 +9,12 @@ let handler = async (m, { conn, args, command }) => {
     return m.reply('❌ Inserisci un numero valido di livelli.')
   }
 
-  // Ensure user exists in db
   if (!global.db.data.users[target]) {
     global.db.data.users[target] = {}
   }
 
   let user = global.db.data.users[target]
 
-  // Initialize lvl if needed
   if (typeof user.lvl !== 'number') user.lvl = Number(user.level ?? user.rankData?.level ?? 0) || 0
 
   if (command === 'setlevel' || command === 'setrank' || command === 'addrank' || command === 'addlevel') {
@@ -32,7 +30,7 @@ let handler = async (m, { conn, args, command }) => {
     await conn.sendMessage(m.chat, { text, mentions: [target] }, { quoted: m })
   } else if (command === 'delrank' || command === 'removelevel' || command === 'removerank' || command === 'dellevel') {
     if (user.lvl - amount < 0) {
-      amount = user.lvl // cannot go below 0
+      amount = user.lvl 
     }
     user.lvl -= amount
     user.level = user.lvl
