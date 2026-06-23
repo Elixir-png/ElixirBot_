@@ -1,4 +1,4 @@
-
+//Plugin by Elixir, Punisher & 888 staff
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, participants }) => {
