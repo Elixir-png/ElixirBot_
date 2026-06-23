@@ -4,11 +4,26 @@ import fs from 'fs'
 import path from 'path'
 
 const ICON_PATH = path.join(process.cwd(), 'icone', 'Whatsapp.jpeg')
-const FONT_FILES = [
-  '/usr/share/fonts/truetype/ancient-scripts/Symbola_hint.ttf',
-  '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
-]
-const FONT_FILE = FONT_FILES.find((f) => fs.existsSync(f)) || FONT_FILES[1]
+
+const getSystemFont = () => {
+  const isWin = process.platform === 'win32'
+  if (isWin) {
+    const winFonts = [
+      path.join(process.env.WINDIR || 'C:\\Windows', 'Fonts', 'arial.ttf'),
+      path.join(process.env.WINDIR || 'C:\\Windows', 'Fonts', 'segoeui.ttf')
+    ]
+    return winFonts.find((f) => fs.existsSync(f)) || 'arial.ttf'
+  } else {
+    const linuxFonts = [
+      '/usr/share/fonts/truetype/ancient-scripts/Symbola_hint.ttf',
+      '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+      '/usr/share/fonts/TTF/DejaVuSans.ttf'
+    ]
+    return linuxFonts.find((f) => fs.existsSync(f)) || 'DejaVuSans'
+  }
+}
+
+const FONT_FILE = getSystemFont()
 
 const normalizeText = (text) => {
   if (!text) return ''
@@ -72,7 +87,9 @@ const renderPreview = async (name, message, profileUrl) => {
   
   const msgLines = wrapText(message, 34).slice(0, 10)
   const lineCount = msgLines.length
-  const fontSpec = `fontfile='${FONT_FILE}'`
+  
+  const sanitizedFontPath = FONT_FILE.replace(/\\/g, '/')
+  const fontSpec = `fontfile='${sanitizedFontPath}'`
 
   const nameFontSize = nameTxt.length > 22 ? 64 : nameTxt.length > 16 ? 72 : 80
   let msgFontSize = 74
@@ -104,7 +121,12 @@ const renderPreview = async (name, message, profileUrl) => {
   const args = ['-y', '-i', inputs[0], '-i', inputs[1], '-filter_complex', filter, '-frames:v', '1', '-f', 'image2', 'pipe:1']
 
   const buf = await new Promise((resolve, reject) => {
-    const ff = spawn('ffmpeg', args)
+    const runEnv = { ...process.env }
+    if (process.platform === 'win32' && !runEnv.FONTCONFIG_FILE) {
+      runEnv.FONTCONFIG_FILE = path.join(process.env.WINDIR || 'C:\\Windows', 'Fonts')
+    }
+
+    const ff = spawn('ffmpeg', args, { env: runEnv })
     const chunks = []
     let stderr = ''
     ff.stdout.on('data', (chunk) => chunks.push(chunk))
