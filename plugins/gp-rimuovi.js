@@ -48,9 +48,9 @@ var handler = async (m, { conn, participants }) => {
     }
 }
 
-handler.help = ['rimuovi']
+handler.help = ['kick']
 handler.tags = ['gruppo']
-handler.command = /^(kick|rimuovi|paki|ban|abdul)$/i 
+handler.command = /^(kick|paki|ban|abdul)$/i 
 handler.group = true
 handler.mods = true
 handler.admin = true
