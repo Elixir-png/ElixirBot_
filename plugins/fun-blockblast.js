@@ -1,4 +1,4 @@
-//Plugin by Elixir, Punisher & 888 staff
+//Plugin by Elixir & 888 staff
 import { randomBytes } from 'crypto';
 
 const games = {};
