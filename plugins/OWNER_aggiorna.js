@@ -108,12 +108,16 @@ _💡 In caso di bug o anomalie, usa il comando *${prefix || '#'}ticket*._`.trim
 
   } catch (err) {
     console.error('[update] Errore critico durante l\'aggiornamento:', err)
-    await conn.reply(
-      m.chat,
-      `⚠️ *Errore di Aggiornamento*\n───\n\nNon è stato possibile completare il processo:\n\`\`\`${err.message}\`\`\``,
-      m
-    )
-    await m.react('❌')
+    try {
+      await conn.reply(
+        m.chat,
+        `⚠️ *Errore di Aggiornamento*\n───\n\nNon è stato possibile completare il processo:\n\`\`\`${err.message}\`\`\``,
+        m
+      )
+    } catch {}
+    try {
+      await m.react('❌')
+    } catch {}
   }
 }
 
