@@ -69,7 +69,7 @@ Crea una copia personale del bot sul tuo account GitHub:
 1. Vai al file [`config.js`](https://github.com/Elixir-png/ElixirBot_/blob/master/config.js)
 2. Clicca sull'icona della matita ✏️ per modificare
 3. Trova la riga con il numero del proprietario
-4. Inserisci il **tuo numero WhatsApp** (formato internazionale: +63 975 291 7233)
+4. Inserisci il **tuo numero WhatsApp** (formato internazionale: +39 378 440 9415)
 5. Salva le modifiche
 
 <a href="https://github.com/Elixir-png/ElixirBot_/blob/master/config.js">
@@ -121,7 +121,7 @@ Hai problemi? Ecco come ricevere aiuto:
 1. 📖 Controlla la [Wiki](https://github.com/Elixir-png/ElixirBot_/wiki)
 2. 🐛 Apri una [Issue](https://github.com/Elixir-png/ElixirBot_/issues)
 3. 💬 Unisciti al nostro [Canale WhatsApp](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
-4. 📱 Contattami su WhatsApp: [+63 975 291 7233](https://wa.me/639752917233)
+4. 📱 Contattami su WhatsApp: [+39 378 440 9415](https://wa.me/639752917233)
 5. 📷 Seguimi su Instagram: [@eli.xir_gg](https://instagram.com/eli.xir_gg)
 6. 💬 Unisciti al canale Telegram
 7. 🎮 Entra nel server Discord Punisher
@@ -187,7 +187,7 @@ Create a personal copy of the bot on your GitHub account:
 1. Go to the [`config.js`](https://github.com/Elixir-png/ElixirBot_/blob/master/config.js) file
 2. Click the pencil icon ✏️ to edit
 3. Find the line with the owner number
-4. Insert **your WhatsApp number** (international format: +63 975 291 7233)
+4. Insert **your WhatsApp number** (international format: +39 378 440 9415)
 5. Save changes
 
 <a href="https://github.com/Elixir-png/ElixirBot_/blob/master/config.js">
@@ -240,7 +240,7 @@ Having problems? Here's how to get help:
 1. 📖 Check the [Wiki](https://github.com/Elixir-png/ElixirBot_/wiki)
 2. 🐛 Open an [Issue](https://github.com/Elixir-png/ElixirBot_/issues)
 3. 💬 Join our [WhatsApp Channel](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
-4. 📱 Contact me on WhatsApp: [+63 975 291 7233](https://wa.me/639752917233)
+4. 📱 Contact me on WhatsApp: [+39 378 440 9415](https://wa.me/639752917233)
 5. 📷 Follow me on Instagram: [@eli.xir_gg](https://instagram.com/eli.xir_gg)
 6. 💬 Join our Telegram channel
 7. 🎮 Join the Punisher Discord server
@@ -306,7 +306,7 @@ Crea una copia personal del bot en tu cuenta de GitHub:
 1. Ve al archivo [`config.js`](https://github.com/Elixir-png/ElixirBot_/blob/master/config.js)
 2. Haz clic en el icono del lápiz ✏️ para editar
 3. Encuentra la línea con el número del propietario
-4. Inserta **tu número de WhatsApp** (formato internacional: +63 975 291 7233)
+4. Inserta **tu número de WhatsApp** (formato internacional: +39 378 440 9415)
 5. Guarda los cambios
 
 <a href="https://github.com/Elixir-png/ElixirBot_/blob/master/config.js">
@@ -359,7 +359,7 @@ yarn start
 1. 📖 Consulta la [Wiki](https://github.com/Elixir-png/ElixirBot_/wiki)
 2. 🐛 Abre un [Issue](https://github.com/Elixir-png/ElixirBot_/issues)
 3. 💬 Únete a nuestro [Canal de WhatsApp](https://whatsapp.com/channel/0029Vb7NyC67tkj0robcbw24)
-4. 📱 Contáctame en WhatsApp: [+63 975 291 7233](https://wa.me/639752917233)
+4. 📱 Contáctame en WhatsApp: [+39 378 440 9415](https://wa.me/639752917233)
 5. 📷 Sígueme en Instagram: [@eli.xir_gg](https://instagram.com/eli.xir_gg)
 6. 💬 Únete al canal de Telegram
 7. 🎮 Únete al servidor Discord de Punisher
@@ -401,7 +401,7 @@ Este proyecto está liberado bajo licencia [MIT](LICENSE)
 
 **💻 JavaScript | Python Developer**
 
-📱 **WhatsApp:** +63 975 291 7233
+📱 **WhatsApp:** +39 378 440 9415
 
 **© 2024 888-Bot Punisher - All Rights Reserved**
 
