@@ -292,46 +292,47 @@ export async function handler(chatUpdate) {
     if (!chatUpdate || !chatUpdate.messages) return
     if (!Array.isArray(chatUpdate.messages) || chatUpdate.messages.length === 0) return
 
-    this.pushMessage(chatUpdate.messages).catch(err => {
-        if (!err.message?.includes('Bad MAC') && !err.message?.includes('absent')) {
-            console.error('[ERRORE] pushMessage:', err)
-        }
-    })
+    try {
+        this.pushMessage(chatUpdate.messages).catch(err => {
+            if (!err.message?.includes('Bad MAC') && !err.message?.includes('absent')) {
+                console.error('[ERRORE] pushMessage:', err)
+            }
+        })
 
-    for (let m of chatUpdate.messages) {
-        if (!m || !m.key || !m.key.remoteJid) continue
+        for (let m of chatUpdate.messages) {
+            if (!m || !m.key || !m.key.remoteJid) continue
 
-        if (!m.message && m.messageStubType == null) {
-            try {
-                const failedSender = m.key.participant || m.key.remoteJid
-                if (failedSender) {
-                    if (!global._decryptRetried) global._decryptRetried = new Map()
-                    const retries = global._decryptRetried.get(failedSender) || 0
-                    if (retries < 3) {
-                        global._decryptRetried.set(failedSender, retries + 1)
-                        setTimeout(() => global._decryptRetried?.delete(failedSender), 120000)
-                        if (typeof this.authState?.keys?.remove === 'function') {
-                            try { await this.authState.keys.remove('session', [failedSender]) } catch {}
-                        }
-                        if (typeof this.requestPrivacyTokens === 'function') {
-                            try { await this.requestPrivacyTokens([failedSender]) } catch {}
-                        }
-                        await new Promise(r => setTimeout(r, 1500))
-                        try {
-                            const retried = await this.loadMessage(m.key.id)
-                            if (retried?.message) {
-                                m = retried
-                            } else {
-                                continue
+            if (!m.message && m.messageStubType == null) {
+                try {
+                    const failedSender = m.key.participant || m.key.remoteJid
+                    if (failedSender) {
+                        if (!global._decryptRetried) global._decryptRetried = new Map()
+                        const retries = global._decryptRetried.get(failedSender) || 0
+                        if (retries < 3) {
+                            global._decryptRetried.set(failedSender, retries + 1)
+                            setTimeout(() => global._decryptRetried?.delete(failedSender), 120000)
+                            if (typeof this.authState?.keys?.remove === 'function') {
+                                try { await this.authState.keys.remove('session', [failedSender]) } catch {}
                             }
-                        } catch { continue }
-                    } else {
-                        global._decryptRetried.delete(failedSender)
-                        continue
+                            if (typeof this.requestPrivacyTokens === 'function') {
+                                try { await this.requestPrivacyTokens([failedSender]) } catch {}
+                            }
+                            await new Promise(r => setTimeout(r, 1500))
+                            try {
+                                const retried = await this.loadMessage(m.key.id)
+                                if (retried?.message) {
+                                    m = retried
+                                } else {
+                                    continue
+                                }
+                            } catch { continue }
+                        } else {
+                            global._decryptRetried.delete(failedSender)
+                            continue
+                        }
                     }
-                }
-            } catch (e) { continue }
-        }
+                } catch (e) { continue }
+            }
 
         if (m.message?.protocolMessage?.type === 'MESSAGE_EDIT') {
             const key = m.message.protocolMessage.key
@@ -826,8 +827,17 @@ if (user.banned) {
                 }
 
                 try {
-                    await plugin.call(this, m, extra)
-                    if (!isPrems) m.euro = plugin.euro || false
+                    try {
+                        await plugin.call(this, m, extra)
+                        if (!isPrems) m.euro = plugin.euro || false
+                    } catch (e) {
+                        const statusCode = e?.output?.statusCode || e?.output?.payload?.statusCode
+                        if (statusCode === 428 || statusCode === 500 || statusCode === 408) {
+                            console.log('⚠️ Rilevato blocco 428 durante l\'invio. Forza riavvio sicuro...')
+                            process.exit(0)
+                        }
+                        throw e
+                    }
                 } catch (e) {
                     m.error = e
                     console.error(`[ERRORE] Plugin ${m.plugin}:`, e)
@@ -907,8 +917,16 @@ if (user.banned) {
                 await this.sendMessage(m.chat, { react: { text: emot, key: m.key } }).catch(e => console.error('[ERRORE]', e))
             }
 
-            if (typeof global.markDbDirty === 'function') global.markDbDirty()
+                if (typeof global.markDbDirty === 'function') global.markDbDirty()
+            }
         }
+    } catch (e) {
+        const statusCode = e?.output?.statusCode || e?.output?.payload?.statusCode
+        if (statusCode === 428 || statusCode === 500 || statusCode === 408) {
+            console.log('⚠️ Rilevato blocco 428 durante l\'invio. Forza riavvio sicuro...')
+            process.exit(0)
+        }
+        console.error(`[ERRORE] Handler per ${chatUpdate?.messages?.[0]?.key?.remoteJid || 'chat'}:`, e)
     }
 }
 
