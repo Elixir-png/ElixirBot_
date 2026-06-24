@@ -15,7 +15,7 @@ function wait(ms) {
 
 let handler = async (m, { conn, text }) => {
   try {
-    // FIX: Logica per identificare correttamente chi si trasforma (Tag, Risposta o Te stesso)
+
     let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : m.sender;
     let userId = who.split('@')[0];
 
@@ -24,7 +24,7 @@ let handler = async (m, { conn, text }) => {
     const progresses = ['30%', '50%', '70%', '100%'];
     for (const p of progresses) {
       await wait(500);
-      // Feedback visivo opzionale durante il caricamento
+    
     }
 
     const start = performance.now();
@@ -74,7 +74,6 @@ let handler = async (m, { conn, text }) => {
       return;
     }
 
-    // FIX: Messaggio finale con menzione funzionante
     const finalMsg = `*✔️ TRASFORMAZIONE COMPLETATA*  
 ━━━━━━━━━━━━━━━━━━━━━  
 👤 *Guerriero:* @${userId}  
@@ -88,7 +87,7 @@ let handler = async (m, { conn, text }) => {
     await conn.sendMessage(m.chat, {
         video: fs.readFileSync(videoPath),
         caption: finalMsg,
-        mentions: [who] // Necessario per rendere il @userId cliccabile
+        mentions: [who]
     }, { quoted: m });
 
   } catch (err) {
@@ -99,6 +98,6 @@ let handler = async (m, { conn, text }) => {
 
 handler.help = ['saiyan']
 handler.tags = ['fun']
-handler.command = /^(saiyan)$/i // Accetta solo .saiyan
+handler.command = /^(saiyan)$/i 
 
 export default handler;
