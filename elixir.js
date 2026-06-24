@@ -238,7 +238,7 @@ let successfulConnectionLogged = false;
 
 function logSystem(message, color = 'cyanBright') {
   const printer = chalk[color] || chalk.cyanBright;
-  console.log(printer(`〔 333 BOT 〕 ${message}`));
+  console.log(printer(`〔𝟴𝟴𝟴 𝗕𝗢𝗧〕 ${message}`));
 }
 
 function normalizePhoneNumberInput(value = '') {
@@ -385,10 +385,9 @@ let opzione;
 if (!pairingMode && !hasExistingSession) {
   const menu = `
 ${chalk.bgBlue.white('┏━━━━━━━━━━━━━━━━━━━━━━━┓')}
-${chalk.bgBlue.white('┃     ELIXIR BOT 2026   ┃')}
-${chalk.bgBlue.white('┃         V10           ┃')}
+${chalk.bgBlue.white('┃     888 BOT 2026      ┃')}
+${chalk.bgBlue.white('┃          V10          ┃')}
 ${chalk.bgBlue.white('┗━━━━━━━━━━━━━━━━━━━━━━━┛')}
-
 ${chalk.yellow('Seleziona come collegarti:')}
 
 ${chalk.green('[1] 📲 QR CODE')}
@@ -559,8 +558,8 @@ async function connectionUpdate(update) {
 
    if (qr && pairingMode === 'qr' && !global.qrGenerated) {
     console.log(chalk.bold.hex('#8b5cf6')(`
-          ELIXIR BOT                 
-        CONNESSIONE QR           
+           𝟴𝟴𝟴 𝗕𝗢𝗧                  
+        CONNESSIONE QR            
 
 📲 Scansiona il QR qui sotto
 ⏳ Valido per ~45 secondi
