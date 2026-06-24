@@ -70,8 +70,10 @@ let handler = async (m, { conn, command, args, usedPrefix }) => {
 
     const v = results.videos[0]
     const videoUrl = v.url
-    let thumb = v.thumbnailUrl || ''
+    let thumb = v.thumbnail || v.thumbnailUrl || ''
+    if (typeof thumb === 'object') thumb = thumb?.url || ''
     if (thumb.startsWith('//')) thumb = 'https:' + thumb
+    if (!thumb) thumb = 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg'
 
     let caption = `╭┈➤ 『 🎵 』 *888𝗧𝗨𝗕𝗘*\n┆  『 📌 』 \`titolo\` ─ ${v.title}\n╰┈➤ 『 📦 』 \`888 𝚩𝚯𝐓\``
 
