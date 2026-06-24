@@ -1,5 +1,6 @@
 // Plugin by Elixir & 888 staff
 import yts from 'yt-search';
+import fg from 'api-dylux';
 import fetch from 'node-fetch';
 import { exec } from 'child_process';
 import fs from 'fs';
@@ -12,126 +13,98 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
     const search = await yts(text);
     const vid = search.videos[0];
-    if (!vid) return m.reply('⚠️ *Risultato non trovato.*');
+    if (!vid) return m.reply('⚠️ *𝗥𝗶𝘀𝘂𝗹𝘁𝗮𝘁𝗼 𝗻𝗼𝗻 𝘁𝗿𝗼𝘃𝗮𝘁𝗼.*');
 
     const url = vid.url;
 
     if (command === 'play') {
-      let infoMsg = `┏━━━━━━━━━━━━━━━━━━━┓\n` +
-                    `   🎧  *Play 888 𝚩𝚯𝐓* 🎧\n` +
-                    `┗━━━━━━━━━━━━━━━━━━━┛\n\n` +
-                    `◈ 📌 *Titolo:* ${vid.title}\n` +
-                    `◈ ⏱️ *Durata:* ${vid.timestamp}\n`;
+        let infoMsg = `┏━━━━━━━━━━━━━━━━━━━┓\n` +
+                      `   🎧  *𝙋𝙡𝙖𝙮 888 𝚩𝚯𝐓* 🎧\n` +
+                      `┗━━━━━━━━━━━━━━━━━━━┛\n\n` +
+                      `◈ 📌 *𝗧𝗶𝘁𝗼𝗹𝗼:* ${vid.title}\n` +
+                      `◈ ⏱️ *𝗗𝘂𝗿𝗮𝘁𝗮:* ${vid.timestamp}\n\n` +
+                      `*𝗦𝗲𝗹𝗲𝘇𝗶𝗼𝗻𝗮 𝗶𝗹 𝗳𝗼𝗿𝗺𝗮𝘁𝗼:*`;
 
-      return await conn.sendMessage(m.chat, {
-        image: { url: vid.thumbnail },
-        caption: infoMsg,
-        footer: '\n888 𝚩𝚯𝐓',
-        buttons: [
-          { buttonId: `${usedPrefix}playaud ${url}`, buttonText: { displayText: '🎵 AUDIO (MP3)' }, type: 1 },
-          { buttonId: `${usedPrefix}playvid ${url}`, buttonText: { displayText: '🎬 VIDEO (MP4)' }, type: 1 }
-        ],
-        headerType: 4
-      }, { quoted: m });
+        return await conn.sendMessage(m.chat, {
+            image: { url: vid.thumbnail },
+            caption: infoMsg,
+            footer: '\n888 𝚩𝚯𝐓',
+            buttons: [
+                { buttonId: `${usedPrefix}playaud ${url}`, buttonText: { displayText: '🎵 𝗔𝗨𝗗𝗜𝗢 (𝗠𝗣𝟯)' }, type: 1 },
+                { buttonId: `${usedPrefix}playvid ${url}`, buttonText: { displayText: '🎬 𝗩𝗜𝗗𝗘𝗢 (𝗠𝗣𝟰)' }, type: 1 }
+            ],
+            headerType: 4
+        }, { quoted: m });
     }
 
     await conn.sendMessage(m.chat, { react: { text: "🎵", key: m.key } });
 
-    const isAudio = command === 'playaud';
     let downloadUrl = null;
+    const isAudio = command === 'playaud';
+    try {
+        let res = isAudio ? await fg.yta(url) : await fg.ytv(url);
+        if (res && res.dl_url) downloadUrl = res.dl_url;
+    } catch (e) { console.log("Dylux API failed"); }
 
-    const methods = [
-      async () => {
-        let api = isAudio ? 'ytmp3' : 'ytmp4';
-        let res = await fetch(`https://vreden.my.id/api/${api}?url=${url}`);
-        let json = await res.json();
-        return json.result?.download?.url || json.result?.url;
-      },
-      async () => {
-        let api = isAudio ? 'ytmp3' : 'ytmp4';
-        let res = await fetch(`https://anya.biz.id/api/${api}?url=${url}`);
-        let json = await res.json();
-        return json.result?.download?.url || json.result?.url;
-      },
-      async () => {
-        let api = isAudio ? 'ytmp3' : 'ytmp4';
-        let res = await fetch(`https://tio.my.id/api/${api}?url=${url}`);
-        let json = await res.json();
-        return json.result?.download?.url || json.result?.url;
-      },
-      async () => {
-        const tmpDir = os.tmpdir();
-        const outFile = path.join(tmpDir, `dlp_${Date.now()}_${isAudio ? 'mp3' : 'mp4'}`);
-        await new Promise((resolve, reject) => {
-          exec(
-            `yt-dlp --no-warnings --force-overwrites -f ${isAudio ? 'bestaudio' : 'best'} -o "${outFile}" "${url}"`,
-            (err) => {
-              if (err) reject(err);
-              else resolve();
-            }
-          );
-        });
-        if (fs.existsSync(outFile)) return outFile;
-        throw new Error('yt-dlp failed');
-      }
-    ];
-
-    for (const method of methods) {
-      if (downloadUrl) break;
-      try {
-        downloadUrl = await method();
-        if (downloadUrl) break;
-      } catch (e) {
-        console.log(`Method failed: ${e.message}`);
-      }
+    if (!downloadUrl) {
+        try {
+            let api = isAudio ? 'ytmp3' : 'ytmp4';
+            let res = await fetch(`https://api.vreden.my.id/api/${api}?url=${url}`);
+            let json = await res.json();
+            downloadUrl = json.result?.download?.url || json.result?.url;
+        } catch (e) { console.log("Vreden API failed"); }
     }
 
-    if (!downloadUrl) throw new Error('All download methods failed');
+    if (!downloadUrl) {
+        throw new Error('APIs failed to provide a download URL');
+    }
 
     const tmpDir = os.tmpdir();
     const fileName = `file_${Date.now()}`;
-    const inputPath = path.join(tmpDir, `${fileName}.${isAudio ? 'mp3' : 'mp4'}`);
+    const inputPath = path.join( tmpDir, `${fileName}.${isAudio ? 'mp3' : 'mp4'}`);
+    const outputPath = path.join(tmpDir, `${fileName}.${isAudio ? 'mp3' : 'mp4'}`);
 
-    if (typeof downloadUrl === 'string' && (downloadUrl.startsWith('http://') || downloadUrl.startsWith('https://'))) {
-      const response = await fetch(downloadUrl);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const arrayBuffer = await response.arrayBuffer();
-      fs.writeFileSync(inputPath, Buffer.from(arrayBuffer));
-    } else if (typeof downloadUrl === 'string' && fs.existsSync(downloadUrl)) {
-      fs.renameSync(downloadUrl, inputPath);
-    }
+    const response = await fetch(downloadUrl);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const arrayBuffer = await response.arrayBuffer();
+    fs.writeFileSync(inputPath, Buffer.from(arrayBuffer));
 
-    if (isAudio) {
-      const voicePath = path.join(tmpDir, `${fileName}.ogg`);
-      await new Promise((resolve, reject) => {
+if (isAudio) {
+    const voicePath = path.join(tmpDir, `${fileName}.ogg`)
+
+    await new Promise((resolve, reject) => {
         exec(
-          `ffmpeg -hide_banner -loglevel error -y -i "${inputPath}" -map_metadata -1 -vn -ar 48000 -ac 1 -c:a libopus -b:a 64k -application voip -f ogg "${voicePath}"`,
-          (err) => {
-            if (err) reject(err);
-            else resolve();
-          }
-        );
-      });
-      await conn.sendMessage(m.chat, {
+            `ffmpeg -hide_banner -loglevel error -y -i "${inputPath}" -map_metadata -1 -vn -ar 48000 -ac 1 -c:a libopus -b:a 64k -application voip -f ogg "${voicePath}"`,
+            (err) => {
+                if (err) reject(err)
+                else resolve()
+            }
+        )
+    })
+
+    await conn.sendMessage(m.chat, {
         audio: fs.readFileSync(voicePath),
         mimetype: 'audio/ogg; codecs=opus',
         ptt: true
-      }, { quoted: m });
-      if (fs.existsSync(voicePath)) fs.unlinkSync(voicePath);
-    } else {
-      await conn.sendMessage(m.chat, {
+    }, { quoted: m })
+
+    if (fs.existsSync(voicePath)) fs.unlinkSync(voicePath)
+
+} else {
+    await conn.sendMessage(m.chat, {
         video: fs.readFileSync(inputPath),
         mimetype: 'video/mp4',
-        caption: `✅ *Scaricato da 888 𝚩𝚯𝐓*`
-      }, { quoted: m });
-    }
+        caption: `✅ *𝐒𝐜𝐚𝐫𝐢𝐜𝐚𝐭𝐨 𝐝𝐚 888 𝚩𝚯𝐓*`
+    }, { quoted: m })
+}
 
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
+    if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
     await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key } });
 
   } catch (e) {
     console.error("Handler Error:", e.message);
-    m.reply('🚀 *Play Error:* Al momento i server di download sono sovraccarichi. Riprova tra poco.');
+    m.reply('🚀 *𝙋𝙡𝙖𝙮 𝙀𝙧𝙧𝙤𝙧:* Al momento i server di download sono sovraccarichi. Riprova tra poco.');
   }
 };
 
