@@ -1,115 +1,95 @@
 // Plugin by Elixir & 888 staff
-import yts from 'yt-search';
-import fg from 'api-dylux';
-import fetch from 'node-fetch';
-import { exec } from 'child_process';
-import fs from 'fs';
-import path from 'path';
-import os from 'os';
+import { exec } from 'child_process'
+import { promisify } from 'util'
+import search from 'youtube-search-api'
+import { unlinkSync, readFileSync, existsSync, readdirSync, mkdirSync } from 'fs'
+import path from 'path'
 
-let handler = async (m, { conn, text, usedPrefix, command }) => {
-  if (!text) return m.reply(`⚡ *888 𝚩𝚯𝐓*\n\n💡 _Scrivi:_ ${usedPrefix + command} nome canzone`);
+const execPromise = promisify(exec)
 
-  try {
-    const search = await yts(text);
-    const vid = search.videos[0];
-    if (!vid) return m.reply('⚠️ *𝗥𝗶𝘀𝘂𝗹𝘁𝗮𝘁𝗼 𝗻𝗼𝗻 𝘁𝗿𝗼𝘃𝗮𝘁𝗼.*');
+let handler = async (m, { conn, command, args, usedPrefix }) => {
+    const tmpDir = path.resolve('./tmp')
+    if (!existsSync(tmpDir)) mkdirSync(tmpDir, { recursive: true })
 
-    const url = vid.url;
-
-    if (command === 'play') {
-        let infoMsg = `┏━━━━━━━━━━━━━━━━━━━┓\n` +
-                      `   🎧  *𝙋𝙡𝙖𝙮 888 𝚩𝚯𝐓* 🎧\n` +
-                      `┗━━━━━━━━━━━━━━━━━━━┛\n\n` +
-                      `◈ 📌 *𝗧𝗶𝘁𝗼𝗹𝗼:* ${vid.title}\n` +
-                      `◈ ⏱️ *𝗗𝘂𝗿𝗮𝘁𝗮:* ${vid.timestamp}\n\n` +
-                      `*𝗦𝗲𝗹𝗲𝘇𝗶𝗼𝗻𝗮 𝗶𝗹 𝗳𝗼𝗿𝗺𝗮𝘁𝗼:*`;
-
-        return await conn.sendMessage(m.chat, {
-            image: { url: vid.thumbnail },
-            caption: infoMsg,
-            footer: '\n888 𝚩𝚯𝐓',
-            buttons: [
-                { buttonId: `${usedPrefix}playaud ${url}`, buttonText: { displayText: '🎵 𝗔𝗨𝗗𝗜𝗢 (𝗠𝗣𝟯)' }, type: 1 },
-                { buttonId: `${usedPrefix}playvid ${url}`, buttonText: { displayText: '🎬 𝗩𝗜𝗗𝗘𝗢 (𝗠𝗣𝟰)' }, type: 1 }
-            ],
-            headerType: 4
-        }, { quoted: m });
+    const cookiePath = path.resolve('./cookies.txt')
+    
+    if (!existsSync(cookiePath)) {
+        return m.reply('❌ Il file `cookies.txt` non è stato trovato nella directory principale.')
     }
 
-    await conn.sendMessage(m.chat, { react: { text: "🎵", key: m.key } });
+    const cookieFlag = `--cookies "${cookiePath}"`
 
-    let downloadUrl = null;
-    const isAudio = command === 'playaud';
-    try {
-        let res = isAudio ? await fg.yta(url) : await fg.ytv(url);
-        if (res && res.dl_url) downloadUrl = res.dl_url;
-    } catch (e) { console.log("Dylux API failed"); }
+    if (command === 'play' && !args.length) {
+        return m.reply(`🏮 Uso: \`${usedPrefix}play [titolo]\``)
+    }
 
-    if (!downloadUrl) {
+    if (args[0] === 'audio' || args[0] === 'video') {
+        let isAudio = args[0] === 'audio'
+        let url = args[1]
+        if (!url || !url.includes('youtu')) return m.reply('🏮 Link non valido.')
+
+        await m.reply(`⏳ Scaricando ${isAudio ? 'audio' : 'video'}...`)
+        let baseName = `${Date.now()}`
+        let cmd = [
+            'yt-dlp',
+            cookieFlag,
+            '--js-runtime node',
+            '--force-ipv4',
+            '--no-warnings',
+            '--no-check-certificate',
+            isAudio ? '-f "ba/b" --extract-audio --audio-format mp3' : '-S "vcodec:h264,res:720,acodec:m4a" --merge-output-format mp4',
+            `-o "${tmpDir}/${baseName}.%(ext)s"`,
+            `"${url}"`
+        ].join(' ')
+
         try {
-            let api = isAudio ? 'ytmp3' : 'ytmp4';
-            let res = await fetch(`https://api.vreden.my.id/api/${api}?url=${url}`);
-            let json = await res.json();
-            downloadUrl = json.result?.download?.url || json.result?.url;
-        } catch (e) { console.log("Vreden API failed"); }
-    }
-
-    if (!downloadUrl) {
-        throw new Error('APIs failed to provide a download URL');
-    }
-
-    const tmpDir = os.tmpdir();
-    const fileName = `file_${Date.now()}`;
-    const inputPath = path.join( tmpDir, `${fileName}.${isAudio ? 'mp3' : 'mp4'}`);
-    const outputPath = path.join(tmpDir, `${fileName}.${isAudio ? 'mp3' : 'mp4'}`);
-
-    const response = await fetch(downloadUrl);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const arrayBuffer = await response.arrayBuffer();
-    fs.writeFileSync(inputPath, Buffer.from(arrayBuffer));
-
-if (isAudio) {
-    const voicePath = path.join(tmpDir, `${fileName}.ogg`)
-
-    await new Promise((resolve, reject) => {
-        exec(
-            `ffmpeg -hide_banner -loglevel error -y -i "${inputPath}" -map_metadata -1 -vn -ar 48000 -ac 1 -c:a libopus -b:a 64k -application voip -f ogg "${voicePath}"`,
-            (err) => {
-                if (err) reject(err)
-                else resolve()
+            await execPromise(cmd)
+            let files = readdirSync(tmpDir)
+            let found = files.find(f => f.startsWith(baseName) && !f.endsWith('.txt'))
+            if (!found) throw new Error('File non generato')
+            
+            let finalPath = path.join(tmpDir, found)
+            let data = readFileSync(finalPath)
+            
+            if (isAudio) {
+                await conn.sendMessage(m.chat, { audio: data, mimetype: 'audio/mpeg', fileName: `audio.mp3` }, { quoted: m })
+            } else {
+                await conn.sendMessage(m.chat, { video: data, mimetype: 'video/mp4', caption: '> 888 𝚩𝚯𝐓' }, { quoted: m })
             }
-        )
-    })
+            unlinkSync(finalPath)
+        } catch (e) {
+            console.error(e)
+            m.reply(`❌ Errore durante il download.`)
+        }
+        return
+    }
 
-    await conn.sendMessage(m.chat, {
-        audio: fs.readFileSync(voicePath),
-        mimetype: 'audio/ogg; codecs=opus',
-        ptt: true
-    }, { quoted: m })
+    let query = args.join(' ')
+    let results = await search.GetListByKeyword(query, false, 1)
+    if (!results || !results.items || results.items.length === 0) return m.reply('❌ Nessun risultato.')
 
-    if (fs.existsSync(voicePath)) fs.unlinkSync(voicePath)
+    const v = results.items[0]
+    const videoUrl = `https://www.youtube.com/watch?v=${v.id}`
+    let thumb = v.thumbnail?.thumbnails?.[0]?.url || ''
+    if (thumb.startsWith('//')) thumb = 'https:' + thumb
 
-} else {
-    await conn.sendMessage(m.chat, {
-        video: fs.readFileSync(inputPath),
-        mimetype: 'video/mp4',
-        caption: `✅ *𝐒𝐜𝐚𝐫𝐢𝐜𝐚𝐭𝐨 𝐝𝐚 888 𝚩𝚯𝐓*`
-    }, { quoted: m })
+    let caption = `╭┈➤ 『 🎵 』 *888𝗧𝗨𝗕𝗘*\n┆  『 📌 』 \`titolo\` ─ ${v.title}\n╰┈➤ 『 📦 』 \`888 𝚩𝚯𝐓\``
+
+    const buttons = [
+        { buttonId: `${usedPrefix}play audio ${videoUrl}`, buttonText: { displayText: '🎵 AUDIO' }, type: 1 },
+        { buttonId: `${usedPrefix}play video ${videoUrl}`, buttonText: { displayText: '🎥 VIDEO' }, type: 1 }
+    ]
+
+    const buttonMessage = {
+        image: { url: thumb },
+        caption: caption,
+        footer: 'Seleziona un formato',
+        buttons: buttons,
+        headerType: 4
+    }
+
+    return await conn.sendMessage(m.chat, buttonMessage, { quoted: m })
 }
 
-    if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
-    if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
-    await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key } });
-
-  } catch (e) {
-    console.error("Handler Error:", e.message);
-    m.reply('🚀 *𝙋𝙡𝙖𝙮 𝙀𝙧𝙧𝙤𝙧:* Al momento i server di download sono sovraccarichi. Riprova tra poco.');
-  }
-};
-
-handler.help = ['play'];
-handler.tags = ['downloader'];
-handler.command = /^(play|playaud|playvid)$/i;
-
+handler.command = ['play']
 export default handler;
