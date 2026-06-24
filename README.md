@@ -403,6 +403,6 @@ Este proyecto está liberado bajo licencia [MIT](LICENSE)
 
 📱 **WhatsApp:** +39 378 440 9415
 
-**© 2024 888-Bot Punisher - All Rights Reserved**
+**© 2024 888-Bot Elixir - All Rights Reserved**
 
 </div>
