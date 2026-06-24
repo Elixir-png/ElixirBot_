@@ -17,11 +17,12 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
 
   const { antiprivato, soloCreatore, read, anticall } = bot
 
+  
   let imgBuffer
   try {
     imgBuffer = fs.readFileSync('icone/888.jpg')
   } catch (e) {
-
+    
     imgBuffer = Buffer.alloc(0)
   }
 
@@ -34,7 +35,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
     message: {
       locationMessage: {
         name: '⚙️ MENU FUNZIONI 888',
-        jpegThumbnail: imgBuffer, 
+        jpegThumbnail: imgBuffer, // Baileys vuole il Buffer diretto, non toString('base64')
         vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;333;;;\nFN:333\nEND:VCARD'
       }
     },
@@ -96,11 +97,11 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
 ┃  [${s(antilinktg)}] ⮕ ${p}antilinktg
 ${catalogs}${ownerSection}
 ┃━━━━━━━━━━━━━━━━━━
-┃ 🟩 = Attivo  |  🟥 = Disattivo
+┃ 🟩 = Attivato  |  🟥 = Disattivato
 ┃━━━━━━━━━━━━━━━━━━
 ┃ ℹ️ *GUIDA RAPIDA USO:*
 ┃  • _Per attivare:_ ${p}attiva [modulo]
-┃  • _Per disattivare:_ ${p}disabilita [modulo]
+┃  • _Per disattivare:_ ${p}disattiva [modulo]
 ╰━━━━━━━━━━━━━━━━━━┈`.trim()
 
   await conn.sendMessage(m.chat, {
