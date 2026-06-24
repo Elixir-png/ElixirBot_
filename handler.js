@@ -252,7 +252,7 @@ if (global.conn && global.conn.ws) {
                     let settings = global.db.data?.settings?.[global.conn.user.jid]
                     if (!settings) {
                         settings = global.db.data.settings[global.conn.user.jid] = {
-                            jadibotmd: false, : true,
+                            jadibotmd: false,
                             soloCreatore: false, anticall: true, status: 0
                         }
                     }
