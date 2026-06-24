@@ -1,7 +1,7 @@
 // Plugin by Elixir & 888 staff
 import { exec } from 'child_process'
 import { promisify } from 'util'
-import search from 'youtube-search-api'
+import ytSearch from 'yt-search'
 import { unlinkSync, readFileSync, existsSync, readdirSync, mkdirSync } from 'fs'
 import path from 'path'
 
@@ -65,12 +65,12 @@ let handler = async (m, { conn, command, args, usedPrefix }) => {
     }
 
     let query = args.join(' ')
-    let results = await search.GetListByKeyword(query, false, 1)
-    if (!results || !results.items || results.items.length === 0) return m.reply('❌ Nessun risultato.')
+    let results = await ytSearch(query)
+    if (!results || !results.videos || results.videos.length === 0) return m.reply('❌ Nessun risultato.')
 
-    const v = results.items[0]
-    const videoUrl = `https://www.youtube.com/watch?v=${v.id}`
-    let thumb = v.thumbnail?.thumbnails?.[0]?.url || ''
+    const v = results.videos[0]
+    const videoUrl = v.url
+    let thumb = v.thumbnailUrl || ''
     if (thumb.startsWith('//')) thumb = 'https:' + thumb
 
     let caption = `╭┈➤ 『 🎵 』 *888𝗧𝗨𝗕𝗘*\n┆  『 📌 』 \`titolo\` ─ ${v.title}\n╰┈➤ 『 📦 』 \`888 𝚩𝚯𝐓\``
