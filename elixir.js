@@ -36,12 +36,29 @@ const tmpDir = join(process.cwd(), 'tmp');
 if (!existsSync(tempDir)) mkdirSync(tempDir, { recursive: true });
 if (!existsSync(tmpDir)) mkdirSync(tmpDir, { recursive: true });
 
+async function cleanupCorruptedSessionKeys() {
+  try {
+    await ensureDir(sessionFolder);
+  } catch {
+    return;
+  }
+
+  const entries = await fsp.readdir(sessionFolder);
+  for (const file of entries) {
+    if (file === 'creds.json') continue;
+    if (file.startsWith('pre-key-') || file.startsWith('sender-key-')) {
+      const filePath = path.join(sessionFolder, file);
+      try {
+        await fsp.unlink(filePath);
+      } catch {}
+    }
+  }
+}
+
 async function ensureDir(dir) {
   try {
     await fsp.mkdir(dir, { recursive: true });
-  } catch (e) {
-    // ignore
-  }
+  } catch {}
 }
 
 async function clearDirectoryAsync(dirPath) {
@@ -63,9 +80,7 @@ async function clearDirectoryAsync(dirPath) {
     try {
       if (entry.isFile()) await fsp.unlink(filePath);
       else if (entry.isDirectory()) await fsp.rm(filePath, { recursive: true, force: true });
-    } catch (e) {
-      console.error(chalk.red(`Errore pulizia ${filePath}:`, e));
-    }
+    } catch {}
   }));
 }
 
@@ -134,9 +149,7 @@ async function clearSessionFolderSelective(dir = sessionFolder) {
       } else if (!isLikelyAuthStateFile(entry.name)) {
         await fsp.unlink(fullPath);
       }
-    } catch {
-      // ignore individual failures
-    }
+    } catch {}
   }));
 }
 
@@ -177,9 +190,7 @@ async function purgeSession(sessionDir, cleanPreKeys = false, maxPreKeyAgeDays =
       } else if (!isLikelyAuthStateFile(file)) {
         await fsp.unlink(filePath);
       }
-    } catch {
-      // ignore failures
-    }
+    } catch {}
   }));
 }
 
@@ -515,6 +526,8 @@ const connectionOptions = {
   shouldIgnoreJid: jid => false
 };
 
+await cleanupCorruptedSessionKeys();
+
 global.conn = makeWASocket(connectionOptions);
 global.store.bind(global.conn);
 
@@ -585,7 +598,13 @@ async function connectionUpdate(update) {
     successfulConnectionLogged = false;
     lastConnectionStateLogged = 'close';
     if (!global.conn?.authState?.creds?.registered) pairingCodeRequested = false;
-    const reason = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode;
+    const statusCode = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode;
+    if (statusCode === 428 || statusCode === 500 || statusCode === 408) {
+      console.log(chalk.bold.yellowBright(`[CONNESSIONE] Rilevato stato ${statusCode}. Eseguo riavvio pulito...`));
+      if (global.conn) global.conn.logout().catch(() => {});
+      process.exit(0);
+    }
+    const reason = statusCode;
     if (reason === DisconnectReason.badSession && !global.connectionMessagesPrinted.badSession) {
       console.log(chalk.bold.redBright(`\n[ ⚠️ ] 𝐒𝐞𝐬𝐬𝐢𝐨𝐧𝐞 𝐞𝐫𝐫𝐚𝐭𝐚, 𝐞𝐥𝐢𝐦𝐢𝐧𝐚 𝐥𝐚 𝐜𝐚𝐫𝐭𝐞𝐥𝐥𝐚 ${global.authFile} 𝐞𝐝 𝐞𝐬𝐞𝐠𝐮𝐢 𝐧𝐮𝐨𝐯𝐚𝐦𝐞𝐧𝐭𝐞 𝐥𝐚 𝐬𝐜𝐚𝐧𝐬𝐢𝐨𝐧𝐞.`));
       global.connectionMessagesPrinted.badSession = true;
