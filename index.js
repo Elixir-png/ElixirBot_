@@ -61,7 +61,7 @@ const typeWriterBig = async (text, delay = 100) => {
     cfonts.say(current, {
       font: 'block',
       align: 'center',
-      gradient: ['red', 'magenta', 'cyan'],
+      gradient: ['red', 'white'],
       transitionGradient: true,
     });
     await sleep(delay);
@@ -126,7 +126,7 @@ const typeWriter = async (text, delay = 25, color = '\x1b[36m') => {
 async function epicStartup() {
   console.clear();
   await sleep(300);
-  await typeWriterBig('888\nBOT V10\n2026', 120);
+  await typeWriterBig('888\nBOT\nV1.0', 120);
   await sleep(400);
   console.log('\n');
   await typeWriter('                     Ultimo Aggiornamento: 21/05/2026', 40, '\x1b[33m');
@@ -145,7 +145,7 @@ async function epicStartup() {
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
   console.log('\n');
   await sleep(200);
-  await pulse('                     #888NEVERDIES', 4);
+  await pulse('                     ★ 888 NEVER DIES ★', 4);
   console.log('\n');
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
   console.log('\n\n');
