@@ -395,11 +395,11 @@ async function requestPairingCodeFlow() {
 let opzione;
 if (!pairingMode && !hasExistingSession) {
   const menu = `
-${chalk.bgBlue.white('┏━━━━━━━━━━━━━━━━━━━━━━━┓')}
-${chalk.bgBlue.white('┃     888 BOT 2026      ┃')}
-${chalk.bgBlue.white('┃          V10          ┃')}
-${chalk.bgBlue.white('┗━━━━━━━━━━━━━━━━━━━━━━━┛')}
-${chalk.yellow('Seleziona come collegarti:')}
+${chalk.bgRedBright.white('┏━━━━━━━━━━━━━━━━━━━━━━━┓')}
+${chalk.bgRedBright.white('┃     ✦ 888 BOT ✦       ┃')}
+${chalk.bgRedBright.white('┃       V 1.0            ┃')}
+${chalk.bgRedBright.white('┗━━━━━━━━━━━━━━━━━━━━━━━┛')}
+${chalk.bgWhite.red.bold('   ✦ Collegati al bot ✦   ')}
 
 ${chalk.green('[1] 📲 QR CODE')}
 ${chalk.gray('    → Scansiona con la fotocamera')}
