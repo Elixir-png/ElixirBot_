@@ -125,37 +125,27 @@ const typeWriter = async (text, delay = 25, color = '\x1b[36m') => {
 
 async function epicStartup() {
   console.clear();
-  
   await sleep(300);
-  
   await typeWriterBig('888\nBOT V10\n2026', 120);
-  
   await sleep(400);
-  
   console.log('\n');
   await typeWriter('                     Ultimo Aggiornamento: 21/05/2026', 40, '\x1b[33m');
-  
   console.log('\n');
   await typeWriter('                    Edit by Elixir, Punisher & 888 Staff', 35, '\x1b[36m');
-  
   console.log('\n\n');
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
   console.log('\n');
-  
   await progressBar('Caricamento sistema', 1100);
   await loading('Inizializzazione moduli', 600);
   await loading('Connessione database', 550);
   await loading('Attivazione protocolli', 600);
   await loading('Sincronizzazione', 500);
   await progressBar('Finalizzazione', 900);
-  
   console.log('\n');
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
   console.log('\n');
-  
   await sleep(200);
   await pulse('                     #888NEVERDIES', 4);
-  
   console.log('\n');
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
   console.log('\n\n');
@@ -215,12 +205,29 @@ async function start(file) {
   );
   
   if (!opts['test']) {
-    if (!rl.listenerCount('line')) {
-      rl.on('line', (line) => {
-        processInstance.send(line.trim());
-      });
-    }
+    rl.removeAllListeners('line'); 
+    rl.on('line', (line) => {
+      if (processInstance && processInstance.connected && typeof processInstance.send === 'function') {
+        try {
+          processInstance.send(line.trim());
+        } catch (err) {
+          if (err.code === 'ERR_IPC_CHANNEL_CLOSED') {
+            console.log('\x1b[33m[!] Impossibile inviare: canale IPC chiuso.\x1b[0m');
+          } else {
+            console.error('\x1b[31m[!] Errore IPC:\x1b[0m', err);
+          }
+        }
+      } else {
+        console.log('\x1b[33m[!] Il bot si sta riavviando, input ignorato.\x1b[0m');
+      }
+    });
   }
 }
+
+process.on('uncaughtException', (err) => {
+  if (err.code !== 'ERR_IPC_CHANNEL_CLOSED') {
+    console.error('\x1b[31m[Cluster] Eccezione non gestita:\x1b[0m', err);
+  }
+});
 
 start('elixir.js');
