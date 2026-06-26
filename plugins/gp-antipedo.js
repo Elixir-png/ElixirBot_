@@ -1,90 +1,98 @@
-import fetch from 'node-fetch'
-
 const logAdminAction = async (chatId, adminJid, actionKey, amount = 1) => {
-if (typeof global.logAdmin?.increment === 'function') {
-await global.logAdmin.increment(chatId, adminJid, actionKey, amount)
-} else {
-global.logAdminQueue = global.logAdminQueue || []
-global.logAdminQueue.push({ chatId, adminJid, actionKey, amount })
-}
-}
-
-async function handler(m, {
-isBotAdmin,
-text,
-conn
-}) {
-
-if (!isBotAdmin) {
-return m.reply('ⓘ 𝐃𝐞𝐯𝐨 𝐞𝐬𝐬𝐞𝐫𝐞 𝐚𝐝𝐦𝐢𝐧 𝐩𝐞𝐫 𝐩𝐨𝐭𝐞𝐫 𝐟𝐮𝐧𝐳𝐢𝐨𝐧𝐚𝐫𝐞')
+    if (typeof global.logAdmin?.increment === 'function') {
+        await global.logAdmin.increment(chatId, adminJid, actionKey, amount)
+    } else {
+        global.logAdminQueue = global.logAdminQueue || []
+        global.logAdminQueue.push({ chatId, adminJid, actionKey, amount })
+    }
 }
 
-const mention = m.mentionedJid?.[0] || m.quoted?.sender || null
+async function handler(m, { isBotAdmin, conn }) {
+    if (!isBotAdmin) {
+        return m.reply('ⓘ Cfr. Config: Devo essere amministratore per eseguire questa azione.')
+    }
 
-if (!mention) {
-return m.reply("ⓘ 𝐌𝐞𝐧𝐳𝐢𝐨𝐧𝐚 𝐥'𝐮𝐭𝐞𝐧𝐭𝐞 𝐝𝐚 𝐫𝐢𝐦𝐮𝐨𝐯𝐞𝐫𝐞")
-}
+    const mention = m.mentionedJid?.[0] || m.quoted?.sender || null
+    if (!mention) {
+        return m.reply("ⓘ Errore: Menziona l'utente da rimuovere o rispondi a un suo messaggio.")
+    }
 
-const normalize = jid => jid && conn.decodeJid ? conn.decodeJid(jid) : jid
-const target = normalize(mention)
-const sender = normalize(m.sender)
+    const normalize = jid => jid && conn.decodeJid ? conn.decodeJid(jid) : jid
+    const target = normalize(mention)
+    const sender = normalize(m.sender)
+    const botJid = normalize(conn.user?.jid || conn.user?.id)
 
-if (
-target === sender ||
-target === normalize(conn.user?.jid || conn.user?.id)
-) {
-return m.reply("ⓘ 𝐌𝐞𝐧𝐳𝐢𝐨𝐧𝐚 𝐥'𝐮𝐭𝐞𝐧𝐭𝐞 𝐝𝐚 𝐫𝐢𝐦𝐮𝐨𝐯𝐞𝐫𝐞")
-}
+    if (target === sender || target === botJid) {
+        return m.reply("⚠️ Azione non valida: Impossibile rimuovere te stesso o il bot.")
+    }
 
-const groupMetadata =
-conn.chats?.[m.chat]?.metadata ||
-await conn.groupMetadata(m.chat).catch(() => null)
+    const groupMetadata = conn.chats?.[m.chat]?.metadata || await conn.groupMetadata(m.chat).catch(() => null)
+    const participants = groupMetadata?.participants || []
 
-const participants = groupMetadata?.participants || []
+    const utente = participants.find(u => 
+        normalize(u.id) === target || 
+        normalize(u.jid) === target || 
+        normalize(u.lid) === target
+    )
 
-const getParticipantIds = p =>
-[p?.id, p?.jid, p?.lid]
-.filter(Boolean)
-.map(normalize)
+    if (!utente) {
+        return m.reply("⚠️ Target fallito: L'utente non è presente in questo gruppo.")
+    }
 
-const utente = participants.find(u =>
-getParticipantIds(u).includes(target)
-)
+    const owner = utente.admin === 'superadmin'
+    const admin = utente.admin === 'admin' || utente.admin === true
 
-const owner = utente?.admin === 'superadmin'
-const admin = utente?.admin === 'admin' || utente?.admin === true
+    if (owner || admin) {
+        return m.reply('⚠️ Permessi insufficienti: Impossibile rimuovere lo staff del gruppo.')
+    }
 
-if (owner) {
-return m.reply('⚠️ 𝐍𝐨𝐧 𝐩𝐮𝐨𝐢 𝐫𝐢𝐦𝐮𝐨𝐯𝐞𝐫𝐞 𝐢𝐥 𝐜𝐫𝐞𝐚𝐭𝐨𝐫𝐞 𝐝𝐞𝐥 𝐠𝐫𝐮𝐩𝐩𝐨.')
-}
+    const gifUrl = 'https://giphy.com'
+    
+    await conn.sendMessage(m.chat, { 
+        video: { url: gifUrl }, 
+        gifPlayback: true, 
+        caption: `🚨 *SISTEMA DI SICUREZZA ATTIVATO* 🚨\nAnalisi target in corso...` 
+    }).catch(() => null)
 
-if (admin) {
-return m.reply('⚠️ 𝐍𝐨𝐧 𝐩𝐮𝐨𝐢 𝐫𝐢𝐦𝐮𝐨𝐯𝐞𝐫𝐞 𝐮𝐧 𝐚𝐦𝐦𝐢𝐧𝐢𝐬𝐭𝐫𝐚𝐭𝐨𝐫𝐞.')
-}
+    const targetUser = mention.split('@')[0]
+    const baseText = `╭────────────────────────╮\n│   🚨 ALLERTA SICUREZZA 🚨  │\n╰────────────────────────╯\n\n➔ *SOGGETTO:* @${targetUser}\n➔ *STATO:* Rilevato nel sistema\n\n`
+    
+    let currentMsg = await conn.sendMessage(m.chat, {
+        text: `${baseText}\`[▢▢▢▢▢▢▢▢▢▢] 0%\`\n⚠️ *Inizializzazione protocollo...*`,
+        mentions: [mention]
+    })
 
-await conn.sendMessage(m.chat, {
-text: `🚨⛓️ *𝐀𝐓𝐓𝐄𝐍𝐙𝐈𝐎𝐍𝐄,  𝐏𝐄𝐃𝐎 𝐀𝐋𝐋'𝐈𝐍𝐓𝐄𝐑𝐍𝐎 𝐃𝐄𝐋𝐋𝐀 𝐂𝐇𝐀𝐓 𝐀𝐕𝐕𝐈𝐒𝐓𝐀𝐓𝐎* ⛓️🚨
+    const frames = [
+        { bar: '`[████▢▢▢▢▢▢] 40%`', status: '🔒 *Generazione credenziali di espulsione...*' },
+        { bar: '`[████████▢▢] 80%`', status: '📡 *Sincronizzazione con il server...*' },
+        { bar: '`[██████████] 100%`', status: '💥 *PROTOCOLLO ESEGUITO!*' }
+    ]
 
-@${mention.split('@')[0]}
+    for (const frame of frames) {
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await conn.sendMessage(m.chat, {
+            text: `${baseText}${frame.bar}\n${frame.status}`,
+            mentions: [mention],
+            edit: currentMsg.key
+        }).catch(() => null)
+    }
 
-𝐈𝐥 𝐩𝐞𝐝𝐨 𝐬𝐭𝐚 𝐩𝐞𝐫 𝐞𝐬𝐬𝐞𝐫𝐞 𝐛𝐮𝐭𝐭𝐚𝐭𝐨 𝐟𝐮𝐨𝐫𝐢 𝐝𝐚𝐥 𝐠𝐫𝐮𝐩𝐩𝐨.`,
-mentions: [mention]
-})
+    try {
+        await conn.groupParticipantsUpdate(m.chat, [mention], 'remove')
+        
+        const senderUser = m.sender.split('@')[0]
+        const finalLayout = `╭────────────────────────╮\n│   🛡️ ESPULSIONE COMPLETATA 🛡️ │\n╰────────────────────────╯\n\n✅ *Sicurezza ripristinata con successo.*\n\n👮 _Azione autorizzata da:_ @${senderUser}`
 
-await new Promise(resolve => setTimeout(resolve, 3000))
+        await conn.sendMessage(m.chat, {
+            text: finalLayout,
+            mentions: [m.sender]
+        })
 
-await conn.groupParticipantsUpdate(m.chat, [mention], 'remove')
-
-await conn.sendMessage(m.chat, {
-text: `🛡️ 𝐏𝐄𝐃𝐎 𝐑𝐈𝐌𝐎𝐒𝐒𝐎 𝐂𝐎𝐍 𝐒𝐔𝐂𝐂𝐄𝐒𝐒𝐎 🛡️
-
-✅ 𝐎𝐫𝐚 𝐥𝐞 𝐫𝐚𝐠𝐚𝐳𝐳𝐞 𝐝𝐞𝐥 𝐠𝐫𝐮𝐩𝐩𝐨 𝐬𝐨𝐧𝐨 𝐚𝐥 𝐬𝐢𝐜𝐮𝐫𝐨.
-
-👮 𝐀𝐳𝐢𝐨𝐧𝐞 𝐞𝐬𝐞𝐠𝐮𝐢𝐭𝐚 𝐝𝐚 @${m.sender.split('@')[0]}`,
-mentions: [m.sender]
-})
-
-await logAdminAction(m.chat, m.sender, 'removes')
+        await logAdminAction(m.chat, m.sender, 'removes')
+    } catch (error) {
+        console.error(error)
+        return m.reply("❌ *Errore critico:* Rimozione fallita. Verifica i permessi di amministrazione del bot.")
+    }
 }
 
 handler.help = ['antipedo @utente']
