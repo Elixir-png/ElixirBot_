@@ -25,6 +25,16 @@ global.ignoredUsersGlobal = global.ignoredUsersGlobal || new Set()
 global.ignoredUsersGroup = global.ignoredUsersGroup || {}
 global.groupSpam = global.groupSpam || {}
 global.processedMessages = global.processedMessages || new Set()
+// Pulisce processedMessages ogni 5 minuti per evitare memory leak
+if (!global._processedMessagesCleanupInterval) {
+    global._processedMessagesCleanupInterval = setInterval(() => {
+        if (global.processedMessages && global.processedMessages.size > 1000) {
+            const entries = [...global.processedMessages];
+            const toRemove = entries.slice(0, entries.length - 500);
+            toRemove.forEach(id => global.processedMessages.delete(id));
+        }
+    }, 5 * 60 * 1000);
+}
 global.processedCalls = global.processedCalls || new Map()
 global.spamTracker = global.spamTracker || {}
 global.activeEvents = global.activeEvents || new Map()
@@ -833,8 +843,14 @@ if (user.banned) {
                     } catch (e) {
                         const statusCode = e?.output?.statusCode || e?.output?.payload?.statusCode
                         if (statusCode === 428 || statusCode === 500 || statusCode === 408) {
-                            console.log('⚠️ Rilevato blocco 428 durante l\'invio. Forza riavvio sicuro...')
-                            process.exit(0)
+                            console.log('⚠️ Rilevato blocco 428 durante l\'invio. Riavvio handler in corso...')
+                            try {
+                                if (global.conn && typeof global.conn.logout === 'function') global.conn.logout().catch(() => {});
+                                if (typeof global.reloadHandler === 'function') global.reloadHandler(true).catch(console.error);
+                            } catch (err) {
+                                console.error('[HANDLER] Errore riavvio:', err.message);
+                            }
+                            return
                         }
                         throw e
                     }
@@ -923,8 +939,14 @@ if (user.banned) {
     } catch (e) {
         const statusCode = e?.output?.statusCode || e?.output?.payload?.statusCode
         if (statusCode === 428 || statusCode === 500 || statusCode === 408) {
-            console.log('⚠️ Rilevato blocco 428 durante l\'invio. Forza riavvio sicuro...')
-            process.exit(0)
+            console.log('⚠️ Rilevato blocco 428 durante l\'invio. Riavvio handler in corso...')
+            try {
+                if (global.conn && typeof global.conn.logout === 'function') global.conn.logout().catch(() => {});
+                if (typeof global.reloadHandler === 'function') global.reloadHandler(true).catch(console.error);
+            } catch (err) {
+                console.error('[HANDLER] Errore riavvio:', err.message);
+            }
+            return
         }
         console.error(`[ERRORE] Handler per ${chatUpdate?.messages?.[0]?.key?.remoteJid || 'chat'}:`, e)
     }
