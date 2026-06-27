@@ -104,6 +104,45 @@ if (process.send) {
 let sessionCleanupRunning = false;
 let dbWriteInProgress = false;
 let dbWritePending = false;
+const dbWriteQueue = [];
+let dbWriteTimer = null;
+
+// Write queue FIFO sicura per il database
+async function processDbQueue() {
+    if (dbWriteInProgress || dbWriteQueue.length === 0) return;
+    dbWriteInProgress = true;
+    const { resolve, reject, force } = dbWriteQueue.shift();
+    try {
+        if (!global.db?.data) {
+            resolve(false);
+            return;
+        }
+        if (!force && !global.dbDirty) {
+            resolve(false);
+            return;
+        }
+        await global.db.write();
+        global.dbDirty = false;
+        resolve(true);
+    } catch (error) {
+        console.error('[DB] Errore scrittura:', error);
+        reject(error);
+    } finally {
+        dbWriteInProgress = false;
+        if (dbWriteQueue.length > 0) {
+            processDbQueue();
+        }
+    }
+}
+
+async function flushDatabase({ force = false } = {}) {
+    return new Promise((resolve, reject) => {
+        dbWriteQueue.push({ resolve, reject, force });
+        if (!dbWriteInProgress) {
+            processDbQueue();
+        }
+    });
+}
 
 function isProtectedAuthStateFile(entry) {
   return entry === 'creds.json' || AUTH_STATE_FILE_PREFIXES.some(prefix => entry.startsWith(prefix));
@@ -199,35 +238,7 @@ global.markDbDirty = function markDbDirty() {
   global.dbDirty = true;
 };
 
-async function flushDatabase({ force = false } = {}) {
-  if (!global.db?.data) return false;
-  if (!force && !global.dbDirty) return false;
-
-  if (dbWriteInProgress) {
-    dbWritePending = true;
-    return false;
-  }
-
-  dbWriteInProgress = true;
-  try {
-    await global.db.write();
-    global.dbDirty = false;
-    return true;
-  } catch (error) {
-    global.dbDirty = true;
-    throw error;
-  } finally {
-    dbWriteInProgress = false;
-    if (dbWritePending) {
-      dbWritePending = false;
-      try {
-        await flushDatabase({ force: true });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
-}
+// flushDatabase è ora definita più sopra con coda FIFO
 
 const { useMultiFileAuthState, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, Browsers, jidNormalizedUser, DisconnectReason } = await import('@realvare/baileys');
 const { chain } = lodash;
@@ -284,14 +295,22 @@ function logConnectionState(state, color = 'cyanBright') {
 }
 
 function redefineConsoleMethod(methodName, filterStrings) {
-  const originalConsoleMethod = console[methodName];
-  console[methodName] = function () {
-    const message = arguments[0];
-    if (typeof message === 'string' && filterStrings.some(filterString => message.includes(atob(filterString)))) {
-      arguments[0] = "";
-    }
-    originalConsoleMethod.apply(console, arguments);
-  };
+  try {
+    const originalConsoleMethod = console[methodName];
+    console[methodName] = function () {
+      try {
+        const message = arguments[0];
+        if (typeof message === 'string' && filterStrings.some(filterString => message.includes(atob(filterString)))) {
+          arguments[0] = "";
+        }
+      } catch (e) {
+        // Ignora errori nel filtro console
+      }
+      originalConsoleMethod.apply(console, arguments);
+    };
+  } catch (e) {
+    // Se redefineConsoleMethod fallisce, il console.log originale rimane
+  }
 }
 
 global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') {
@@ -600,9 +619,14 @@ async function connectionUpdate(update) {
     if (!global.conn?.authState?.creds?.registered) pairingCodeRequested = false;
     const statusCode = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode;
     if (statusCode === 428 || statusCode === 500 || statusCode === 408) {
-      console.log(chalk.bold.yellowBright(`[CONNESSIONE] Rilevato stato ${statusCode}. Eseguo riavvio pulito...`));
-      if (global.conn) global.conn.logout().catch(() => {});
-      process.exit(0);
+      console.log(chalk.bold.yellowBright(`[CONNESSIONE] Rilevato stato ${statusCode}. Riavvio handler in corso...`));
+      try {
+        if (global.conn) global.conn.logout().catch(() => {});
+        await global.reloadHandler(true).catch(console.error);
+      } catch (e) {
+        console.error('[CONNESSIONE] Errore durante riavvio handler:', e.message);
+      }
+      return;
     }
     const reason = statusCode;
     if (reason === DisconnectReason.badSession && !global.connectionMessagesPrinted.badSession) {
@@ -616,7 +640,12 @@ async function connectionUpdate(update) {
     } else if (reason === DisconnectReason.connectionReplaced && !global.connectionMessagesPrinted.connectionReplaced) {
       console.log(chalk.bold.yellowBright(`[ ⚠️ ] 𝐂𝐨𝐧𝐧𝐞𝐬𝐬𝐢𝐨𝐧𝐞 𝐬𝐨𝐬𝐭𝐢𝐭𝐮𝐢𝐭𝐚, 𝐞' 𝐬𝐭𝐚𝐭𝐚 𝐚𝐩𝐞𝐫𝐭𝐚 𝐮𝐧'𝐚𝐥𝐭𝐫𝐚 𝐧𝐮𝐨𝐯𝐚 𝐬𝐞𝐬𝐬𝐢𝐨𝐧𝐞. 𝐏𝐞𝐫 𝐩𝐫𝐢𝐦𝐚 𝐜𝐨𝐬𝐚 𝐝𝐢𝐬𝐜𝐨𝐧𝐧𝐞𝐭𝐭𝐢𝐭𝐢 𝐝𝐚𝐥𝐥𝐚 𝐬𝐞𝐬𝐬𝐢𝐨𝐧𝐞 𝐜𝐨𝐫𝐫𝐞𝐧𝐭𝐞.`));
       global.connectionMessagesPrinted.connectionReplaced = true;
-      process.exit(1);
+      console.log(chalk.gray('Tentativo di riconnessione in corso...'));
+      try {
+        await global.reloadHandler(true).catch(console.error);
+      } catch (e) {
+        console.error('[CONNESSIONE] Errore riconnessione:', e.message);
+      }
     } else if (reason === DisconnectReason.connectionLost && !global.connectionMessagesPrinted.connectionLost) {
       console.log(chalk.bold.blueBright(`\n[ ⚠️ ] 𝐂𝐨𝐧𝐧𝐞𝐬𝐬𝐢𝐨𝐧𝐞 𝐩𝐞𝐫𝐬𝐚 𝐚𝐥 𝐬𝐞𝐫𝐯𝐞𝐫, 𝐫𝐢𝐜𝐨𝐧𝐧𝐞𝐬𝐬𝐢𝐨𝐧𝐞 𝐢𝐧 𝐜𝐨𝐫𝐬𝐨...`));
       global.connectionMessagesPrinted.connectionLost = true;
@@ -627,7 +656,33 @@ async function connectionUpdate(update) {
   }
 }
 
-process.on('uncaughtException', console.error);
+process.on('uncaughtException', (err) => {
+  console.error('❌ Eccezione non gestita:', err?.message || err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  if (reason?.code === 'ERR_IPC_CHANNEL_CLOSED') return;
+  console.error('❌ Promise rejection non gestita:', reason instanceof Error ? reason.message : reason);
+  if (reason instanceof Error && reason.stack) {
+    console.error(reason.stack);
+  }
+});
+
+process.on('warning', (warning) => {
+  if (warning.name === 'MaxListenersExceededWarning') {
+    // Aumenta il limite invece di lamentarsi
+    if (warning.emitter && typeof warning.emitter.setMaxListeners === 'function') {
+      warning.emitter.setMaxListeners(warning.emitter.getMaxListeners() + 10);
+    }
+    return;
+  }
+  if (warning.name !== 'DeprecationWarning') {
+    console.warn('⚠️ Warning:', warning.message);
+  }
+});
+
+// Aumenta il limite globale di listeners per prevenire warning
+process.setMaxListeners(50);
 
 let isInit = true;
 let handler = await import('./handler.js').catch(e => {
