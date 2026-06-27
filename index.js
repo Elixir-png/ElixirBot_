@@ -52,6 +52,68 @@ const rl = createInterface(process.stdin, process.stdout);
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Effetto glitch per testo
+const glitchText = async (text, times = 3) => {
+  const chars = '!@#$%&*()_+-=[]{}|;:,.<>?/';
+  for (let g = 0; g < times; g++) {
+    let glitched = '';
+    for (let i = 0; i < text.length; i++) {
+      if (Math.random() > 0.7) {
+        glitched += chars[Math.floor(Math.random() * chars.length)];
+      } else {
+        glitched += text[i];
+      }
+    }
+    process.stdout.write(`\r\x1b[31m${glitched}\x1b[0m`);
+    await sleep(40);
+  }
+  process.stdout.write(`\r\x1b[32m${text}\x1b[0m\n`);
+};
+
+// Cornice animata con neon
+const showNeonBorder = async (label, color = '\x1b[36m') => {
+  const reset = '\x1b[0m';
+  const border = '═'.repeat(40);
+  process.stdout.write(`\n${color}╔${border}╗${reset}\n`);
+  process.stdout.write(`${color}║${reset}  ${color}${'✦'.repeat(3)} ${label} ${'✦'.repeat(3)}${reset}  ${color}║${reset}\n`);
+  process.stdout.write(`${color}╚${border}╝${reset}\n`);
+};
+
+// DigitRain singola linea
+const digitalRainLine = async () => {
+  const colors = ['\x1b[32m', '\x1b[36m', '\x1b[92m', '\x1b[96m'];
+  const chars = '01アイウエオカキクケコサシスセソタチツテト';
+  let line = '';
+  for (let i = 0; i < 60; i++) {
+    line += chars[Math.floor(Math.random() * chars.length)] + ' ';
+  }
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  process.stdout.write(`\r${color}${line}\x1b[0m`);
+  await sleep(30);
+};
+
+// Sequenza di digit rain
+const showDigitalRain = async (lines = 5) => {
+  for (let i = 0; i < lines; i++) {
+    await digitalRainLine();
+    process.stdout.write('\n');
+    await sleep(50);
+  }
+};
+
+// Scanner animato
+const scannerLine = async (delay = 20) => {
+  const width = 50;
+  const scanChar = '█';
+  for (let i = 0; i <= width; i++) {
+    const bar = '▓'.repeat(i) + scanChar + '░'.repeat(width - i);
+    const percent = Math.floor((i / width) * 100);
+    process.stdout.write(`\r\x1b[35m[${bar}] \x1b[33m${percent}%\x1b[36m SCANNING...\x1b[0m`);
+    await sleep(delay);
+  }
+  process.stdout.write('\n');
+};
+
 const typeWriterBig = async (text, delay = 100) => {
   let current = '';
   for (let char of text) {
@@ -123,29 +185,112 @@ const typeWriter = async (text, delay = 25, color = '\x1b[36m') => {
   console.log();
 };
 
+// Rainbow fade per titolo
+const rainbowText = async (text) => {
+  const colors = [
+    '\x1b[31m', '\x1b[33m', '\x1b[93m', '\x1b[32m',
+    '\x1b[36m', '\x1b[34m', '\x1b[35m'
+  ];
+  for (let repeat = 0; repeat < 2; repeat++) {
+    for (let c = 0; c < colors.length; c++) {
+      process.stdout.write(`\r${colors[c]}${text}\x1b[0m`);
+      await sleep(80);
+    }
+  }
+  process.stdout.write(`\r\x1b[36m${text}\x1b[0m\n`);
+};
+
+// Sparkle effect
+const sparkleLine = async () => {
+  const sparkles = ['✦', '✧', '★', '☆', '•'];
+  let line = '';
+  for (let i = 0; i < 40; i++) {
+    line += sparkles[Math.floor(Math.random() * sparkles.length)] + ' ';
+  }
+  process.stdout.write(`\r\x1b[33m${line}\x1b[0m`);
+  await sleep(40);
+};
+
 async function epicStartup() {
+  // ========== FASE 1: BOOT SEQUENCE ==========
   console.clear();
-  await sleep(300);
-  await typeWriterBig('888\nBOT\nV1.0', 120);
-  await sleep(400);
-  console.log('\n');
-  await typeWriter('                     Ultimo Aggiornamento: 21/05/2026', 40, '\x1b[33m');
-  console.log('\n');
-  await typeWriter('                    Edit by Elixir, Punisher & 888 Staff', 35, '\x1b[36m');
-  console.log('\n\n');
-  console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
-  console.log('\n');
-  await progressBar('Caricamento sistema', 1100);
-  await loading('Inizializzazione moduli', 600);
-  await loading('Connessione database', 550);
-  await loading('Attivazione protocolli', 600);
-  await loading('Sincronizzazione', 500);
-  await progressBar('Finalizzazione', 900);
-  console.log('\n');
-  console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
-  console.log('\n');
+  console.log('\x1b[32m' + '█'.repeat(70) + '\x1b[0m');
+  await sleep(100);
+  
+  await showNeonBorder(' SISTEMA IN AVVIO ', '\x1b[32m');
   await sleep(200);
-  await pulse('                     ★ 888 NEVER DIES ★', 4);
+  
+  // Effetto scanner
+  process.stdout.write('\n');
+  await scannerLine(15);
+  await sleep(100);
+  
+  // Digitarain veloce
+  await showDigitalRain(3);
+  await sleep(100);
+  
+  // ========== FASE 2: TITOLO PRINCIPALE ==========
+  console.clear();
+  await sleep(200);
+  
+  // Glitch effect prima del titolo
+  process.stdout.write('\n\n');
+  await glitchText('INIZIALIZZAZIONE IN CORSO...', 5);
+  await sleep(200);
+  
+  console.clear();
+  console.log('\n\n');
+  await typeWriterBig('888\nBOT\nV1.0', 100);
+  await sleep(300);
+  
+  // Rainbow sul titolo
+  console.log('\n');
+  await rainbowText('                     ═══ 𝟴𝟴𝟴 𝗕𝗢𝗧 ═══');
+  await sleep(200);
+  
+  // Sparkle animation
+  process.stdout.write('\n');
+  await sparkleLine();
+  process.stdout.write('\n');
+  await sleep(200);
+  
+  // ========== FASE 3: INFO ANIMATE ==========
+  console.log('\n');
+  await typeWriter('                     ▸ Aggiornamento: 21/05/2026', 35, '\x1b[33m');
+  await sleep(60);
+  await typeWriter('                     ▸ Developer: Elixir, Punisher & 888 Staff', 30, '\x1b[36m');
+  await sleep(60);
+  await typeWriter('                     ▸ Versione: 1.0 | Build: 888-BOT', 30, '\x1b[35m');
+  await sleep(200);
+  
+  // ========== FASE 4: BORDI E CARICAMENTO ==========
+  console.log('\n');
+  console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
+  console.log('\n');
+  
+  await progressBar('▸ Caricamento nucleo sistema', 900);
+  await loading('▸ Inizializzazione moduli', 500);
+  await loading('▸ Connessione database', 450);
+  await loading('▸ Attivazione protocolli di rete', 500);
+  await loading('▸ Sincronizzazione dispositivi', 450);
+  await loading('▸ Verifica integrità plugin', 400);
+  await progressBar('▸ Finalizzazione avvio', 800);
+  
+  // ========== FASE 5: FINALE EPICO ==========
+  console.log('\n');
+  console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
+  console.log('\n');
+  
+  await sleep(100);
+  
+  // Effetto finale epico - 888 NEVER DIES con glow
+  process.stdout.write('\n');
+  await rainbowText('                     ★ 𝟴𝟴𝟴 NEVER DIES ★');
+  await sleep(100);
+  
+  // Pulse piu lungo
+  await pulse('                     ★ 888 NEVER DIES ★', 6);
+  
   console.log('\n');
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
   console.log('\n\n');
@@ -187,16 +332,39 @@ async function start(file) {
     }
   });
 
+  let restartAttempts = 0;
+  const MAX_RESTART_ATTEMPTS = 10;
+
   processInstance.on('exit', (_, code) => {
     isRunning = false;
-    console.error('\n\x1b[31m✖ Errore processo [' + code + ']\x1b[0m\n');
+    console.error('\n\x1b[31m✖ Processo terminato [' + code + ']\x1b[0m\n');
 
     if (code !== 0) {
-      watchFile(args[0], () => {
-        unwatchFile(args[0]);
-        console.log('\x1b[32m↻ Recupero automatico...\x1b[0m\n');
+      if (code === 42) {
+        // Riavvio volontario (owner-restart.js)
+        console.log('\x1b[32m↻ Riavvio volontario...\x1b[0m\n');
+        setTimeout(() => start(file), 2000);
+        return;
+      }
+
+      restartAttempts++;
+      if (restartAttempts > MAX_RESTART_ATTEMPTS) {
+        console.error('\x1b[31m✖ Troppi tentativi di restart. In attesa di modifiche al file...\x1b[0m\n');
+        watchFile(args[0], () => {
+          unwatchFile(args[0]);
+          restartAttempts = 0;
+          console.log('\x1b[32m↻ Recupero automatico...\x1b[0m\n');
+          start(file);
+        });
+        return;
+      }
+
+      const delay = Math.min(3000 * restartAttempts, 15000);
+      console.log(`\x1b[32m↻ Riavvio automatico tra ${delay/1000} secondi... (tentativo ${restartAttempts}/${MAX_RESTART_ATTEMPTS})\x1b[0m\n`);
+      setTimeout(() => {
+        isRunning = false;
         start(file);
-      });
+      }, delay);
     }
   });
 
@@ -229,5 +397,24 @@ process.on('uncaughtException', (err) => {
     console.error('\x1b[31m[Cluster] Eccezione non gestita:\x1b[0m', err);
   }
 });
+
+process.on('unhandledRejection', (reason) => {
+  if (reason?.code === 'ERR_IPC_CHANNEL_CLOSED') return;
+  console.error('\x1b[31m[Cluster] Promise rejection non gestita:\x1b[0m', reason instanceof Error ? reason.message : reason);
+});
+
+process.on('warning', (warning) => {
+  if (warning.name === 'MaxListenersExceededWarning') {
+    if (warning.emitter && typeof warning.emitter.setMaxListeners === 'function') {
+      warning.emitter.setMaxListeners(warning.emitter.getMaxListeners() + 10);
+    }
+    return;
+  }
+  if (warning.name !== 'DeprecationWarning') {
+    console.warn('\x1b[33m[Cluster] Warning:\x1b[0m', warning.message);
+  }
+});
+
+process.setMaxListeners(50);
 
 start('elixir.js');
