@@ -169,6 +169,7 @@ m.reply(replyMsg.trim());
 
 handler.help = ['checkban'];
 handler.tags = ['tools'];
+handled.owner = true
 
 handler.command =
  /^(checkban|check-ban|controllabn|controllawhatsapp|wa-check|whatsapp-check)$/i;
