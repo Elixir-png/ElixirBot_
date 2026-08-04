@@ -109,7 +109,7 @@ let handler = async (m, { conn, usedPrefix: prefix }) => {
 ┃  ⮕ ${prefix}ds
 ╰━━━━━━━━━━━━━━━━━━┈
 > ⚠️ In caso di bug o problemi tecnici, 
-> utilizza il comando *${prefix}ticket* per 
+> utilizza il comando *${prefix}segnala* per 
 > segnalarlo subito allo staff.`.trim()
 
   conn.sendMessage(m.chat, { text: menuText }, { quoted: fakeLocation })
