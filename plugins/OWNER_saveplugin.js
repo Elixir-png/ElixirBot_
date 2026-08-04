@@ -1,4 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Elixir, Punisher & 888 staff
 
 import fs from 'fs'
 const PROTECTED_PLUGIN_NAMES = new Set(['crediti', 'crediti.js']);
