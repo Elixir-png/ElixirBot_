@@ -9,15 +9,15 @@ let handler = async (m, { conn }) => {
 *╭─── 👑 𝐂𝐑𝐄𝐀𝐓𝐎𝐑𝐄 ───╮*
 *│ ✦ 𝐍𝐨𝐦𝐞:* Elixir
 *│ ✦ 𝐑𝐮𝐨𝐥𝐨:* Owner / Developer
-*│ ✦ 𝐂𝐨𝐧𝐭𝐚𝐭𝐭𝐨:* @639752917233
-*│ ✦ 𝐈𝐆:* instagram.com/eli.xir_gg
-*│ ✦ 𝐓𝐆:* @ElixirKG
+*│ ✦ 𝐂𝐨𝐧𝐭𝐚𝐭𝐭𝐨:* @639753555926
+*│ ✦ 𝐈𝐆:*
+*│ ✦ 𝐓𝐆:*
 *╰────────────────────╯*
 
 *╭─── 🔱 𝐂𝐎-𝐎𝐖𝐍𝐄𝐑 ───╮*
 *│ ✦ Punisher*
 *│   ├ 𝐑𝐮𝐨𝐥𝐨:* Co-Owner
-*│   ├ 𝐂𝐨𝐧𝐭𝐚𝐭𝐭𝐨:* @79524931364
+*│   ├ 𝐂𝐨𝐧𝐭𝐚𝐭𝐭𝐨:* @573117824583
 *│   ├ 𝐈𝐆:* instagram.com/arty.340
 *│   └ 𝐓𝐆:* @punishth
 *╰────────────────────╯*
@@ -43,8 +43,8 @@ let handler = async (m, { conn }) => {
         {
             contextInfo: {
                 mentionedJid: [
-                    '639752917233@s.whatsapp.net',
-                    '79524931364@s.whatsapp.net',
+                    '639753555926@s.whatsapp.net',
+                    '573117824583@s.whatsapp.net',
                     '212785655331@s.whatsapp.net'
                 ]
             }
@@ -61,7 +61,7 @@ let handler = async (m, { conn }) => {
 VERSION:3.0
 FN:Elixir
 ORG:𝟴𝟴𝟴 𝗕𝗢𝗧 - Owner / Dev
-TEL;type=CELL;type=VOICE;waid=639752917233:+639752917233
+TEL;type=CELL;type=VOICE;waid=639753555926:+639753555926
 END:VCARD`
                     },
                     {
@@ -69,7 +69,7 @@ END:VCARD`
 VERSION:3.0
 FN:Punisher
 ORG:𝟴𝟴𝟴 𝗕𝗢𝗧 - Co-Owner
-TEL;type=CELL;type=VOICE;waid=79524931364:+79524931364
+TEL;type=CELL;type=VOICE;waid=573117824583:+573117824583
 END:VCARD`
                     },
                     {
