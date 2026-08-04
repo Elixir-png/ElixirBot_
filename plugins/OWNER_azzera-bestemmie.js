@@ -1,4 +1,4 @@
-//Plugin by Punisher, Punisher & 888 staff
+//Plugin by Elixir, Punisher & 888 staff
 
 const handler = async (m) => {
   const text = m.text; 
