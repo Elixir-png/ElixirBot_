@@ -1,5 +1,3 @@
-//Plugin by Gab, Lucifero & 333 staff
-
 let handler = async (m, { conn, args }) => {
   let bet = parseInt(args[0])
   let user = global.db.data.users[m.sender]
@@ -16,21 +14,21 @@ let handler = async (m, { conn, args }) => {
   if (a===b && b===c) {
     user.money += bet*2
     text =
-`╔═🎰 𝐒𝐋𝐎𝐓 ═╗
+`╭━━━〔🎰 𝐒𝐋𝐎𝐓 〕━━━┈
 ┃ ${a} ${b} ${c}
 ┃ 💎 JACKPOT +${bet*2}€
 ┃
 ┃ 💼 Saldo: ${user.money}€
-╚══════╝`
+╰━━━━━━━━━━━━━━━━━━┈`
   } else {
     user.money -= bet
     text =
-`╔═🎰 𝐒𝐋𝐎𝐓 ═╗
+`╭━━━〔🎰 𝐒𝐋𝐎𝐓 〕━━━┈
 ┃ ${a} ${b} ${c}
 ┃ 💀 Perso -${bet}€
 ┃
 ┃ 💼 Saldo: ${user.money}€
-╚══════╝`
+╰━━━━━━━━━━━━━━━━━━┈`
   }
 
   await conn.sendMessage(m.chat, {
