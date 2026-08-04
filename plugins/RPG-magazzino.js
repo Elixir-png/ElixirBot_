@@ -1,5 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
-
+//Plugin by Elixir, Punisher & 888 staff
 async function handler(m, { conn }) {
   const users = global.db.data.users;
   if (!users[m.sender]) users[m.sender] = {};
