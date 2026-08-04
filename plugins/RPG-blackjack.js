@@ -1,5 +1,3 @@
-//Plugin by Gab, Lucifero & 333 staff
-
 let pesca = () => Math.floor(Math.random() * 10) + 1
 
 let handler = async (m, { conn, args, command }) => {
@@ -24,12 +22,12 @@ let handler = async (m, { conn, args, command }) => {
 
     return conn.sendMessage(m.chat, {
       text:
-`╔═🃏 𝐁𝐋𝐀𝐂𝐊𝐉𝐀𝐂𝐊 ═╗
+`╭━━━〔🃏 𝐁𝐋𝐀𝐂𝐊𝐉𝐀𝐂𝐊 〕━━━┈
 ┃ 🧑 Tu: ${g.player.join(" + ")} = ${sum}
 ┃ 🤖 Banco: ${g.dealer[0]} + ?
 ┃
 ┃ 🎮 Scegli:
-╚══════╝`,
+╰━━━━━━━━━━━━━━━━━━┈`,
       buttons: [
         { buttonId: ".pesco", buttonText: { displayText: "🃏 Pesco" }, type: 1 },
         { buttonId: ".sto", buttonText: { displayText: "✋ Sto" }, type: 1 }
@@ -79,7 +77,7 @@ let handler = async (m, { conn, args, command }) => {
     }
 
     let msg =
-`╔═🃏 𝐁𝐋𝐀𝐂𝐊𝐉𝐀𝐂𝐊 ═╗
+`╭━━━〔🃏 𝐁𝐋𝐀𝐂𝐊𝐉𝐀𝐂𝐊 〕━━━┈ 
 ┃ 🧑 Tu: ${sumP}
 ┃ 🤖 Banco: ${sumD}
 ┃
