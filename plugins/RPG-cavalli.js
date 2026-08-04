@@ -1,5 +1,3 @@
-//Plugin by Gab, Lucifero & 333 staff
-
 let handler = async (m, { conn, args, command }) => {
 
   global.cavalli = global.cavalli || {}
@@ -17,11 +15,11 @@ let handler = async (m, { conn, args, command }) => {
 
     return conn.sendMessage(m.chat, {
       text:
-`╔═🐎 𝐂𝐀𝐕𝐀𝐋𝐋𝐈 ═╗
+`╭━━━〔🐎 𝐂𝐀𝐕𝐀𝐋𝐋𝐈 〕━━━┈
 ┃ 💰 Portafoglio: *${money}€*
 ┃
 ┃ Scegli la puntata
-╚══════╝`,
+╰━━━━━━━━━━━━━━━━━━┈`,
       buttons: [
         { buttonId: bet(100), buttonText: { displayText: "100€" }, type: 1 },
         { buttonId: bet(200), buttonText: { displayText: "200€" }, type: 1 },
@@ -44,17 +42,17 @@ let handler = async (m, { conn, args, command }) => {
 
     return conn.sendMessage(m.chat, {
       text:
-`╔═🐎 𝐂𝐀𝐕𝐀𝐋𝐋𝐈 ═╗
+`╭━━━〔🐎 𝐂𝐀𝐕𝐀𝐋𝐋𝐈 〕━━━┈ 
 ┃ 🎯 Scegli il cavallo
 ┃ 💰 Puntata: *${bet}€*
 ┃
 ┃ 🐎 1 → Jonny
-┃ 🐎 2 → Gab
+┃ 🐎 2 → Dav
 ┃ 🐎 3 → Franco
-╚══════╝`,
+╰━━━━━━━━━━━━━━━━━━┈`,
       buttons: [
         { buttonId: ".cavallo 1", buttonText: { displayText: "🐎 Jonny" }, type: 1 },
-        { buttonId: ".cavallo 2", buttonText: { displayText: "🐎 Gab" }, type: 1 },
+        { buttonId: ".cavallo 2", buttonText: { displayText: "🐎 Dav" }, type: 1 },
         { buttonId: ".cavallo 3", buttonText: { displayText: "🐎 Franco" }, type: 1 }
       ],
       headerType: 1
@@ -70,7 +68,7 @@ let handler = async (m, { conn, args, command }) => {
 
     let cavalli = {
       1: "Jonny",
-      2: "Gab",
+      2: "Dav",
       3: "Franco"
     }
 
@@ -84,21 +82,21 @@ let handler = async (m, { conn, args, command }) => {
     if (scelta === vincitore) {
       user.money += game.bet * 2
       text =
-`╔═🐎 𝐂𝐀𝐕𝐀𝐋𝐋𝐈 ═╗
+`╭━━━〔🐎 𝐂𝐀𝐕𝐀𝐋𝐋𝐈 〕━━━┈
 ┃ 🏆 Vincitore: *${nomeVincitore}*
 ┃ 💰 Guadagno: +${game.bet * 2}€
 ┃
 ┃ 💼 Saldo: ${user.money}€
-╚══════╝`
+╰━━━━━━━━━━━━━━━━━━┈`
     } else {
       user.money -= game.bet
       text =
-`╔═🐎 𝐂𝐀𝐕𝐀𝐋𝐋𝐈 ═╗
+`╭━━━〔🐎 𝐂𝐀𝐕𝐀𝐋𝐋𝐈 〕━━━┈
 ┃ 🏆 Vincitore: *${nomeVincitore}*
 ┃ 💀 Perso: -${game.bet}€
 ┃
 ┃ 💼 Saldo: ${user.money}€
-╚══════╝`
+╰━━━━━━━━━━━━━━━━━━┈`
     }
 
     delete global.cavalli[m.sender]
