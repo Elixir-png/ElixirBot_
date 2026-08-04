@@ -1,141 +1,176 @@
 // Plugin by Elixir, Punisher & 888 staff
-import fetch from 'node-fetch'
-import { createCanvas } from 'canvas'
+import fetch from 'node-fetch';
 
-let handler = async (m, { conn, text, command, usedPrefix: prefix }) => {
-  try {
-    console.log(`[checkban] Richiesta scansione da: ${m.sender} via ${command}`)
-    
-    let target = m.quoted ? m.quoted.sender : m.mentionedJid?.[0] ? m.mentionedJid[0] : text ? text.replace(/[^0-9]/g, '') + '@s.whatsapp.net' : null
-    if (!target) {
-      return m.reply(`⭔ *SISTEMA 888*\n\n💡 _Uso:_ Rispondi a qualcuno, taggalo o scrivi il numero.`)
-    }
+let handler = async (m, { args, conn }) => {
 
-    await m.react('🛰️')
-
-    let cleanNumber = target.split('@')[0]
-    let isBanned = false
-    let databaseStatus = 'UNKNOWN'
-
-    try {
-      if (global.db && global.db.data && global.db.data.users) {
-        let userInDb = global.db.data.users[target]
-        if (userInDb) {
-          isBanned = userInDb.banned || false
-          databaseStatus = isBanned ? 'RESTRICTED' : 'AUTHORIZED'
-        }
-      }
-    } catch (dbErr) {
-      console.error('[checkban] Errore lettura locale database:', dbErr.message)
-    }
-
-    const canvas = createCanvas(850, 480)
-    const ctx = canvas.getContext('2d')
-
-    ctx.fillStyle = '#070b19'
-    ctx.fillRect(0, 0, 850, 480)
-
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.04)'
-    ctx.lineWidth = 1
-    for (let x = 0; x < 850; x += 25) {
-      ctx.beginPath()
-      ctx.moveTo(x, 0)
-      ctx.lineTo(x, 480)
-      ctx.stroke()
-    }
-    for (let y = 0; y < 480; y += 25) {
-      ctx.beginPath()
-      ctx.moveTo(0, y)
-      ctx.lineTo(850, y)
-      ctx.stroke()
-    }
-
-    ctx.strokeStyle = '#00f0ff'
-    ctx.lineWidth = 2
-    ctx.strokeRect(20, 20, 810, 440)
-
-    ctx.fillStyle = 'rgba(0, 240, 255, 0.1)'
-    ctx.fillRect(25, 25, 800, 40)
-    ctx.strokeStyle = '#00f0ff'
-    ctx.strokeRect(25, 25, 800, 40)
-
-    ctx.fillStyle = '#00f0ff'
-    ctx.font = 'bold 16px Courier New'
-    ctx.fillText('// 888 MAIN CORE CONTROL SYSTEM — CORE SCANNER v4.0 //', 45, 51)
-
-    ctx.fillStyle = '#ffffff'
-    ctx.font = '15px Courier New'
-    ctx.fillText(`TARGET_ID : ${target}`, 50, 110)
-    ctx.fillText(`PHONE_NUM : +${cleanNumber}`, 50, 140)
-    ctx.fillText(`TIMESTAMP : ${new Date().toISOString()}`, 50, 170)
-    ctx.fillText(`DB_STATUS : ${databaseStatus}`, 50, 200)
-
-    ctx.lineWidth = 1
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.2)'
-    ctx.beginPath()
-    ctx.moveTo(50, 230)
-    ctx.lineTo(800, 230)
-    ctx.stroke()
-
-    ctx.fillStyle = 'rgba(0, 240, 255, 0.05)'
-    ctx.fillRect(50, 260, 750, 160)
-    ctx.lineWidth = 1.5
-    ctx.strokeStyle = isBanned ? '#ff0055' : '#00ff66'
-    ctx.strokeRect(50, 260, 750, 160)
-
-    if (isBanned) {
-      ctx.fillStyle = '#ff0055'
-      ctx.font = 'bold 36px Courier New'
-      ctx.fillText('➔ SECURITY ALERT: ACCESS BANNED', 80, 325)
-      ctx.font = '14px Courier New'
-      ctx.fillStyle = 'rgba(255, 0, 85, 0.8)'
-      ctx.fillText('CRITICAL: L\'utente ha violato le policy o è stato inserito nella blacklist.', 80, 365)
-      ctx.fillText('Stato operativo: Sospensione permanente da tutti i moduli del cluster 888.', 80, 385)
-    } else {
-      ctx.fillStyle = '#00ff66'
-      ctx.font = 'bold 36px Courier New'
-      ctx.fillText('➔ SECURITY CLEAR: SYSTEM ACTIVE', 80, 325)
-      ctx.font = '14px Courier New'
-      ctx.fillStyle = 'rgba(0, 255, 102, 0.8)'
-      ctx.fillText('VERIFIED: Nessuna anomalia o restrizione trovata a carico dell\'account.', 80, 365)
-      ctx.fillText('Stato operativo: Autorizzato per intero all\'utilizzo dei servizi centrali.', 80, 385)
-    }
-
-    const buffer = canvas.toBuffer('image/png')
-    
-    let captionText = 
-`╭━━━〔 📡 *SCANSIONE LOG* 〕━━━┈
-┃ *Bot:* 𝟴𝟴𝟴 𝗕𝗢𝗧
-┃ *Livello:* Core Control System
-┃━━━━━━━━━━━━━━━━━━
-┃ ⚙️ *Dettagli Scansione:*
-┃  ⮕ *Core:* 888 NETWORK
-┃  ⮕ *Target:* @${cleanNumber}
-┃  ⮕ *Esito:* ${isBanned ? '*BANNATO / LOCK* 🔴' : '*AUTORIZZATO / SAFE* 🟢'}
-╰━━━━━━━━━━━━━━━━━━┈
-> ⚠️ In caso di bug o problemi tecnici, 
-> utilizza il comando *${prefix || '#'}ticket* per 
-> segnalarlo subito allo staff.`.trim()
-
-    await conn.sendMessage(m.chat, { 
-      image: buffer, 
-      caption: captionText,
-      mentions: [target]
-    }, { quoted: m })
-
-    await m.react('✅')
-    console.log(`[checkban] Canvas generato ed inviato con successo per: ${cleanNumber}`)
-
-  } catch (err) {
-    console.error('[checkban] Errore durante la generazione del checkban tech:', err)
-    await m.reply(`\`── ❌ SYSTEM ERROR ──\`\n\n\`💥\` Fallimento durante il rendering HUD Canvas.\n\n\`[⚡] 888 SYSTEM\``)
-    await m.react('❌')
+  if (!args[0]) {
+    return m.reply(`
+╭━〔 𝐖𝐇𝐀𝐓𝐒𝐀𝐏𝐏 𝐁𝐀𝐍 𝐂𝐇𝐄𝐂𝐊 〕━╮
+┣━━━━━━━━━━━━━━━━━━━━━
+┃ 📌 *𝐔𝐬𝐨:* .checkban <numero>
+┃ 🌍 *𝐅𝐨𝐫𝐦𝐚𝐭𝐨:* internazionale
+┣━━━━━━━━━━━━━━━━━━━━━
+┃ ✅ 𝐄𝐬𝐞𝐦𝐩𝐢:
+┃ • .checkban 391112224444
+┃ • .checkban +39 111 222 4444
+┃ • .checkban 347 968 4300
+┣━━━━━━━━━━━━━━━━━━━━━
+┃ 🤖 𝐈𝐥 𝐛𝐨𝐭 𝐫𝐢𝐦𝐮𝐨𝐯𝐞
+┃ 𝐚𝐮𝐭𝐨𝐦𝐚𝐭𝐢𝐜𝐚𝐦𝐞𝐧𝐭𝐞 𝐬𝐩𝐚𝐳𝐢 𝐞 +
+╰━━━━━━━━━━━━━━━━━━━━━╯
+`.trim());
   }
+
+  let phoneNumber = args.join(' ').trim();
+
+  phoneNumber = phoneNumber.replace(/[\s\-\(\)\+]/g, '');
+
+  if (phoneNumber.startsWith('3') && phoneNumber.length === 10) {
+    phoneNumber = '39' + phoneNumber;
+  }
+
+  if (!/^\d+$/.test(phoneNumber)) {
+    return m.reply(`
+╭━〔 ❌ 𝐍𝐔𝐌𝐄𝐑𝐎 𝐈𝐍𝐕𝐀𝐋𝐈𝐃𝐎 〕━╮
+┣━━━━━━━━━━━━━━━━━━━━━
+┃ 📌 𝐈𝐧𝐬𝐞𝐫𝐢𝐬𝐜𝐢 𝐬𝐨𝐥𝐨 𝐧𝐮𝐦𝐞𝐫𝐢
+┃
+┃ ✅ 𝐅𝐨𝐫𝐦𝐚𝐭𝐢 𝐚𝐜𝐜𝐞𝐭𝐭𝐚𝐭𝐢:
+┃ • 391112224444
+┃ • +391112224444
+┃ • 347 968 4300
+┃ • +39 347 968 4300
+╰━━━━━━━━━━━━━━━━━━━━━╯
+`.trim());
+  }
+
+  if (phoneNumber.length < 10) {
+    return m.reply(`
+╭━〔 𝐍𝐔𝐌𝐄𝐑𝐎 𝐓𝐑𝐎𝐏𝐏𝐎 𝐂𝐎𝐑𝐓𝐎 〕━╮
+┣━━━━━━━━━━━━━━━━━━━━
+┃ 📌 𝐈𝐧𝐬𝐞𝐫𝐢𝐬𝐜𝐢 𝐚𝐥𝐦𝐞𝐧𝐨
+┃ 𝟏𝟎 𝐜𝐢𝐟𝐫𝐞 𝐯𝐚𝐥𝐢𝐝𝐞
+╰━━━━━━━━━━━━━━━━━━━╯
+`.trim());
+  }
+
+  try {
+
+    await m.reply(`
+╭━━〔 🔍 𝐂𝐎𝐍𝐓𝐑𝐎𝐋𝐋𝐎 〕━━╮
+┣━━━━━━━━━━━━━━━━━━━
+┃ 📱 𝐕𝐞𝐫𝐢𝐟𝐢𝐜𝐚 𝐧𝐮𝐦𝐞𝐫𝐨
+┃ 𝐢𝐧 𝐜𝐨𝐫𝐬𝐨 𝐬𝐮 𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩...
+╰━━━━━━━━━━━━━━━━━━━╯
+`.trim());
+
+    const tokenRes = await fetch('https://baron0.com/api/get-token');
+
+    if (!tokenRes.ok) {
+      return m.reply(`
+╭━━〔 ❌ 𝐄𝐑𝐑𝐎𝐑𝐄 𝐀𝐏𝐈 〕━━╮
+┣━━━━━━━━━━━━━━━━━━━
+┃ HTTP ${tokenRes.status}
+┃ Token non disponibile
+╰━━━━━━━━━━━━━━━━━━━╯
+`.trim());
+    }
+
+    const { token } = await tokenRes.json();
+
+    const response = await fetch('https://baron0.com/check-number', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-page-token': token,
+      },
+      body: JSON.stringify({
+        number: `+${phoneNumber}`
+      }),
+    });
+
+    if (!response.ok) {
+      return m.reply(`
+╭━━〔 ❌ 𝐄𝐑𝐑𝐎𝐑𝐄 𝐀𝐏𝐈 〕━━╮
+┣━━━━━━━━━━━━━━━━━━━━
+┃ HTTP ${response.status}
+┃ Endpoint non disponibile
+╰━━━━━━━━━━━━━━━━━━━╯
+`.trim());
+    }
+
+    const data = await response.json();
+
+    const isBanned = data.banned || false;
+    const err = data.error || {};
+
+    const status = err.status || 'unknown';
+    const reason = err.reason || 'unknown';
+    const loginNum = err.login || phoneNumber;
+
+    const methods =
+      Array.isArray(err.fallback_methods) &&
+      err.fallback_methods.length
+        ? err.fallback_methods.join(', ')
+        : 'nessuno';
+
+    const autoconf =
+      err.autoconf_type != null
+        ? err.autoconf_type
+        : 'n/a';
+
+    let replyMsg = `╭━〔 📱 𝐖𝐇𝐀𝐓𝐒𝐀𝐏𝐏 𝐒𝐓𝐀𝐓𝐔𝐒 〕━╮
+┣━━━━━━━━━━━━━━━━━━━━━
+┃ 📞 𝐍𝐮𝐦𝐞𝐫𝐨:
+┃ +${loginNum}
+┣━━━━━━━━━━━━━━━━━━━━━
+`;
+
+if (isBanned) {
+  replyMsg += `┃ 🔴 𝐒𝐓𝐀𝐓𝐎: 𝐁𝐀𝐍𝐍𝐀𝐓𝐎
+┃ ❌ 𝐍𝐮𝐦𝐞𝐫𝐨 𝐛𝐚𝐧𝐧𝐚𝐭𝐨
+┃ 𝐝𝐚 𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩
+`;
+} else {
+  replyMsg += `┃ 🟢 𝐒𝐓𝐀𝐓𝐎: 𝐀𝐓𝐓𝐈𝐕𝐎
+┃ ✅ 𝐍𝐮𝐦𝐞𝐫𝐨 𝐚𝐭𝐭𝐢𝐯𝐨
+┃ 𝐬𝐮 𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩
+`;
 }
 
-handler.help = ['checkban']
-handler.tags = ['owner']
-handler.command = /^(checkban)$/i
-handler.owner = true
+replyMsg += `┣━━━━━━━━━━━━━━━━━━━━━
+┃ 📊 𝐃𝐄𝐓𝐓𝐀𝐆𝐋𝐈
+┣━━━━━━━━━━━━━━━━━━━━━
+┃ • 𝐒𝐭𝐚𝐭𝐮𝐬: ${status}
+┃ • 𝐌𝐨𝐭𝐢𝐯𝐨: ${reason}
+┃ • 𝐀𝐮𝐭𝐡: ${methods}
+┃ • 𝐀𝐮𝐭𝐨𝐜𝐨𝐧𝐟: ${autoconf}
+┃ • 𝐎𝐫𝐚: ${new Date().toLocaleString('it-IT')}
+╰━━━━━━━━━━━━━━━━━━━━━╯`;
 
-export default handler
+m.reply(replyMsg.trim());
+
+  } catch (error) {
+
+    console.error('WhatsApp Ban Check Error:', error);
+
+    m.reply(`
+╭━━〔 ❌ 𝐄𝐑𝐑𝐎𝐑𝐄 〕━━╮
+┣━━━━━━━━━━━━━━━━━━━
+┃ 🌐 𝐄𝐫𝐫𝐨𝐫𝐞 𝐜𝐨𝐧𝐧𝐞𝐬𝐬𝐢𝐨𝐧𝐞
+┃
+┃ ${error.message}
+┃
+┃ 🔄 𝐑𝐢𝐩𝐫𝐨𝐯𝐚 𝐩𝐢𝐮̀ 𝐭𝐚𝐫𝐝𝐢
+╰━━━━━━━━━━━━━━━━━━━╯
+`.trim());
+  }
+};
+
+handler.help = ['checkban'];
+handler.tags = ['tools'];
+
+handler.command =
+ /^(checkban|check-ban|controllabn|controllawhatsapp|wa-check|whatsapp-check)$/i;
+
+export default handler;
