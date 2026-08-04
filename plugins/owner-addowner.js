@@ -1,4 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by elixir, punisher & 888 staff
 
 let handler = async (m, { text }) => {
   let number
@@ -14,7 +14,7 @@ let handler = async (m, { text }) => {
 
  
   const alreadyInOwner = global.owner.some(([num]) => num === clean)
-  if (alreadyInOwner) return m.reply('È già rowner')
+  if (alreadyInOwner) return m.reply('È già owner')
 
   
   global.owner.push([clean, 'Co-Owner', true])
@@ -23,7 +23,7 @@ let handler = async (m, { text }) => {
   if (!global.db.data.owners) global.db.data.owners = []
   if (!global.db.data.owners.includes(number)) global.db.data.owners.push(number)
 
-  m.reply(`✅ *${clean}* aggiunto come rowner`)
+  m.reply(`✅ *${clean}* aggiunto come owner`)
 }
 
 handler.command = /^addowner$/i
