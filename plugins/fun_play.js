@@ -1,97 +1,104 @@
 // Plugin by Elixir & 888 staff
-import { exec } from 'child_process'
-import { promisify } from 'util'
-import ytSearch from 'yt-search'
-import { unlinkSync, readFileSync, existsSync, readdirSync, mkdirSync } from 'fs'
-import path from 'path'
+import yts from 'yt-search';
+import { exec } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
 
-const execPromise = promisify(exec)
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+  if (!text) return m.reply(`╭───〔 𝟴𝟴𝟴 𝗕𝗢𝗧 〕───╮\n│\n│ 💡 *Uso corretto:* \n│ ${usedPrefix + command} <nome canzone>\n│\n╰───────────────────╯`);
 
-let handler = async (m, { conn, command, args, usedPrefix }) => {
-    const tmpDir = path.resolve('./tmp')
-    if (!existsSync(tmpDir)) mkdirSync(tmpDir, { recursive: true })
+  try {
+    const search = await yts(text);
+    const vid = search.videos[0];
+    if (!vid) return m.reply('❌ *Nessun risultato trovato per la ricerca.*');
 
-    const cookiePath = path.resolve('./cookies.txt')
-    
-    if (!existsSync(cookiePath)) {
-        return m.reply('❌ Il file `cookies.txt` non è stato trovato nella directory principale.')
+    const url = vid.url;
+
+    // Struttura dei pulsanti e logica mantenuta intatta con nuova grafica
+    if (command === 'play') {
+        let infoMsg = `─── 𝟴𝟴𝟴 𝗣𝗟𝗔𝗬𝗘𝗥 ───\n\n` +
+                      `🎵 *Titolo:* ${vid.title}\n` +
+                      `⏱️ *Durata:* ${vid.timestamp}\n` +
+                      `👤 *Canale:* ${vid.author.name}\n` +
+                      `👁️ *Visualizzazioni:* ${vid.views.toLocaleString()}\n\n` +
+                      `👇 *Scegli il formato da scaricare:*`;
+
+        return await conn.sendMessage(m.chat, {
+            image: { url: vid.thumbnail },
+            caption: infoMsg,
+            footer: '𝟴𝟴𝟴 𝗕𝗢𝗧 • Downloader',
+            buttons: [
+                { buttonId: `${usedPrefix}playaud ${url}`, buttonText: { displayText: '🎧 Audio (MP3)' }, type: 1 },
+                { buttonId: `${usedPrefix}playvid ${url}`, buttonText: { displayText: '📹 Video (MP4)' }, type: 1 }
+            ],
+            headerType: 4
+        }, { quoted: m });
     }
 
-    const cookieFlag = `--cookies "${cookiePath}"`
+    await conn.sendMessage(m.chat, { react: { text: "⏳", key: m.key } });
 
-    if (command === 'play' && !args.length) {
-        return m.reply(`🏮 Uso: \`${usedPrefix}play [titolo]\``)
+    const isAudio = command === 'playaud';
+    const tmpDir = os.tmpdir();
+    const fileName = `file_${Date.now()}`;
+    const outputPath = path.join(tmpDir, `${fileName}.${isAudio ? 'mp3' : 'mp4'}`);
+
+    // Downloader locale basato su yt-dlp: nessuna API esterna richiesta
+    await new Promise((resolve, reject) => {
+        let cmd = isAudio 
+            ? `yt-dlp -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o "${outputPath}" "${url}"`
+            : `yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "${outputPath}" "${url}"`;
+
+        exec(cmd, (err) => {
+            if (err) reject(err);
+            else resolve();
+        });
+    });
+
+    if (!fs.existsSync(outputPath)) {
+        throw new Error('Il download locale con yt-dlp è fallito.');
     }
 
-    if (args[0] === 'audio' || args[0] === 'video') {
-        let isAudio = args[0] === 'audio'
-        let url = args[1]
-        if (!url || !url.includes('youtu')) return m.reply('🏮 Link non valido.')
+    if (isAudio) {
+        const voicePath = path.join(tmpDir, `${fileName}.ogg`);
 
-        await m.reply(`⏳ Scaricando ${isAudio ? 'audio' : 'video'}...`)
-        let baseName = `${Date.now()}`
-        let cmd = [
-            'yt-dlp',
-            cookieFlag,
-            '--js-runtime node',
-            '--force-ipv4',
-            '--no-warnings',
-            '--no-check-certificate',
-            isAudio ? '-f "ba/b" --extract-audio --audio-format mp3' : '-S "vcodec:h264,res:720,acodec:m4a" --merge-output-format mp4',
-            `-o "${tmpDir}/${baseName}.%(ext)s"`,
-            `"${url}"`
-        ].join(' ')
+        await new Promise((resolve, reject) => {
+            exec(
+                `ffmpeg -hide_banner -loglevel error -y -i "${outputPath}" -map_metadata -1 -vn -ar 48000 -ac 1 -c:a libopus -b:a 64k -application voip -f ogg "${voicePath}"`,
+                (err) => {
+                    if (err) reject(err);
+                    else resolve();
+                }
+            );
+        });
 
-        try {
-            await execPromise(cmd)
-            let files = readdirSync(tmpDir)
-            let found = files.find(f => f.startsWith(baseName) && !f.endsWith('.txt'))
-            if (!found) throw new Error('File non generato')
-            
-            let finalPath = path.join(tmpDir, found)
-            let data = readFileSync(finalPath)
-            
-            if (isAudio) {
-                await conn.sendMessage(m.chat, { audio: data, mimetype: 'audio/mpeg', fileName: `audio.mp3` }, { quoted: m })
-            } else {
-                await conn.sendMessage(m.chat, { video: data, mimetype: 'video/mp4', caption: '> 888 𝚩𝚯𝐓' }, { quoted: m })
-            }
-            unlinkSync(finalPath)
-        } catch (e) {
-            console.error(e)
-            m.reply(`❌ Errore durante il download.`)
-        }
-        return
+        await conn.sendMessage(m.chat, {
+            audio: fs.readFileSync(voicePath),
+            mimetype: 'audio/ogg; codecs=opus',
+            ptt: true
+        }, { quoted: m });
+
+        if (fs.existsSync(voicePath)) fs.unlinkSync(voicePath);
+
+    } else {
+        await conn.sendMessage(m.chat, {
+            video: fs.readFileSync(outputPath),
+            mimetype: 'video/mp4',
+            caption: `✨ *Completato da 𝟴𝟴𝟴 𝗕𝗢𝗧*`
+        }, { quoted: m });
     }
 
-    let query = args.join(' ')
-    let results = await ytSearch(query)
-    if (!results || !results.videos || results.videos.length === 0) return m.reply('❌ Nessun risultato.')
+    if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+    await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key } });
 
-    const v = results.videos[0]
-    const videoUrl = v.url
-    let thumb = v.thumbnail || v.thumbnailUrl || ''
-    if (typeof thumb === 'object') thumb = thumb?.url || ''
-    if (thumb.startsWith('//')) thumb = 'https:' + thumb
-    if (!thumb) thumb = 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg'
+  } catch (e) {
+    console.error("Handler Error:", e.message);
+    m.reply('⚠️ *Errore:* Impossibile completare il download. Riprova più tardi.');
+  }
+};
 
-    let caption = `╭┈➤ 『 🎵 』 *888𝗧𝗨𝗕𝗘*\n┆  『 📌 』 \`titolo\` ─ ${v.title}\n╰┈➤ 『 📦 』 \`888 𝚩𝚯𝐓\``
+handler.help = ['play'];
+handler.tags = ['downloader'];
+handler.command = /^(play|playaud|playvid)$/i;
 
-    const buttons = [
-        { buttonId: `${usedPrefix}play audio ${videoUrl}`, buttonText: { displayText: '🎵 AUDIO' }, type: 1 },
-        { buttonId: `${usedPrefix}play video ${videoUrl}`, buttonText: { displayText: '🎥 VIDEO' }, type: 1 }
-    ]
-
-    const buttonMessage = {
-        image: { url: thumb },
-        caption: caption,
-        footer: 'Seleziona un formato',
-        buttons: buttons,
-        headerType: 4
-    }
-
-    return await conn.sendMessage(m.chat, buttonMessage, { quoted: m })
-}
-
-handler.command = ['play']
 export default handler;
