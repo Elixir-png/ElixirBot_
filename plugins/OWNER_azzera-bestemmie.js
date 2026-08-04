@@ -1,4 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
+//Plugin by Punisher, Punisher & 888 staff
 
 const handler = async (m) => {
   const text = m.text; 
