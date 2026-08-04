@@ -1,4 +1,3 @@
-//Plugin by Elixir, Punisher & 888 staff
 let handler = async (m, { conn }) => {
   let user = global.db.data.users[m.sender]
   let money = user.money || 0
@@ -6,11 +5,11 @@ let handler = async (m, { conn }) => {
 
   await conn.sendMessage(m.chat, {
     text:
-`╔═🃏 𝐁𝐋𝐀𝐂𝐊𝐉𝐀𝐂𝐊 ═╗
+`╭━━━〔🃏 𝐁𝐋𝐀𝐂𝐊𝐉𝐀𝐂𝐊 〕━━━┈
 ┃ 💰 Portafoglio: *${money}€*
 ┃
 ┃ Scegli la puntata
-╚══════╝`,
+╰━━━━━━━━━━━━━━━━━━┈`,
     buttons: [
       { buttonId: bet(100), buttonText: { displayText: "100€" }, type: 1 },
       { buttonId: bet(200), buttonText: { displayText: "200€" }, type: 1 },
