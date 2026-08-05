@@ -1,49 +1,85 @@
-const afkUsers = new Map();
+// Plugin by Elixir, Punisher & 888 staff
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-conn.ev.on('messages.upsert', async (m) => {
-    // 1. FILTRO FONDAMENTALE: blocca le notifiche duplicate
-    if (m.type !== 'notify') return;
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const AFK_FILE = path.join(__dirname, '..', 'data', 'afk.json')
 
-    const msg = m.messages[0];
+let afkData = {}
 
-    // Ignora messaggi vuoti, messaggi di stato/storie o messaggi inviati dal bot stesso
-    if (!msg || !msg.message || msg.key.fromMe) return;
+function loadAfkData() {
+    try {
+        if (fs.existsSync(AFK_FILE)) {
+            afkData = JSON.parse(fs.readFileSync(AFK_FILE, 'utf8'))
+        } else {
+            afkData = {}
+        }
+    } catch (e) {
+        console.error('[AFK] Errore caricamento dati:', e)
+        afkData = {}
+    }
+}
 
-    const from = msg.key.remoteJid;
-    const sender = msg.key.participant || msg.key.remoteJid;
+function saveAfkData() {
+    try {
+        fs.writeFileSync(AFK_FILE, JSON.stringify(afkData, null, 2), 'utf8')
+    } catch (e) {
+        console.error('[AFK] Errore salvataggio dati:', e)
+    }
+}
 
-    // Estrae il testo del messaggio in base al tipo (testo normale, con formato o risposta)
-    const body = 
-        msg.message.conversation || 
-        msg.message.extendedTextMessage?.text || 
-        '';
+loadAfkData()
 
-    const cleanBody = body.trim();
+let handler = m => m
 
-    // 2. DISATTIVAZIONE AFK
-    // Se l'utente è AFK e manda un messaggio qualsiasi (diverso da .afk)
-    if (afkUsers.has(sender) && cleanBody.toLowerCase() !== '.afk') {
-        const startTime = afkUsers.get(sender);
-        const seconds = Math.floor((Date.now() - startTime) / 1000);
+handler.all = async function (m) {
+    if (!m.text || m.fromMe) return
+    if (!m.isGroup) return
 
-        // Rimuove subito l'utente dalla mappa prima di inviare il messaggio
-        afkUsers.delete(sender);
+    const sender = m.sender
+    const body = m.text.trim()
 
-        await conn.sendMessage(from, {
+    if (afkData[sender] && body.toLowerCase() !== '.afk') {
+        const { since } = afkData[sender]
+        const seconds = Math.floor((Date.now() - since) / 1000)
+        delete afkData[sender]
+        saveAfkData()
+
+        await this.sendMessage(m.chat, {
             text: `👋 Non sei più AFK!\n⏱️ Sei stato/a AFK per *${seconds}s*`
-        }, { quoted: msg });
-        return;
+        }, { quoted: m })
+        return
     }
 
-    // 3. ATTIVAZIONE AFK
-    if (cleanBody.toLowerCase() === '.afk') {
-        // Salva l'orario se non era già AFK
-        if (!afkUsers.has(sender)) {
-            afkUsers.set(sender, Date.now());
+    if (body.toLowerCase() === '.afk') {
+        if (!afkData[sender]) {
+            afkData[sender] = {
+                reason: 'Nessun motivo specificato',
+                since: Date.now()
+            }
+            saveAfkData()
 
-            await conn.sendMessage(from, {
+            await this.sendMessage(m.chat, {
                 text: '💤 *Modalità AFK attivata per questo gruppo!*\n\n_Non verrai menzionato/a nei tag._'
-            }, { quoted: msg });
+            }, { quoted: m })
+        }
+        return
+    }
+
+    const mentioned = m.mentionedJid || []
+    if (mentioned.length > 0) {
+        for (const jid of mentioned) {
+            if (afkData[jid] && jid !== sender) {
+                const { reason, since } = afkData[jid]
+                const seconds = Math.floor((Date.now() - since) / 1000)
+                const name = this.getName(jid) || jid.split('@')[0]
+                await this.sendMessage(m.chat, {
+                    text: `💤 *${name}* è AFK da *${seconds}s*\n📝 Motivo: ${reason}`
+                }, { quoted: m })
+            }
         }
     }
-});
+}
+
+export default handler
