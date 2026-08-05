@@ -9,7 +9,7 @@ const vic = new Map()
 const CACHE_TTL = 15 * 60 * 1000
 const gonnabealongyr = 20 * 60
 const A = [ 'bestaudio[ext=m4a]/bestaudio', '251', '140', 'bestaudio', 'best[height<=480]' ]
-const V = [ '135+140', '134+140', '136+140', '137+140',  /* Sti ultimi due hanno la maggior qualita ma pesano asf */]
+const V = [ '135+140', '134+140', '136+140', '137+140', ]
 const tmpDir = path.join(process.cwd(), 'temp')
 if (!fs.existsSync(tmpDir)) {
     fs.mkdirSync(tmpDir)
