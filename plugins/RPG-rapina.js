@@ -1,4 +1,4 @@
-//Plugin by Gab, Lucifero & 333 staff
+// Plugin by Elixir, Punisher & 888 staff
 
 const COOLDOWN = 10 * 60 * 1000; // 10 minuti
 const BLOCCO_ARRESTO = 20 * 60 * 1000; // 20 minuti
