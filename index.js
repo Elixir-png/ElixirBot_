@@ -52,7 +52,6 @@ const rl = createInterface(process.stdin, process.stdout);
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Effetto glitch per testo
 const glitchText = async (text, times = 3) => {
   const chars = '!@#$%&*()_+-=[]{}|;:,.<>?/';
   for (let g = 0; g < times; g++) {
@@ -70,7 +69,6 @@ const glitchText = async (text, times = 3) => {
   process.stdout.write(`\r\x1b[32m${text}\x1b[0m\n`);
 };
 
-// Cornice animata con neon
 const showNeonBorder = async (label, color = '\x1b[36m') => {
   const reset = '\x1b[0m';
   const border = '═'.repeat(40);
@@ -79,7 +77,6 @@ const showNeonBorder = async (label, color = '\x1b[36m') => {
   process.stdout.write(`${color}╚${border}╝${reset}\n`);
 };
 
-// DigitRain singola linea
 const digitalRainLine = async () => {
   const colors = ['\x1b[32m', '\x1b[36m', '\x1b[92m', '\x1b[96m'];
   const chars = '01アイウエオカキクケコサシスセソタチツテト';
@@ -92,7 +89,6 @@ const digitalRainLine = async () => {
   await sleep(30);
 };
 
-// Sequenza di digit rain
 const showDigitalRain = async (lines = 5) => {
   for (let i = 0; i < lines; i++) {
     await digitalRainLine();
@@ -101,7 +97,6 @@ const showDigitalRain = async (lines = 5) => {
   }
 };
 
-// Scanner animato
 const scannerLine = async (delay = 20) => {
   const width = 50;
   const scanChar = '█';
@@ -185,7 +180,6 @@ const typeWriter = async (text, delay = 25, color = '\x1b[36m') => {
   console.log();
 };
 
-// Rainbow fade per titolo
 const rainbowText = async (text) => {
   const colors = [
     '\x1b[31m', '\x1b[33m', '\x1b[93m', '\x1b[32m',
@@ -200,7 +194,6 @@ const rainbowText = async (text) => {
   process.stdout.write(`\r\x1b[36m${text}\x1b[0m\n`);
 };
 
-// Sparkle effect
 const sparkleLine = async () => {
   const sparkles = ['✦', '✧', '★', '☆', '•'];
   let line = '';
@@ -212,7 +205,6 @@ const sparkleLine = async () => {
 };
 
 async function epicStartup() {
-  // ========== FASE 1: BOOT SEQUENCE ==========
   console.clear();
   console.log('\x1b[32m' + '█'.repeat(70) + '\x1b[0m');
   await sleep(100);
@@ -220,21 +212,17 @@ async function epicStartup() {
   await showNeonBorder(' SISTEMA IN AVVIO ', '\x1b[32m');
   await sleep(200);
 
-  // Effetto scanner
   process.stdout.write('\n');
   await scannerLine(15);
   await sleep(100);
 
-  // Digitarain veloce
   await showDigitalRain(3);
   await sleep(100);
 
-  // ========== FASE 2: TITOLO PRINCIPALE ==========
   console.clear();
 
   await sleep(200);
 
-  // Glitch effect prima del titolo
   process.stdout.write('\n\n');
   await glitchText('INIZIALIZZAZIONE IN CORSO...', 5);
   await sleep(200);
@@ -244,27 +232,33 @@ async function epicStartup() {
   await typeWriterBig('888\nBOT\nV1.0', 100);
   await sleep(300);
 
-  // Rainbow sul titolo
   console.log('\n');
   await rainbowText('                     ═══ 𝟴𝟴𝟴 𝗕𝗢𝗧 ═══');
   await sleep(200);
 
-  // Sparkle animation
   process.stdout.write('\n');
   await sparkleLine();
   process.stdout.write('\n');
   await sleep(200);
 
-  // ========== FASE 3: INFO ANIMATE ==========
   console.log('\n');
-  await typeWriter('                     ▸ Aggiornamento: 21/05/2026', 35, '\x1b[33m');
+  await typeWriter('                     ▸ Aggiornamento: 06/08/2026 - 09:01', 35, '\x1b[33m'); 
   await sleep(60);
-  await typeWriter('                     ▸ Developer: Elixir, Punisher & 888 Staff', 30, '\x1b[36m');
+  await typeWriter('                     ▸ Developer: Ghost & Punisher', 30, '\x1b[36m'); 
   await sleep(60);
-  await typeWriter('                     ▸ Versione: 1.0 | Build: 888-BOT', 30, '\x1b[35m');
+  await typeWriter('                     ▸ Versione: 1.0 | Build: 888-STABLE-v1', 30, '\x1b[35m');
+  await sleep(60);
+
+  await typeWriter('                     ▸ Creatore Principale: Elixir 👑', 30, '\x1b[91m'); 
+  await sleep(60);
+  await typeWriter('                     ▸ Autorizzazione: Accesso riservato a 888 Staff 🔒', 30, '\x1b[34m'); 
+  await sleep(60);
+  await typeWriter('                     ▸ Rete: WhatsApp Web Sincronizzato con successo 💬', 30, '\x1b[32m'); 
+  await sleep(150);
+  
+  await typeWriter('\n                     [ SYSTEM ] 888-BOT È ONLINE ED OPERATIVO IN CHAT! 🟢', 20, '\x1b[1;\x1b[32m');
   await sleep(200);
 
-  // ========== FASE 4: BORDI E CARICAMENTO ==========
   console.log('\n');
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
   console.log('\n');
@@ -277,19 +271,16 @@ async function epicStartup() {
   await loading('▸ Verifica integrità plugin', 400);
   await progressBar('▸ Finalizzazione avvio', 800);
 
-  // ========== FASE 5: FINALE EPICO ==========
   console.log('\n');
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
   console.log('\n');
 
   await sleep(100);
 
-  // Effetto finale epico - 888 NEVER DIES con glow
   process.stdout.write('\n');
   await rainbowText('                     ★ 𝟴𝟴𝟴 NEVER DIES ★');
   await sleep(100);
 
-  // Pulse piu lungo
   await pulse('                     ★ 888 NEVER DIES ★', 6);
 
   console.log('\n');
@@ -342,7 +333,6 @@ async function start(file) {
 
     if (code !== 0) {
       if (code === 42) {
-        // Riavvio volontario (owner-restart.js)
         console.log('\x1b[32m↻ Riavvio volontario...\x1b[0m\n');
         setTimeout(() => start(file), 2000);
         return;
