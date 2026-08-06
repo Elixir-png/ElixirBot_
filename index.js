@@ -53,7 +53,7 @@ const rl = createInterface(process.stdin, process.stdout);
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Effetto glitch per testo
-const glitchText = async (text, times = 3) => {
+const glitchText = async (text, times = 8) => {
   const chars = '!@#$%&*()_+-=[]{}|;:,.<>?/';
   for (let g = 0; g < times; g++) {
     let glitched = '';
@@ -93,7 +93,7 @@ const digitalRainLine = async () => {
 };
 
 // Sequenza di digit rain
-const showDigitalRain = async (lines = 5) => {
+const showDigitalRain = async (lines = 15) => {
   for (let i = 0; i < lines; i++) {
     await digitalRainLine();
     process.stdout.write('\n');
@@ -212,87 +212,134 @@ const sparkleLine = async () => {
 };
 
 async function epicStartup() {
-  // ========== FASE 1: BOOT SEQUENCE ==========
+  // ========== FASE 1: MATRIX RAIN INTENSE ==========
   console.clear();
-  console.log('\x1b[32m' + '█'.repeat(70) + '\x1b[0m');
-  await sleep(100);
-  
-  await showNeonBorder(' SISTEMA IN AVVIO ', '\x1b[32m');
+  console.log('\x1b[2J\x1b[H');
   await sleep(200);
   
-  // Effetto scanner
-  process.stdout.write('\n');
-  await scannerLine(15);
-  await sleep(100);
+  // Header hacking
+  console.log('\x1b[32m');
+  console.log('  ╔══════════════════════════════════════════════════════════════╗');
+  console.log('  ║  ███████╗██╗   ██╗███╗   ██╗██████╗  ██████╗ ██╗  ██╗███████╗  ║');
+  console.log('  ║  ██╔════╝██║   ██║████╗  ██║██╔══██╗██╔═══██╗██║  ██║██╔════╝  ║');
+  console.log('  ║  ███████╗██║   ██║██╔██╗ ██║██║  ██║██║   ██║███████║█████╗    ║');
+  console.log('  ║  ╚════██║██║   ██║██║╚██╗██║██║  ██║██║   ██║██╔══██║██╔══╝    ║');
+  console.log('  ║  ███████║╚██████╔╝██║ ╚████║██████╔╝╚██████╔╝██║  ██║███████╗  ║');
+  console.log('  ║  ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝  ║');
+  console.log('  ╚══════════════════════════════════════════════════════════════╝');
+  console.log('\x1b[0m');
+  await sleep(800);
   
-  // Digitarain veloce
-  await showDigitalRain(3);
-  await sleep(100);
+  // Effetto matrix rain intenso
+  console.log('\x1b[32m[INFO]\x1b[0m Inizializzazione sistema matrix...');
+  await sleep(300);
+  await showDigitalRain(15);
+  await sleep(400);
   
-  // ========== FASE 2: TITOLO PRINCIPALE ==========
+  // ========== FASE 2: BOOT SEQUENCE HACKER ==========
   console.clear();
+  console.log('\x1b[2J\x1b[H');
+  await sleep(100);
+  
+  // Simulazione boot
+  const bootLines = [
+    'BIOS Date 01/01/88 15:23:00 Ver: 888.BOT.OS',
+    'CPU: Quantum Core i9-9999K @ 99.99GHz',
+    'Memory Test: 888888MB OK',
+    'Detecting Primary Master ... 888 SSD',
+    'Detecting Secondary Slave ... None',
+    'Initializing Matrix Protocol v6.66',
+    'Loading Kernel Modules: [████████████████████] 100%',
+    'Mounting Virtual Filesystem /dev/matrix',
+    'Starting Neural Network Interface...',
+    'Bypassing Security Protocols...',
+    'Access GRANTED. Welcome, User.',
+  ];
+  
+  for (const line of bootLines) {
+    await typeWriter(`\x1b[32m> \x1b[0m${line}`, 8, '\x1b[32m');
+    await sleep(150);
+  }
+  
+  await sleep(500);
+  
+  // ========== FASE 3: TITOLO PRINCIPALE ==========
+  console.clear();
+  console.log('\x1b[2J\x1b[H');
   await sleep(200);
   
-  // Glitch effect prima del titolo
+  // Effetto typing del titolo
   process.stdout.write('\n\n');
-  await glitchText('INIZIALIZZAZIONE IN CORSO...', 5);
-  await sleep(200);
+  await glitchText('888 BOT ONLINE', 8);
+  await sleep(300);
   
   console.clear();
   console.log('\n\n');
-  await typeWriterBig('888\nBOT\nV1.0', 100);
+  await typeWriterBig('888\nBOT\nV2.0', 80);
+  await sleep(400);
+  
+  // Titolo centrale matrix
+  console.log('\n');
+  await typeWriter('                     ═══ 𝟴𝟴𝟴 𝗕𝗢𝗧 ═══', 50, '\x1b[32m');
+  await sleep(200);
+  
+  // Matrix rain sotto titolo
+  process.stdout.write('\n');
+  await showDigitalRain(8);
+  process.stdout.write('\n');
   await sleep(300);
   
-  // Rainbow sul titolo
+  // ========== FASE 4: LOADING HACKER ==========
   console.log('\n');
-  await rainbowText('                     ═══ 𝟴𝟴𝟴 𝗕𝗢𝗧 ═══');
+  await typeWriter('                     ▸ Status: ONLINE', 30, '\x1b[32m');
+  await sleep(80);
+  await typeWriter('                     ▸ Encryption: AES-888', 30, '\x1b[32m');
+  await sleep(80);
+  await typeWriter('                     ▸ Developer: Elixir, Punisher & 888 Staff', 25, '\x1b[32m');
+  await sleep(80);
+  await typeWriter('                     ▸ Build: 2024.888.HACKER', 25, '\x1b[32m');
+  await sleep(300);
+  
+  // ========== FASE 5: CARICAMENTO SISTEMA ==========
+  console.log('\n');
+  console.log('\x1b[32m' + '━'.repeat(70) + '\x1b[0m');
+  console.log('\n');
+  
+  await progressBar('▸ Caricamento moduli', 800);
+  await loading('▸ Connessione rete matrix', 600);
+  await loading('▸ Bypass firewall', 500);
+  await loading('▸ Decrypt dati', 400);
+  await loading('▸ Sincronizzazione nodi', 600);
+  await loading('▸ Verifica integrità', 500);
+  await progressBar('▸ Avvio sistema', 700);
+  
+  // ========== FASE 6: ACCESS GRANTED ==========
+  console.log('\n');
+  console.log('\x1b[32m' + '━'.repeat(70) + '\x1b[0m');
+  console.log('\n');
+  
   await sleep(200);
   
-  // Sparkle animation
-  process.stdout.write('\n');
-  await sparkleLine();
-  process.stdout.write('\n');
+  // Messaggio finale matrix
+  console.log('\x1b[32m');
+  console.log('  ╔══════════════════════════════════════════════════════════════╗');
+  console.log('  ║                                                              ║');
+  console.log('  ║   ██████╗  █████╗ ███╗   ██╗██╗  ██╗███████╗██████╗ ███████╗  ║');
+  console.log('  ║   ██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝██╔════╝██╔══██╗██╔════╝  ║');
+  console.log('  ║   ██████╔╝███████║██╔██╗ ██║█████╔╝ █████╗  ██████╔╝███████╗  ║');
+  console.log('  ║   ██╔═══╝ ██╔══██║██║╚██╗██║██╔═██╗ ██╔══╝  ██╔═══╝ ╚════██║  ║');
+  console.log('  ║   ██║     ██║  ██║██║ ╚████║██║  ██╗███████╗██║     ███████║  ║');
+  console.log('  ║   ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝     ╚══════╝  ║');
+  console.log('  ║                                                              ║');
+  console.log('  ╚══════════════════════════════════════════════════════════════╝');
+  console.log('\x1b[0m');
+  await sleep(500);
+  
+  // Typing finale
+  await typeWriter('  [SYSTEM] Accesso consentito. Benvenuto nella Matrix.', 40, '\x1b[32m');
   await sleep(200);
+  await typeWriter('  [888] Il bot è ora operativo. Pronto per il comando.', 30, '\x1b[92m');
   
-  // ========== FASE 3: INFO ANIMATE ==========
-  console.log('\n');
-  await typeWriter('                     ▸ Aggiornamento: 21/05/2026', 35, '\x1b[33m');
-  await sleep(60);
-  await typeWriter('                     ▸ Developer: Elixir, Punisher & 888 Staff', 30, '\x1b[36m');
-  await sleep(60);
-  await typeWriter('                     ▸ Versione: 1.0 | Build: 888-BOT', 30, '\x1b[35m');
-  await sleep(200);
-  
-  // ========== FASE 4: BORDI E CARICAMENTO ==========
-  console.log('\n');
-  console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
-  console.log('\n');
-  
-  await progressBar('▸ Caricamento nucleo sistema', 900);
-  await loading('▸ Inizializzazione moduli', 500);
-  await loading('▸ Connessione database', 450);
-  await loading('▸ Attivazione protocolli di rete', 500);
-  await loading('▸ Sincronizzazione dispositivi', 450);
-  await loading('▸ Verifica integrità plugin', 400);
-  await progressBar('▸ Finalizzazione avvio', 800);
-  
-  // ========== FASE 5: FINALE EPICO ==========
-  console.log('\n');
-  console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
-  console.log('\n');
-  
-  await sleep(100);
-  
-  // Effetto finale epico - 888 NEVER DIES con glow
-  process.stdout.write('\n');
-  await rainbowText('                     ★ 𝟴𝟴𝟴 NEVER DIES ★');
-  await sleep(100);
-  
-  // Pulse piu lungo
-  await pulse('                     ★ 888 NEVER DIES ★', 6);
-  
-  console.log('\n');
-  console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
   console.log('\n\n');
 }
 
