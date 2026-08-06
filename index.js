@@ -233,7 +233,7 @@ async function epicStartup() {
   await sleep(300);
 
   console.log('\n');
-  await rainbowText('                     ═══ 𝟴𝟴𝟴 𝗕𝗢𝗧 ═══');
+  await rainbowText('                     ⚙️ 𝟴𝟴𝟴 𝗕𝗢𝗧 • 𝗢𝗙𝗙𝗜𝗖𝗜𝗔𝗟 ⚙️');
   await sleep(200);
 
   process.stdout.write('\n');
@@ -242,11 +242,27 @@ async function epicStartup() {
   await sleep(200);
 
   console.log('\n');
-  await typeWriter('                     ▸ Aggiornamento: 06/08/2026 - 09:01', 35, '\x1b[33m'); 
+  console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
+  console.log('\n');
+
+   await progressBar('▸ Caricamento server 888BoTProject', 900);
+  await loading('▸ Controllo credenziali 888 Staff', 500);
+  await loading('▸ Connessione al server centrale', 450);
+  await loading('▸ Attivazione protocolli criptati', 500);
+  await loading('▸ Autenticazione sessione Elixir', 450);
+  await loading('▸ Verifica permessi di root [OK]', 400);
+  await progressBar('▸ Sblocco console operativa', 800);
+
+
+  console.log('\n');
+  console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
+  console.log('\n');
+
+  await typeWriter('                     ▸ Aggiornamento: 06/08/2026 - 09:17', 35, '\x1b[33m'); 
   await sleep(60);
   await typeWriter('                     ▸ Developer: Ghost & Punisher', 30, '\x1b[36m'); 
   await sleep(60);
-  await typeWriter('                     ▸ Versione: 1.0 | Build: 888-STABLE-v1', 30, '\x1b[35m');
+  await typeWriter('                     ▸ Versione: 1.1 | Build: 888-STABLE-v1', 30, '\x1b[35m');
   await sleep(60);
 
   await typeWriter('                     ▸ Creatore Principale: Elixir 👑', 30, '\x1b[91m'); 
@@ -263,25 +279,13 @@ async function epicStartup() {
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
   console.log('\n');
 
-  await progressBar('▸ Caricamento nucleo sistema', 900);
-  await loading('▸ Inizializzazione moduli', 500);
-  await loading('▸ Connessione database', 450);
-  await loading('▸ Attivazione protocolli di rete', 500);
-  await loading('▸ Sincronizzazione dispositivi', 450);
-  await loading('▸ Verifica integrità plugin', 400);
-  await progressBar('▸ Finalizzazione avvio', 800);
-
-  console.log('\n');
-  console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
-  console.log('\n');
-
   await sleep(100);
 
   process.stdout.write('\n');
-  await rainbowText('                     ★ 𝟴𝟴𝟴 NEVER DIES ★');
+  await rainbowText('                     🖧 PROJECT 888: ACTIVE 🖧');
   await sleep(100);
 
-  await pulse('                     ★ 888 NEVER DIES ★', 6);
+  await pulse('                     🔥 AUTHORIZED BY ELIXIR 🔥', 6);
 
   console.log('\n');
   console.log('\x1b[90m' + '━'.repeat(70) + '\x1b[0m');
@@ -306,6 +310,7 @@ async function start(file) {
     exec: args[0],
     args: args.slice(1),
   });
+
 
   let processInstance = fork();
 
