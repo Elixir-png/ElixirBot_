@@ -12,7 +12,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
     antivoip, antitrava, antiArab, antiLink, antilinkig, antilinktiktok,
     antilinktg, antimedia, antispam, antitoxic, antiBot, antioneview,
     antigore, antibusiness, reaction, bestemmiometro, ai, vocali, logrichieste,
-    slowmode, antinuke
+    slowmode, antinuke, antifake
   } = chat
 
   const { antiprivato, soloCreatore, read, anticall } = bot
@@ -96,6 +96,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
 ┃  [${s(antilinkig)}] ⮕ ${p}antilinkig
 ┃  [${s(antilinktiktok)}] ⮕ ${p}antilinktiktok
 ┃  [${s(antilinktg)}] ⮕ ${p}antilinktg
+┃  [${s(antifake)}] ⮕ ${p}antifake
 ${catalogs}${ownerSection}
 ┃━━━━━━━━━━━━━━━━━━
 ┃ 🟩 = Attivato  |  🟥 = Disattivato

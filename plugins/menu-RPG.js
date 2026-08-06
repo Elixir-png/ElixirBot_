@@ -66,6 +66,9 @@ let handler = async (_0x512ed3, { conn: _0x542b94, usedPrefix: _0x3f73c1 }) => {
 ┃  ⮕ ${_0x3f73c1}compra
 ┃  ⮕ ${_0x3f73c1}vendi
 ┃  ⮕ ${_0x3f73c1}magazzino
+┃  ⮕ ${_0x3f73c1}negozio
+┃  ⮕ ${_0x3f73c1}asta
+┃  ⮕ ${_0x3f73c1}posizione
 ┃ 
 ┃ 🏆 *Classifiche & Quiz:*
 ┃  ⮕ ${_0x3f73c1}calcioscommesse
