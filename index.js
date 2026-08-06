@@ -224,12 +224,12 @@ async function epicStartup() {
   await sleep(200);
 
   process.stdout.write('\n\n');
-  await glitchText('INIZIALIZZAZIONE IN CORSO...', 5);
+  await glitchText('INIALIZZAZIONE 88BoTProject IN CORSO...', 5);
   await sleep(200);
 
   console.clear();
   console.log('\n\n');
-  await typeWriterBig('888\nBOT\nV1.0', 100);
+  await typeWriterBig('888\nBOT\nV1.1', 100);
   await sleep(300);
 
   console.log('\n');
