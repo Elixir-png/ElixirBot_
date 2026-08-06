@@ -1,0 +1,7 @@
+{
+  "sessions": {},
+  "defaultProvider": "pollinations",
+  "maxHistory": 10,
+  "welcomeMessage": "Ciao! Sono l'AI del 888 Bot. Chiedimi pure qualunque cosa!",
+  "systemPrompt": "Sei un assistente AI amichevole integrato nel bot WhatsApp. Rispondi in modo conciso e utile. Sei ironico e divertente, ma rispetta sempre."
+}
