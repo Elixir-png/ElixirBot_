@@ -38,8 +38,19 @@ function saveConfig(cfg) {
   } catch (e) {}
 }
 
+async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+
+  try {
+    return await fetch(url, { ...options, signal: controller.signal })
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 async function callGemini(messages) {
-  const res = await fetch('https://generalllm.com/v1beta/openai/chat/completions', {
+  const res = await fetchWithTimeout('https://generalllm.com/v1beta/openai/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -49,14 +60,14 @@ async function callGemini(messages) {
       model: 'gemini-1.5-flash',
       messages: messages
     })
-  })
+  }, 10000)
   if (!res.ok) throw new Error('Gemini fallita')
   const data = await res.json()
   return data.choices?.[0]?.message?.content || ''
 }
 
 async function callOpenRouter(messages) {
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  const res = await fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${OPENROUTER_KEY}`,
@@ -68,14 +79,14 @@ async function callOpenRouter(messages) {
       model: 'meta-llama/llama-70b-chat:free',
       messages: messages
     })
-  })
+  }, 8000)
   if (!res.ok) throw new Error('OpenRouter fallita')
   const data = await res.json()
   return data.choices?.[0]?.message?.content || ''
 }
 
 async function callPollinations(messages) {
-  const res = await fetch('https://text.pollinations.ai/', {
+  const res = await fetchWithTimeout('https://text.pollinations.ai/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -83,19 +94,30 @@ async function callPollinations(messages) {
       model: 'gpt-4o',
       json: false
     })
-  })
+  }, 8000)
   if (!res.ok) throw new Error('Pollinations fallita')
   return await res.text()
 }
 
 async function getAIResponse(messages) {
   if (GEMINI_KEY) {
-    try { return await callGemini(messages) } catch (e) {}
+    try {
+      const reply = await callGemini(messages)
+      if (reply && reply.trim()) return reply
+    } catch (e) {}
   }
   if (OPENROUTER_KEY) {
-    try { return await callOpenRouter(messages) } catch (e) {}
+    try {
+      const reply = await callOpenRouter(messages)
+      if (reply && reply.trim()) return reply
+    } catch (e) {}
   }
-  return await callPollinations(messages)
+  try {
+    const reply = await callPollinations(messages)
+    if (reply && reply.trim()) return reply
+  } catch (e) {}
+
+  return 'Scusa, ho avuto un piccolo intoppo. Riprova tra pochi secondi.'
 }
 
 async function resolveSenderName(conn, sender, fallback = 'Utente') {
@@ -177,10 +199,6 @@ handler.before = async (m, { conn }) => {
   if (session.messages.length > maxHistory + 2) {
     session.messages = [session.messages[0], ...session.messages.slice(-(maxHistory + 1))]
   }
-
-  await conn.sendMessage(m.chat, {
-    text: 'Sto generando una risposta...'
-  }, { quoted: m })
 
   try {
     await conn.sendPresenceUpdate('composing', m.chat)
