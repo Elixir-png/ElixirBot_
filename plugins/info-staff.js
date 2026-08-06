@@ -11,32 +11,35 @@ let handler = async (m, { conn, usedPrefix }) => {
   const botName = global.db?.data?.nomedelbot || global.nomebot || "𝟴𝟴𝟴 𝗕𝗢𝗧"
   const botVersion = global.versione || global.db?.data?.version || "1.0"
 
-  let text = `🌟 *TEAM ${botName.toUpperCase()}*\n\n`
-  text += `🤖 *${botName}* · v${botVersion}\n\n`
+  let text = `╭━━━〔 👑 *TEAM ${botName.toUpperCase()}* 〕━━━┈\n`
+  text += `┃ 🤖 *${botName}*\n`
+  text += `┃ 📌 *v${botVersion}*\n`
+  text += `┃━━━━━━━━━━━━━━━━━━\n`
 
   for (const member of staffData) {
-    text += `${member.emoji} *${member.nome}* · ${member.ruolo}\n`
+    text += `┃ 👤 *${member.nome}* · ${member.ruolo}\n`
     if (member.telefono) {
-      text += `   📱 wa.me/${member.telefono}\n`
+      text += `┃   · 📱 wa.me/${member.telefono}\n`
     }
     if (member.instagram) {
-      text += `   📷 instagram.com/${member.instagram}\n`
+      text += `┃   · 📷 instagram.com/${member.instagram}\n`
     }
     if (member.telegram) {
-      text += `   ✈️ @${member.telegram}\n`
+      text += `┃   · ✈️ @${member.telegram}\n`
     }
     if (member.bio) {
-      text += `   💬 ${member.bio}\n`
+      text += `┃   · 💬 ${member.bio}\n`
     }
-    text += `\n`
+    text += `┃━━━━━━━━━━━━━━━━━━\n`
   }
 
-  text += `──────────────────\n`
-  text += `📎 *GitHub*\n`
-  text += `📧 *Email:* ElixirBoTSupporto@proton.me\n`
-  text += `📢 *Canale*\n`
-  text += `──────────────────\n\n`
-  text += `💡 Vuoi entrare nello staff? Contatta l'owner`
+  text += `┃ 📎 *GitHub:*\n`
+  text += `┃   · https://github.com/Elixir-png/ElixirBot_\n`
+  text += `┃ 📧 *Email:* ElixirBoTSupporto@proton.me\n`
+  text += `┃ 📢 *Canale:*\n`
+  text += `┃   · https://whatsapp.com/channel/0029Vb8Y0igGufJ0xMYJmU40\n`
+  text += `╰━━━━━━━━━━━━━━━━━━┈\n\n`
+  text += `💡 Vuoi entrare nello staff? Contatta wa.me/${staffData[0].telefono}`
 
   const mentionedJids = staffData
     .filter(m => m.telefono)
@@ -53,29 +56,10 @@ TEL;type=CELL;type=VOICE;waid=${m.telefono}:${m.telefono.startsWith('39') ? '+' 
 END:VCARD`
     }))
 
-  const buttons = [
-    { buttonId: `https://wa.me/393297014539`, buttonText: { displayText: "🔐 Contatta Owner" }, type: 2 },
-    { buttonId: `https://github.com/Elixir-png/ElixirBot_`, buttonText: { displayText: "📑 GitHub" }, type: 2 },
-    { buttonId: `${usedPrefix}menu`, buttonText: { displayText: "◀️ Menu" }, type: 1 }
-  ]
-
-  try {
-    await conn.sendMessage(m.chat, {
-      text,
-      footer: `> 💡 Vuoi entrare nello staff? Contatta @${staffData[0].telefono.split('39')[1]}`,
-      buttons,
-      headerType: 1,
-      mentions: mentionedJids
-    }, { quoted: m })
-  } catch (e) {
-    await conn.sendMessage(m.chat, {
-      text,
-      footer: `> 💡 Vuoi entrare nello staff? Contatta un owner`,
-      buttons,
-      headerType: 1,
-      mentions: mentionedJids
-    }, { quoted: m })
-  }
+  await conn.sendMessage(m.chat, {
+    text,
+    mentions: mentionedJids
+  }, { quoted: m })
 
   if (contacts.length > 0) {
     try {
