@@ -27,7 +27,7 @@ import NodeCache from 'node-cache';
 
 const authFolder = global.authFile || '888BotSession';
 global.authFile = authFolder;
-global.authFileJB = global.authFileJB || '333bot-sub';
+global.authFileJB = global.authFileJB || '888bot-sub';
 global.rcanal = '120363341274693350@newsletter';
 const sessionFolder = path.join(process.cwd(), authFolder);
 const tempDir = join(process.cwd(), 'temp');
@@ -107,7 +107,6 @@ let dbWritePending = false;
 const dbWriteQueue = [];
 let dbWriteTimer = null;
 
-// Write queue FIFO sicura per il database
 async function processDbQueue() {
     if (dbWriteInProgress || dbWriteQueue.length === 0) return;
     dbWriteInProgress = true;
@@ -238,8 +237,6 @@ global.markDbDirty = function markDbDirty() {
   global.dbDirty = true;
 };
 
-// flushDatabase è ora definita più sopra con coda FIFO
-
 const { useMultiFileAuthState, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, Browsers, jidNormalizedUser, DisconnectReason } = await import('@realvare/baileys');
 const { chain } = lodash;
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000;
@@ -304,12 +301,10 @@ function redefineConsoleMethod(methodName, filterStrings) {
           arguments[0] = "";
         }
       } catch (e) {
-        // Ignora errori nel filtro console
       }
       originalConsoleMethod.apply(console, arguments);
     };
   } catch (e) {
-    // Se redefineConsoleMethod fallisce, il console.log originale rimane
   }
 }
 
@@ -398,13 +393,13 @@ async function requestPairingCodeFlow() {
       phoneNumber = `+${normalizedNumber}`;
     }
 
-    logSystem(`Avvio pairing code per ${phoneNumber}...`, 'blueBright');
+    console.log(`\x1b[36m⚙️ [888-SYSTEM]\x1b[0m Generazione codice per il terminale: \x1b[36m${phoneNumber}\x1b[0m...`);
     const randomCode = generateRandomCode();
     const pairingCode = await global.conn.requestPairingCode(normalizedNumber, randomCode);
     const formattedCode = formatPairingCode(pairingCode);
 
-    console.log(chalk.bold.white(chalk.bgBlueBright('꒰🩸꒱ ◦•≫ CODICE DI COLLEGAMENTO:')), chalk.bold.white(formattedCode));
-    logSystem('Inserisci il codice su WhatsApp > Dispositivi collegati > Collega un dispositivo.', 'greenBright');
+    console.log(`\n\x1b[31m꒰🩸꒱ ◦•≫\x1b[0m \x1b[1;91m𝟴𝟴𝟴-𝗖𝗢𝗗𝗘:\x1b[0m \x1b[1;32m${formattedCode}\x1b[0m \x1b[31m≪•◦\x1b[0m\n`);
+    console.log(`\x1b[90m💡 [INFO] Inserisci il codice su WhatsApp > Dispositivi collegati > Collega con numero.\x1b[0m`);
   } catch (error) {
     pairingCodeRequested = false;
     logSystem(`Impossibile generare il pairing code: ${error.message}`, 'redBright');
@@ -416,7 +411,7 @@ if (!pairingMode && !hasExistingSession) {
   const menu = `
 ${chalk.bgRedBright.white('┏━━━━━━━━━━━━━━━━━━━━━━━┓')}
 ${chalk.bgRedBright.white('┃     ✦ 888 BOT ✦       ┃')}
-${chalk.bgRedBright.white('┃       V 1.0            ┃')}
+${chalk.bgRedBright.white('┃       V 1.1            ┃')}
 ${chalk.bgRedBright.white('┗━━━━━━━━━━━━━━━━━━━━━━━┛')}
 ${chalk.bgWhite.red.bold('   ✦ Collegati al bot ✦   ')}
 
@@ -441,11 +436,11 @@ ${chalk.cyan('Scegli solo 1 o 2 ↓')}
 }
 
 if (hasExistingSession) {
-  logSystem(`Sessione trovata in ${global.authFile}. Avvio con credenziali esistenti.`, 'whiteBright');
+  console.log(`\x1b[36m⚙️ [888-CORE]\x1b[0m Sessione rilevata in \x1b[35m${global.authFile}\x1b[0m. Autenticazione rapida...`);
 } else if (pairingMode === 'qr') {
-  logSystem('Modalita pairing selezionata: QR code.', 'whiteBright');
+  console.log(`\x1b[33m📡 [888-PAIRING]\x1b[0m Inizializzazione protocollo: \x1b[1;33mQR-CODE\x1b[0m...`);
 } else if (pairingMode === 'code') {
-  logSystem('Modalita pairing selezionata: codice a 8 caratteri.', 'whiteBright');
+  console.log(`\x1b[33m📡 [888-PAIRING]\x1b[0m Inizializzazione protocollo: \x1b[1;33mPAIRING CODE\x1b[0m...`);
 }
 
 const filterStrings = [
@@ -598,7 +593,7 @@ async function connectionUpdate(update) {
 
 ───────────────
 `));
-    logSystem('Apri WhatsApp > Dispositivi collegati > Collega un dispositivo e scansiona il QR.', 'whiteBright');
+    console.log(`\x1b[90m💡 [INFO] Apri WhatsApp > Dispositivi collegati > Scansiona il codice QR generato.\x1b[0m`);
     global.qrGenerated = true;
   }
 
@@ -608,8 +603,8 @@ async function connectionUpdate(update) {
     global.connectionMessagesPrinted = {};
     successfulConnectionLogged = true;
 
-    logSystem(`Bot collegato con successo come ${getConnectionLabel()}`, 'whiteBright');
-    logSystem(`Sessione attiva: ${global.authFile} | Pairing: ${hasExistingSession ? 'sessione esistente' : pairingMode || 'automatico'}`, 'whiteBright');
+    console.log(`\n\x1b[1;32m✔ [SUCCESS] 888-BOT collegato all'account:\x1b[0m \x1b[36m${getConnectionLabel()}\x1b[0m`);
+    console.log(`\x1b[90m📊 [SESSION] File: ${global.authFile} | Engine: ${hasExistingSession ? 'Sessione Storica' : pairingMode || 'Automatico'}\x1b[0m\n`);
 
   }
 
@@ -670,7 +665,6 @@ process.on('unhandledRejection', (reason, promise) => {
 
 process.on('warning', (warning) => {
   if (warning.name === 'MaxListenersExceededWarning') {
-    // Aumenta il limite invece di lamentarsi
     if (warning.emitter && typeof warning.emitter.setMaxListeners === 'function') {
       warning.emitter.setMaxListeners(warning.emitter.getMaxListeners() + 10);
     }
@@ -681,7 +675,6 @@ process.on('warning', (warning) => {
   }
 });
 
-// Aumenta il limite globale di listeners per prevenire warning
 process.setMaxListeners(50);
 
 let isInit = true;
