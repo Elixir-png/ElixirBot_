@@ -6,6 +6,7 @@ import { watchFile, unwatchFile, existsSync } from 'fs';
 import { createInterface } from 'readline';
 import yargs from 'yargs';
 import { execSync } from 'child_process';
+import os from 'os';
 
 process.env.SUPPRESS_BANNER = 'true';
 
@@ -112,54 +113,123 @@ const typeWriter = async (text, delay = 25, color = '\x1b[36m') => {
   console.log();
 };
 
+const getSystemInfo = async () => {
+  const cpus = os.cpus();
+  const cpuModel = cpus[0]?.model || 'Unknown CPU';
+  const cpuCores = cpus.length;
+  const totalMem = Math.floor(os.totalmem() / 1024 / 1024);
+  const freeMem = Math.floor(os.freemem() / 1024 / 1024);
+  const usedMem = totalMem - freeMem;
+  const osType = os.type();
+  const platform = os.platform();
+  const hostname = os.hostname();
+  const uptime = Math.floor(os.uptime() / 60);
+  const arch = os.arch();
+
+  return {
+    cpu: `${cpuModel} (${cpuCores} cores)`,
+    ram: `${usedMem}MB / ${totalMem}MB`,
+    os: `${osType} ${platform} ${arch}`,
+    hostname: hostname,
+    uptime: `${uptime}m`
+  };
+};
+
 async function epicStartup() {
+  console.clear();
+  console.log('\x1b[2J\x1b[H');
+  await sleep(200);
+  
+  const width = 70;
+  const height = 20;
+  
+  for (let frame = 0; frame < 25; frame++) {
+    console.clear();
+    console.log('\x1b[2J\x1b[H');
+    
+    const scanY = Math.floor((frame / 25) * height);
+    for (let y = 0; y < height; y++) {
+      let line = '';
+      for (let x = 0; x < width; x++) {
+        if (y === scanY) {
+          line += '\x1b[32m█\x1b[0m';
+        } else if (Math.random() > 0.97) {
+          line += '\x1b[36m·\x1b[0m';
+        } else {
+          line += ' ';
+        }
+      }
+      console.log(line);
+    }
+    await sleep(50);
+  }
+  
+  await sleep(400);
+  
   const logo = `
- ██████╗  ██████╗ ████████╗
- ██╔══██╗██╔═══██╗╚══██╔══╝
- ██████╔╝██║   ██║   ██║   
- ██╔══██╗██║   ██║   ██║   
- ██████╔╝╚██████╔╝   ██║   
- ╚══════╝  ╚═════╝    ╚═╝   
+ ___   ___   ___    ____   ___ _____ 
+  ( _ ) ( _ ) ( _ )  | __ ) / _ \_   _|
+  / _ \ / _ \ / _ \  |  _ \| | | || |  
+ | (_) | (_) | (_) | | |_) | |_| || |  
+  \___/ \___/ \___/  |____/ \___/ |_|  
+                                       
 `;
 
   console.clear();
   console.log('\x1b[2J\x1b[H');
-  await sleep(400);
+  await sleep(200);
   
   const gradient = ['\x1b[31m', '\x1b[33m', '\x1b[32m', '\x1b[36m', '\x1b[34m', '\x1b[35m'];
   for (let i = 0; i < logo.length; i++) {
     const color = gradient[i % gradient.length];
     process.stdout.write(`\x1b[${Math.floor(i / 70) + 5};${i % 70}H${color}${logo[i]}\x1b[0m`);
-    await sleep(15);
+    await sleep(10);
   }
   
-  await sleep(800);
+  await sleep(700);
+  
+  const logoGlow = ['\x1b[32m', '\x1b[33m', '\x1b[36m', '\x1b[32m'];
+  for (let g = 0; g < 4; g++) {
+    const color = logoGlow[g % logoGlow.length];
+    console.log(`\x1b[${5};1H${color}${logo.trim()}\x1b[0m`);
+    await sleep(120);
+  }
   
   console.log('\x1b[32m\n ✔ Sistema inizializzato con successo.\x1b[0m\n');
-  await sleep(300);
+  await sleep(500);
+  
+  const sysInfo = await getSystemInfo();
   
   const statusData = [
     { label: 'Status', value: '\x1b[32mONLINE\x1b[0m' },
     { label: 'Versione', value: '\x1b[36m4.0\x1b[0m' },
-    { label: 'Moduli', value: '\x1b[33mCaricati\x1b[0m' },
-    { label: 'WhatsApp', value: '\x1b[35mConnesso\x1b[0m' },
-    { label: 'Plugin', value: '\x1b[32mAttivi\x1b[0m' },
+    { label: 'CPU', value: `\x1b[33m${sysInfo.cpu}\x1b[0m` },
+    { label: 'RAM', value: `\x1b[35m${sysInfo.ram}\x1b[0m` },
+    { label: 'OS', value: `\x1b[36m${sysInfo.os}\x1b[0m` },
+    { label: 'Host', value: `\x1b[32m${sysInfo.hostname}\x1b[0m` },
+    { label: 'Uptime', value: `\x1b[33m${sysInfo.uptime}\x1b[0m` },
   ];
   
   for (const item of statusData) {
     const line = `  \x1b[36m${item.label}:\x1b[0m ${item.value}`;
-    await typeWriter(line, 20);
-    await sleep(100);
+    await typeWriter(line, 30);
+    await sleep(180);
   }
   
   console.log('\x1b[31m' + '─'.repeat(70) + '\x1b[0m');
-  await sleep(200);
+  await sleep(400);
   
-  await loading('Avvio connessione WhatsApp', 800);
-  await loading('Caricamento comandi', 600);
-  await loading('Sincronizzazione dati', 500);
+  await loading('Avvio connessione WhatsApp', 1000);
+  await loading('Caricamento comandi', 800);
+  await loading('Sincronizzazione database', 700);
+  await loading('Verifica integrità sistema', 600);
+  await loading('Ottimizzazione performance', 700);
+  await loading('Controllo sicurezza', 500);
   
-  console.log('\x1b[32m\n ✔ Bot operativo. Digita .help per i comandi.\x1b[0m\n');
+  console.log('\x1b[32m\n ✔ Bot operativo e pronto.\x1b[0m\n');
+  await sleep(400);
+  
+  console.log('\n');
 }
 
 let isRunning = false;
@@ -207,7 +277,6 @@ async function start(file) {
 
     if (code !== 0) {
       if (code === 42) {
-        // Riavvio volontario (owner-restart.js)
         console.log('\x1b[32m↻ Riavvio volontario...\x1b[0m\n');
         setTimeout(() => start(file), 2000);
         return;
