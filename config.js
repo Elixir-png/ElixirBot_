@@ -41,9 +41,9 @@ global.versione = pkg.version
 global.errore = '⚠️ *Errore inatteso!* Usa il comando `.ticket` per avvisare gli owner.'
 
 
-global.repobot = 'https://github.com/GabWT333/Gab333'
-global.canale = 'https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h'
-global.gruppo = 'https://chat.whatsapp.com/KqBeKHgrc53BNdvuPTKLTL' 
+global.repo = 'https://github.com/Elixir-png/ElixirBot_'
+global.canale = 'https://whatsapp.com/channel/0029Vb8Y0igGufJ0xMYJmU40'
+global.gruppo = 'https://chat.whatsapp.com/Dxfu8kYcAhaIVZIVdKwGRc'
 
 
 global.cheerio = cheerio
@@ -60,7 +60,6 @@ global.APIKeys = {
     screenshotone: '333',
     screenshotone_default: '333',
     tmdb: '333',
-    gemini:'333',
     ocrspace: '333',
     assemblyai: '333',
     google: '333',
@@ -69,7 +68,6 @@ global.APIKeys = {
     genius: '333',
     unsplash: '333',
     removebg: 'FEx4CYmYN1QRQWD1mbZp87jV',
-    openrouter: '333',
     lastfm: '36f859a1fc4121e7f0e931806507d5f9',
 }
 
