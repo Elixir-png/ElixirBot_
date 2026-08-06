@@ -98,6 +98,19 @@ async function getAIResponse(messages) {
   return await callPollinations(messages)
 }
 
+async function resolveSenderName(conn, sender, fallback = 'Utente') {
+  if (!conn || typeof conn.getName !== 'function') {
+    return fallback
+  }
+
+  try {
+    const name = await Promise.resolve(conn.getName(sender))
+    if (typeof name === 'string' && name.trim()) return name
+  } catch (e) {}
+
+  return fallback
+}
+
 let handler = async (m, { conn, usedPrefix, command, text }) => {
   const cfg = loadConfig()
   const chat = global.db.data.chats?.[m.chat] || {}
@@ -149,7 +162,7 @@ handler.before = async (m, { conn }) => {
   const prompt = m.text || (Object.values(m.message || {})[0]?.text || Object.values(m.message || {})[0]?.caption || '')
   if (!prompt || typeof prompt !== 'string' || prompt.trim().length < 1) return
 
-  const senderName = await conn.getName(m.sender).catch(() => 'Utente')
+  const senderName = await resolveSenderName(conn, m.sender, m.pushName || 'Utente')
   const cfg = loadConfig()
   const maxHistory = cfg.maxHistory || 10
   const systemPrompt = cfg.systemPrompt || 'Sei un assistente AI amichevole. Rispondi in modo conciso.'
