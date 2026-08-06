@@ -52,6 +52,41 @@ const rl = createInterface(process.stdin, process.stdout);
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Aurora boreale
+const showAurora = async (frames = 40) => {
+  const auroraColors = ['\x1b[32m', '\x1b[36m', '\x1b[35m', '\x1b[34m'];
+  for (let frame = 0; frame < frames; frame++) {
+    console.clear();
+    for (let y = 0; y < 15; y++) {
+      let line = '';
+      const offset = Math.sin(frame * 0.15 + y * 0.4) * 8;
+      for (let x = 0; x < 70; x++) {
+        const wave = Math.sin((x + offset) * 0.2) * 4;
+        if (Math.abs(x - 35) < 25 + wave) {
+          const color = auroraColors[(y + frame) % 4];
+          line += color + '▒' + '\x1b[0m';
+        } else {
+          line += ' ';
+        }
+      }
+      console.log(line);
+    }
+    await sleep(80);
+  }
+};
+
+// Raggi cosmici
+const showCosmicRays = async () => {
+  for (let i = 0; i < 12; i++) {
+    const angle = (i / 12) * Math.PI * 2;
+    const length = 15 + Math.floor(Math.random() * 10);
+    const x2 = Math.floor(Math.cos(angle) * length) + 35;
+    const y2 = Math.floor(Math.sin(angle) * (length / 2)) + 8;
+    const color = ['\x1b[32m', '\x1b[36m', '\x1b[33m', '\x1b[35m'][i % 4];
+    console.log(color + ' '.repeat(35) + '✦' + ' '.repeat(Math.abs(x2 - 35)) + '·' + '\x1b[0m');
+  }
+};
+
 // Effetto glitch per testo
 const glitchText = async (text, times = 8) => {
   const chars = '!@#$%&*()_+-=[]{}|;:,.<>?/';
@@ -212,133 +247,168 @@ const sparkleLine = async () => {
 };
 
 async function epicStartup() {
-  // ========== FASE 1: MATRIX RAIN INTENSE ==========
+  // ========== FASE 1: AURORA BOREALE ==========
   console.clear();
   console.log('\x1b[2J\x1b[H');
   await sleep(200);
   
-  // Header hacking
-  console.log('\x1b[32m');
-  console.log('  ╔══════════════════════════════════════════════════════════════╗');
-  console.log('  ║  ███████╗██╗   ██╗███╗   ██╗██████╗  ██████╗ ██╗  ██╗███████╗  ║');
-  console.log('  ║  ██╔════╝██║   ██║████╗  ██║██╔══██╗██╔═══██╗██║  ██║██╔════╝  ║');
-  console.log('  ║  ███████╗██║   ██║██╔██╗ ██║██║  ██║██║   ██║███████║█████╗    ║');
-  console.log('  ║  ╚════██║██║   ██║██║╚██╗██║██║  ██║██║   ██║██╔══██║██╔══╝    ║');
-  console.log('  ║  ███████║╚██████╔╝██║ ╚████║██████╔╝╚██████╔╝██║  ██║███████╗  ║');
-  console.log('  ║  ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝  ║');
-  console.log('  ╚══════════════════════════════════════════════════════════════╝');
-  console.log('\x1b[0m');
-  await sleep(800);
+  // Mostra aurora boreale
+  await showAurora(50);
+  await sleep(500);
   
-  // Effetto matrix rain intenso
-  console.log('\x1b[32m[INFO]\x1b[0m Inizializzazione sistema matrix...');
-  await sleep(300);
-  await showDigitalRain(15);
-  await sleep(400);
-  
-  // ========== FASE 2: BOOT SEQUENCE HACKER ==========
+  // ========== FASE 2: NASCITA DELLE STELLE ==========
   console.clear();
   console.log('\x1b[2J\x1b[H');
   await sleep(100);
   
-  // Simulazione boot
-  const bootLines = [
-    'BIOS Date 01/01/88 15:23:00 Ver: 888.BOT.OS',
-    'CPU: Quantum Core i9-9999K @ 99.99GHz',
-    'Memory Test: 888888MB OK',
-    'Detecting Primary Master ... 888 SSD',
-    'Detecting Secondary Slave ... None',
-    'Initializing Matrix Protocol v6.66',
-    'Loading Kernel Modules: [████████████████████] 100%',
-    'Mounting Virtual Filesystem /dev/matrix',
-    'Starting Neural Network Interface...',
-    'Bypassing Security Protocols...',
-    'Access GRANTED. Welcome, User.',
-  ];
+  // Stelle che appaiono una per una
+  const stars = [];
+  for (let i = 0; i < 60; i++) {
+    stars.push({
+      x: Math.floor(Math.random() * 70),
+      y: Math.floor(Math.random() * 20),
+      brightness: 0
+    });
+  }
   
-  for (const line of bootLines) {
-    await typeWriter(`\x1b[32m> \x1b[0m${line}`, 8, '\x1b[32m');
-    await sleep(150);
+  // Accendi le stelle gradualmente
+  for (let brightness = 0; brightness <= 1; brightness += 0.1) {
+    console.clear();
+    console.log('\x1b[2J\x1b[H');
+    for (const star of stars) {
+      if (star.brightness < brightness) {
+        star.brightness = brightness;
+      }
+      if (Math.random() > 0.3) {
+        const color = brightness > 0.5 ? '\x1b[33m' : '\x1b[37m';
+        const char = brightness > 0.7 ? '✦' : '·';
+        process.stdout.write(`\x1b[${star.y};${star.x}H${color}${char}\x1b[0m`);
+      }
+    }
+    await sleep(100);
+  }
+  
+  await sleep(800);
+  
+  // ========== FASE 3: COSMIC CONVERGENCE ==========
+  console.clear();
+  console.log('\x1b[2J\x1b[H');
+  await sleep(100);
+  
+  // Le stelle convergono al centro
+  const centerX = 35;
+  const centerY = 10;
+  
+  for (let step = 0; step < 20; step++) {
+    console.clear();
+    console.log('\x1b[2J\x1b[H');
+    for (let i = 0; i < stars.length; i++) {
+      const star = stars[i];
+      const dx = centerX - star.x;
+      const dy = centerY - star.y;
+      star.x += dx * 0.15;
+      star.y += dy * 0.15;
+      
+      const color = i % 3 === 0 ? '\x1b[33m' : (i % 3 === 1 ? '\x1b[36m' : '\x1b[35m');
+      const char = i % 2 === 0 ? '✦' : '★';
+      process.stdout.write(`\x1b[${Math.floor(star.y)};${Math.floor(star.x)}H${color}${char}\x1b[0m`);
+    }
+    await sleep(80);
   }
   
   await sleep(500);
   
-  // ========== FASE 3: TITOLO PRINCIPALE ==========
+  // ========== FASE 4: BIG BANG ==========
+  console.clear();
+  console.log('\x1b[2J\x1b[H');
+  await sleep(100);
+  
+  // Esplosione di particelle
+  for (let i = 0; i < 150; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const distance = Math.random() * 30;
+    const x = Math.floor(Math.cos(angle) * distance) + centerX;
+    const y = Math.floor(Math.sin(angle) * distance) + centerY;
+    const char = ['*', '✦', '★', '·', '•', '✧'][Math.floor(Math.random() * 6)];
+    const color = ['\x1b[32m', '\x1b[33m', '\x1b[36m', '\x1b[35m', '\x1b[93m'][Math.floor(Math.random() * 5)];
+    process.stdout.write(`\x1b[${y};${x}H${color}${char}\x1b[0m`);
+  }
+  
+  await sleep(600);
+  
+  // ========== FASE 5: EMERSIONE 888 ==========
   console.clear();
   console.log('\x1b[2J\x1b[H');
   await sleep(200);
   
-  // Effetto typing del titolo
+  // Effetto glitch del titolo
   process.stdout.write('\n\n');
-  await glitchText('888 BOT ONLINE', 8);
-  await sleep(300);
-  
-  console.clear();
-  console.log('\n\n');
-  await typeWriterBig('888\nBOT\nV2.0', 80);
+  await glitchText('888 BOT ONLINE', 10);
   await sleep(400);
   
-  // Titolo centrale matrix
-  console.log('\n');
-  await typeWriter('                     ═══ 𝟴𝟴𝟴 𝗕𝗢𝗧 ═══', 50, '\x1b[32m');
-  await sleep(200);
+  // Logo grande
+  console.clear();
+  console.log('\n\n');
+  await typeWriterBig('888\nBOT\nV3.0', 60);
+  await sleep(500);
   
-  // Matrix rain sotto titolo
-  process.stdout.write('\n');
-  await showDigitalRain(8);
-  process.stdout.write('\n');
+  // ========== FASE 6: RAGGI COSMICI ==========
+  console.log('\n');
+  await showCosmicRays();
+  await sleep(400);
+  
+  // ========== FASE 7: INFO GALATTICHE ==========
+  console.log('\n');
+  await typeWriter('                     ▸ Coordinate: 888.88.88.88', 30, '\x1b[36m');
+  await sleep(80);
+  await typeWriter('                     ▸ Galassia: Via Lattea 888', 30, '\x1b[33m');
+  await sleep(80);
+  await typeWriter('                     ▸ Razzo: Velocità Luce x888', 30, '\x1b[35m');
+  await sleep(80);
+  await typeWriter('                     ▸ Equipaggio: Elixir, Punisher & Staff', 25, '\x1b[32m');
   await sleep(300);
   
-  // ========== FASE 4: LOADING HACKER ==========
+  // ========== FASE 8: CARICAMENTO NAVE ==========
   console.log('\n');
-  await typeWriter('                     ▸ Status: ONLINE', 30, '\x1b[32m');
-  await sleep(80);
-  await typeWriter('                     ▸ Encryption: AES-888', 30, '\x1b[32m');
-  await sleep(80);
-  await typeWriter('                     ▸ Developer: Elixir, Punisher & 888 Staff', 25, '\x1b[32m');
-  await sleep(80);
-  await typeWriter('                     ▸ Build: 2024.888.HACKER', 25, '\x1b[32m');
+  console.log('\x1b[36m' + '━'.repeat(70) + '\x1b[0m');
+  console.log('\n');
+  
+  await progressBar('▸ Controllo navigazione', 700);
+  await loading('▸ Caricamento antimateria', 600);
+  await loading('▸ Calibrazione warp drive', 500);
+  await loading('▸ Sincronizzazione satellite', 400);
+  await loading('▸ Verifica scudi deflettori', 600);
+  await loading('▸ Preparazione salto iperspaziale', 500);
+  await progressBar('▸ Decollo', 600);
+  
+  // ========== FASE 9: MISSIONE COMPIUTA ==========
+  console.log('\n');
+  console.log('\x1b[36m' + '━'.repeat(70) + '\x1b[0m');
+  console.log('\n');
+  
   await sleep(300);
   
-  // ========== FASE 5: CARICAMENTO SISTEMA ==========
-  console.log('\n');
-  console.log('\x1b[32m' + '━'.repeat(70) + '\x1b[0m');
-  console.log('\n');
-  
-  await progressBar('▸ Caricamento moduli', 800);
-  await loading('▸ Connessione rete matrix', 600);
-  await loading('▸ Bypass firewall', 500);
-  await loading('▸ Decrypt dati', 400);
-  await loading('▸ Sincronizzazione nodi', 600);
-  await loading('▸ Verifica integrità', 500);
-  await progressBar('▸ Avvio sistema', 700);
-  
-  // ========== FASE 6: ACCESS GRANTED ==========
-  console.log('\n');
-  console.log('\x1b[32m' + '━'.repeat(70) + '\x1b[0m');
-  console.log('\n');
-  
-  await sleep(200);
-  
-  // Messaggio finale matrix
-  console.log('\x1b[32m');
+  // Box finale
+  console.log('\x1b[36m');
   console.log('  ╔══════════════════════════════════════════════════════════════╗');
-  console.log('  ║                                                              ║');
-  console.log('  ║   ██████╗  █████╗ ███╗   ██╗██╗  ██╗███████╗██████╗ ███████╗  ║');
-  console.log('  ║   ██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝██╔════╝██╔══██╗██╔════╝  ║');
-  console.log('  ║   ██████╔╝███████║██╔██╗ ██║█████╔╝ █████╗  ██████╔╝███████╗  ║');
-  console.log('  ║   ██╔═══╝ ██╔══██║██║╚██╗██║██╔═██╗ ██╔══╝  ██╔═══╝ ╚════██║  ║');
-  console.log('  ║   ██║     ██║  ██║██║ ╚████║██║  ██╗███████╗██║     ███████║  ║');
-  console.log('  ║   ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝     ╚══════╝  ║');
-  console.log('  ║                                                              ║');
+  console.log('  ║  ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★  ║');
+  console.log('  ║  ★                                                          ★  ║');
+  console.log('  ║  ★   ██████╗ ██╗  ██╗ ██████╗ ██████╗ ██╗   ██╗███████╗    ★  ║');
+  console.log('  ║  ★   ██╔══██╗██║  ██║██╔═══██╗██╔══██╗██║   ██║██╔════╝    ★  ║');
+  console.log('  ║  ★   ██████╔╝███████║██║   ██║██████╔╝██║   ██║█████╗      ★  ║');
+  console.log('  ║  ★   ██╔═══╝ ██╔══██║██║   ██║██╔══██╗██║   ██║██╔══╝      ★  ║');
+  console.log('  ║  ★   ██║     ██║  ██║╚██████╔╝██║  ██║╚██████╔╝███████╗    ★  ║');
+  console.log('  ║  ★   ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝    ★  ║');
+  console.log('  ║  ★                                                          ★  ║');
+  console.log('  ║  ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★  ║');
   console.log('  ╚══════════════════════════════════════════════════════════════╝');
   console.log('\x1b[0m');
   await sleep(500);
   
   // Typing finale
-  await typeWriter('  [SYSTEM] Accesso consentito. Benvenuto nella Matrix.', 40, '\x1b[32m');
+  await typeWriter('  [NAVIGATION] Missione compiuta. Benvenuto nell\'universo 888.', 35, '\x1b[36m');
   await sleep(200);
-  await typeWriter('  [888] Il bot è ora operativo. Pronto per il comando.', 30, '\x1b[92m');
+  await typeWriter('  [888 BOT] Pronto per esplorare nuove galassie. Comandi disponibili.', 25, '\x1b[93m');
   
   console.log('\n\n');
 }
