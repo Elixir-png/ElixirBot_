@@ -6,7 +6,23 @@ const manually = `iscrivetevi tutti qua
 https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h
 
 e stiamo cambiando gruppo, tutti qua 
-https://chat.whatsapp.com/C4OojVoyFbeCSxPSolZvrG`
+https://chat.whatsapp.com/C4OojVoyFbeCSxPSolZvrG
+
+𝐆𝐑𝐔𝐏𝐏𝐈 𝐔𝐅𝐅𝐈𝐂𝐈𝐀𝐋𝐈:
+
+╭───⭓
+│ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟭
+│ https://chat.whatsapp.com/Dxfu8kYcAhaIVZIVdKwGRc
+│
+│ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟮
+│ https://chat.whatsapp.com/KALEdOncDa7Imw7NTLwYyw
+│
+│ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟯
+│ https://chat.whatsapp.com/DjDBrPXWZLOCAoHMA1oNND
+│
+│ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟰
+│ https://chat.whatsapp.com/BTl1RY8cqR4BUeRQIyoAXD
+╰───⭓`
 import { generateWAMessageFromContent } from '@realvare/baileys'
 const handler = async (m, { args, text }) => {
 if (parseInt(args[1])) return m.reply(`Inserisci prima la quantità di messaggi da inviare e poi il testo`)
