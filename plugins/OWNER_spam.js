@@ -1,7 +1,5 @@
 // Plugin by Elixir, Punisher & 888 staff
 
-
-
 const manually = `𝐆𝐑𝐔𝐏𝐏𝐈 𝐔𝐅𝐅𝐈𝐂𝐈𝐀𝐋𝐈:
 
 ╭───⭓
