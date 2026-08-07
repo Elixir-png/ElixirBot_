@@ -8,7 +8,6 @@ const handler = async (m, { conn, text, usedPrefix, command, isGroup }) => {
   let targetDate
   let message
 
-  // Formato remind: "10min messaggio" o "1h messaggio"
   const timeMatch = text.match(/^(\d+)\s*(s|sec|secondi?|m|min|minuti?|h|ore?|d|giorni?)\b/i)
   if (timeMatch && command !== 'countdown' && command !== 'cd' && command !== 'contoallarovescia') {
     const amount = parseInt(timeMatch[1])

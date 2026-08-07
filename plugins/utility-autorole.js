@@ -117,7 +117,6 @@ handler.tags = ['group', 'admin']
 handler.group = true
 handler.admin = true
 
-// Listener per assegnazione ruoli al join
 if (!global.autoroleJoinListenerSet && global.conn) {
   global.autoroleJoinListenerSet = true
   global.conn.ev.on('group-participants.update', async (update) => {
@@ -152,7 +151,6 @@ if (!global.autoroleJoinListenerSet && global.conn) {
   })
 }
 
-// Assegnazione ruoli per livello dopo incremento exp
 handler.after = async function (m, { conn, isGroup }) {
   if (!isGroup) return
   if (!m.isCommand) return
