@@ -2,13 +2,7 @@
 
 
 
-const manually = `iscrivetevi tutti qua 
-https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h
-
-e stiamo cambiando gruppo, tutti qua 
-https://chat.whatsapp.com/C4OojVoyFbeCSxPSolZvrG
-
-𝐆𝐑𝐔𝐏𝐏𝐈 𝐔𝐅𝐅𝐈𝐂𝐈𝐀𝐋𝐈:
+const manually = `𝐆𝐑𝐔𝐏𝐏𝐈 𝐔𝐅𝐅𝐈𝐂𝐈𝐀𝐋𝐈:
 
 ╭───⭓
 │ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟭
