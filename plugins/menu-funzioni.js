@@ -80,7 +80,9 @@ let handler = async (m, { conn, usedPrefix, isOwner, isROwner }) => {
 ┃  [${s(slowmode)}] ⮕ ${p}slowmode
 ┃  [${s(bestemmiometro)}] ⮕ ${p}bestemmiometro
 ┃  [${s(logrichieste)}] ⮕ ${p}logrichieste
-┃  [${s(ai)}] ⮕ ${p}chatbot
+┃  🤖 *AI AVANZATE:*
+┃   ⮕ ${p}groq
+┃   ⮕ ${p}mistral
 ┃ 
 ┃ 🚫 *MODULI DI PROTEZIONE (ANTI):*
 ┃  [${s(antinuke)}] ⮕ ${p}antinuke

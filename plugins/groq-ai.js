@@ -6,20 +6,20 @@ let ON = false
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!m.isGroup) {
-        return m.reply('❌ Il chatbot funziona solo nei gruppi. Usa il comando in un gruppo.', m)
+        return m.reply('❌ Il Groq AI funziona solo nei gruppi.', m)
     }
 
-    if (text === '.bot on' || text === '.chatbot on') {
+    if (text === '.bot on' || text === '.groq on') {
         ON = true
-        return m.reply('✅ AI ATTIVA')
+        return m.reply('✅ Groq AI ATTIVA')
     }
-    if (text === '.bot off' || text === '.chatbot off') {
+    if (text === '.bot off' || text === '.groq off') {
         ON = false
-        return m.reply('❌ AI DISATTIVATA')
+        return m.reply('❌ Groq AI DISATTIVATA')
     }
-    if (text.startsWith('.bot ') || text.startsWith('.chatbot ')) {
-        if (!ON) return m.reply('❌ AI disattivata. Usa .bot on o .chatbot on per attivarla.')
-        let domanda = text.replace(/^\.(bot|chatbot)\s+/, '')
+    if (text.startsWith('.bot ') || text.startsWith('.groq ')) {
+        if (!ON) return m.reply('❌ Groq AI disattivata. Usa .bot on o .groq on per attivarla.')
+        let domanda = text.replace(/^\.(bot|groq)\s+/, '')
         let risposta = await ia(domanda)
         return m.reply(risposta)
     }
@@ -36,7 +36,7 @@ handler.all = async (m) => {
     m.reply(risposta)
 }
 
-handler.command = /^(bot|chatbot)$/i
+handler.command = /^(bot|groq)$/i
 handler.group = true
 
 export default handler
@@ -46,7 +46,7 @@ async function ia(prompt) {
         let { data } = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
             model: "llama-3.1-8b-instant",
             messages: [
-                { role: "system", content: "Sei RLY BOT. Italiano, diretto, max 3 righe." },
+                { role: "system", content: "Sei 888 BOT. Italiano, diretto, max 3 righe." },
                 { role: "user", content: prompt }
             ]
         }, {

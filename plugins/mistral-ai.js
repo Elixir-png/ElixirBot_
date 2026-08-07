@@ -198,7 +198,7 @@ let handler = async (m, { conn, text, usedPrefix, command, isOwner }) => {
 
                 let carouselData = null;
 
-                // Handle legacy "interactive" format by converting it to a single-card carousel
+          
                 if (jsonResult.interactive) {
                     console.log("Converting legacy 'interactive' format to carousel.");
                     const { image, text, footer, buttons } = jsonResult.interactive;
@@ -227,7 +227,7 @@ let handler = async (m, { conn, text, usedPrefix, command, isOwner }) => {
                         throw new Error("Carousel format requires a non-empty 'cards' array.");
                     }
 
-                    // 1. Sanitize buttonParamsJson
+                   
                     const sanitizedCards = carouselData.cards.map(card => {
                         const sanitizedButtons = card.buttons?.map(button => {
                             if (button.buttonParamsJson && typeof button.buttonParamsJson !== 'string') {
@@ -240,7 +240,7 @@ let handler = async (m, { conn, text, usedPrefix, command, isOwner }) => {
                         return { ...card, buttons: sanitizedButtons, footer: card.footer || '> ◈ ━━ *vare ✧ bot* ━━ ◈' };
                     });
 
-                    // 2. Validate image URLs and use a fallback if they are invalid
+
                     const validatedCards = await Promise.all(sanitizedCards.map(async (card) => {
                         if (card.image && card.image.url) {
                             try {
