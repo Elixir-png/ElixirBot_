@@ -138,6 +138,10 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
   const chat = global.db.data.chats?.[m.chat] || {}
   const isEnabled = chat.ai !== false
 
+  if (!m.isGroup) {
+    return conn.reply(m.chat, '❌ Il chatbot funziona solo nei gruppi. Usa il comando in un gruppo.', m)
+  }
+
   if (!text || text.toLowerCase() === 'status') {
     return conn.reply(m.chat, `Chatbot *STATO*\n\n${isEnabled ? 'Attivo' : 'Disattivato'}\nProvider: *${cfg.defaultProvider}*\n\n• ${usedPrefix}chatbot on  — Attiva\n• ${usedPrefix}chatbot off — Disattiva\n• ${usedPrefix}chatbot reset — Pulisci conversazione\n• ${usedPrefix}chatbot help — Questo messaggio`, m)
   }
@@ -147,13 +151,13 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
   if (sub === 'on' || sub === 'attiva') {
     chat.ai = true
     global.db.data.chats[m.chat] = chat
-    return conn.reply(m.chat, 'Chatbot *ATTIVATO*! Ora rispondo quando mi menzioni o scrivi in privato.', m)
+    return conn.reply(m.chat, 'Chatbot *ATTIVATO*! Ora rispondo quando mi menzioni o rispondi ai miei messaggi nel gruppo.', m)
   }
 
   if (sub === 'off' || sub === 'disattiva') {
     chat.ai = false
     global.db.data.chats[m.chat] = chat
-    return conn.reply(m.chat, 'Chatbot *DISATTIVATO*. Non rispondero piu automaticamente.', m)
+    return conn.reply(m.chat, 'Chatbot *DISATTIVATO*. Non rispondero piu automaticamente nel gruppo.', m)
   }
 
   if (sub === 'reset' || sub === 'pulisci') {
@@ -163,12 +167,13 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     return conn.reply(m.chat, 'Conversazione *PULITA*! Sessione resettata.', m)
   }
 
-  return conn.reply(m.chat, `Chatbot *COMANDI*\n\n• ${usedPrefix}chatbot — Stato\n• ${usedPrefix}chatbot on — Attiva\n• ${usedPrefix}chatbot off — Disattiva\n• ${usedPrefix}chatbot reset — Pulisci conversazione\n• ${usedPrefix}chatbot help — Questo messaggio\n\nMenziona il bot o scrivilo in privato per chattare!`, m)
+  return conn.reply(m.chat, `Chatbot *COMANDI*\n\n• ${usedPrefix}chatbot — Stato\n• ${usedPrefix}chatbot on — Attiva\n• ${usedPrefix}chatbot off — Disattiva\n• ${usedPrefix}chatbot reset — Pulisci conversazione\n• ${usedPrefix}chatbot help — Questo messaggio\n\nMenziona il bot o rispondi ai suoi messaggi per chattare nel gruppo!`, m)
 }
 
 handler.before = async (m, { conn }) => {
   if (!m.message || m.mtype === 'reaction' || m.mtype === 'pollUpdateMessage') return
   if (m.fromMe) return
+  if (!m.isGroup) return
 
   const chat = global.db.data.chats?.[m.chat]
   if (!chat || chat.ai === false) return
@@ -176,10 +181,9 @@ handler.before = async (m, { conn }) => {
   const botJid = conn.user?.jid
 
   const isMentioned = m.mentionedJid && m.mentionedJid.includes(botJid)
-  const isPrivato = !m.isGroup
   const isReplyAlBot = m.quoted && m.quoted.sender === botJid
 
-  if (!isMentioned && !isPrivato && !isReplyAlBot) return
+  if (!isMentioned && !isReplyAlBot) return
 
   const prompt = m.text || (Object.values(m.message || {})[0]?.text || Object.values(m.message || {})[0]?.caption || '')
   if (!prompt || typeof prompt !== 'string' || prompt.trim().length < 1) return
@@ -220,6 +224,6 @@ handler.before = async (m, { conn }) => {
 handler.help = ['chatbot']
 handler.tags = ['ai']
 handler.command = ['chatbot', 'chat', 'ai']
-handler.group = false
+handler.group = true
 
 export default handler

@@ -13,7 +13,7 @@ const moduleCache = new NodeCache({ stdTTL: 300 });
 
 	
 global.gab = [
-  '639753555926',
+  '393784409415',
   '639753555926',
   '13018239629',
   '79524931364',
@@ -24,7 +24,7 @@ global.gab = [
 global.owner = [
   ['639753555926', 'Elixir', true],
   ['393297014539', 'Elixir', true],
-  ['13018239629', 'ElixirBot', true],
+  ['3784409415', 'ElixirBot', true],
   ['573117824583', 'Punisher', true],
   ['212785655331', 'Ghost', true],
 ]
