@@ -1,10 +1,9 @@
-// Plugin by 888 Staff - Notifica nuovi video TikTok in tutti i gruppi
+// Plugin by Elixir
 import fs from 'fs'
 
 const TIKTOK_USERNAME = 'elixir._regna'
 const STATE_FILE = 'data/tiktok.json'
 
-// Stato persistente: ultimi video già notificati
 let lastVideoIds = []
 try {
     const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'))
@@ -22,10 +21,8 @@ async function checkNewVideos(conn) {
     const videos = await fetchLatestVideos()
     if (!videos.length) return { newVideos: [], groups: 0 }
 
-    // Filtra i video mai visti prima
     const newVideos = videos.filter(v => v.video_id && !lastVideoIds.includes(v.video_id))
 
-    // Aggiorna lo stato con gli ultimi video (in ordine, i più recenti primi)
     lastVideoIds = videos.map(v => v.video_id)
     try {
         fs.writeFileSync(STATE_FILE, JSON.stringify({ videos: lastVideoIds }))
@@ -33,7 +30,6 @@ async function checkNewVideos(conn) {
 
     if (!newVideos.length) return { newVideos: [], groups: 0 }
 
-    // Invia il link + descrizione + tag in tutti i gruppi dove c'è il bot
     const groups = Object.keys(global.db?.data?.chats || {})
         .filter(id => id.endsWith('@g.us'))
 
