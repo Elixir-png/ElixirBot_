@@ -459,7 +459,11 @@ export async function handler(chatUpdate) {
         try {
             Object.defineProperty(m, 'sender', { value: normalizedSender, writable: true, configurable: true })
         } catch (e) {
-            m.normalizedSender = normalizedSender
+            try {
+                m.sender = normalizedSender
+            } catch (err) {
+                m.normalizedSender = normalizedSender
+            }
         }
 
         if (!global.db.data.users[normalizedSender]) {
