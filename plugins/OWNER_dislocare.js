@@ -1,4 +1,5 @@
-// Plugin by Elixir
+// Plugin by Elixir, Punisher & 888 staff
+
 let handler = async (m, { conn, participants, isBotAdmin }) => {
     if (!m.isGroup) return;
 
