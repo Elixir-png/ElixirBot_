@@ -1,5 +1,19 @@
+//Plugin by Elixir, Punisher & 888 staff
 
 import fetch from 'node-fetch';
+
+const byeMessages = [
+  `👋 @user ha lasciato il gruppo @group. Finalmente un po' di pace!`,
+  `😏 @user è uscito da @group. Non ci mancherai!`,
+  `🚪 @user ha abbandonato @group. Buona liberazione!`,
+  `👋 Addio @user! Non ti sentiremo la mancanza.`,
+  `💔 @user ha lasciato @group. Chi se ne frega!`,
+  `🌅 @user se n'è andato/a da @group. Meglio così!`,
+  `😒 @user ha deciso di andarsene da @group. Che sollievo!`,
+  `🙄 @user è uscito da @group. Speriamo non torni!`,
+  `😤 @user ha lasciato @group. Un problema in meno!`,
+  `👋 @user se n'è andato/a. Non fare che ti richiamiamo!`
+];
 
 export async function before(m, { conn, participants }) {
   if (!m.isGroup) return;
@@ -11,17 +25,17 @@ export async function before(m, { conn, participants }) {
   let participants_new = m.messageStubParameters || [];
 
   for (let user of participants_new) {
-    // Cleanup: remove user's data from chat-specific tracking when they leave
+
     if (m.messageStubType === 28) {
-      // Remove from topBlasphemy
+
       if (chat.topBlasphemy && chat.topBlasphemy[user]) {
         delete chat.topBlasphemy[user]
       }
-      // Remove from topUsers (messaggi)
+   
       if (chat.topUsers && chat.topUsers[user]) {
         delete chat.topUsers[user]
       }
-      // Remove from any other per-chat user tracking
+   
       if (chat.whitelist && chat.whitelist.includes(user)) {
         chat.whitelist = chat.whitelist.filter(u => u !== user)
       }
@@ -42,7 +56,13 @@ export async function before(m, { conn, participants }) {
     }
 
     if (m.messageStubType === 28) {
-      let byeText = chat.sBye || `@${user.split('@')[0]} 𝐡𝐚 𝐥𝐚𝐬𝐜𝐢𝐚𝐭𝐨 𝐢𝐥 𝐠𝐫𝐮𝐩𝐩𝐨`;
+  
+      let byeText;
+      if (chat.sBye) {
+        byeText = chat.sBye;
+      } else {
+        byeText = byeMessages[Math.floor(Math.random() * byeMessages.length)];
+      }
 
       byeText = byeText
         .replace(/@user/g, `@${user.split('@')[0]}`)
