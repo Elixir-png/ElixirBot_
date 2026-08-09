@@ -15,89 +15,6 @@ const byeMessages = [
   `👋 @user se n'è andato/a. Non fare che ti richiamiamo!`
 ];
 
-export async function before(m, { conn, participants }) {
-  if (!m.isGroup) return;
-
-  let chat = global.db.data.chats[m.chat];
-  if (!chat) return;
-
-  let groupMetadata = await conn.groupMetadata(m.chat) || (conn.chats[m.chat] || {}).metadata;
-  let participants_new = m.messageStubParameters || [];
-
-  for (let user of participants_new) {
-   
-    if (m.messageStubType === 28) {
-
-      if (chat.topBlasphemy && chat.topBlasphemy[user]) {
-        delete chat.topBlasphemy[user]
-      }
-  
-      if (chat.topUsers && chat.topUsers[user]) {
-        delete chat.topUsers[user]
-      }
-
-      if (chat.whitelist && chat.whitelist.includes(user)) {
-        chat.whitelist = chat.whitelist.filter(u => u !== user)
-      }
-    }
-
-    let profilePic;
-    try {
-      profilePic = await conn.profilePictureUrl(user, 'image');
-    } catch {
-      profilePic = 'https://telegra.ph/file/8ca14ef9fa43e99d1d196.jpg';
-    }
-
-    let ppBuffer;
-    try {
-      ppBuffer = await (await fetch(profilePic)).buffer();
-    } catch {
-      ppBuffer = await (await fetch('https://telegra.ph/file/8ca14ef9fa43e99d1d196.jpg')).buffer();
-    }
-
-    if (m.messageStubType === 28) {
-    
-      let byeText;
-      if (chat.sBye) {
-        byeText = chat.sBye;
-      } else {
-        byeText = byeMessages[Math.floor(Math.random() * byeMessages.length)];
-      }
-
-      byeText = byeText
-        .replace(/@user/g, `@${user.split('@')[0]}`)
-        .replace(/@group/g, groupMetadata.subject)
-        .replace(/@count/g, groupMetadata.participants.length);
-
-      byeText += `\n\n👥 𝐌𝐞𝐦𝐛𝐫𝐢 𝐫𝐢𝐦𝐚𝐧𝐞𝐧𝐭𝐢: ${groupMetadata.participants.length}`;
-
-      const fakeBye = {
-        key: {
-          participants: '0@s.whatsapp.net',
-          fromMe: false,
-          id: '333Bye'
-        },
-        message: {
-          locationMessage: {
-            name: '𝐀𝐝𝐝𝐢𝐨 👋',
-            jpegThumbnail: ppBuffer.toString('base64'),
-            vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;Bye;;;\nFN:Bye\nEND:VCARD'
-          }
-        },
-        participant: '0@s.whatsapp.net'
-      }
-
-      await conn.sendMessage(m.chat, {
-        text: byeText,
-        mentions: [user]
-      }, { quoted: fakeBye });
-    }
-  }
-}
-
-
-import fetch from 'node-fetch';
-
 const welcomeMessages = {
   buoni: [
     `🎉 Benvenuto @user nel gruppo @group! 🎉
@@ -281,11 +198,26 @@ export async function before(m, { conn, participants }) {
   if (!m.isGroup) return;
 
   let chat = global.db.data.chats[m.chat];
+  if (!chat) return;
 
   let groupMetadata = await conn.groupMetadata(m.chat) || (conn.chats[m.chat] || {}).metadata;
-  let participants_new = m.messageStubParameters;
+  let participants_new = m.messageStubParameters || [];
 
   for (let user of participants_new) {
+    if (m.messageStubType === 28) {
+      if (chat.topBlasphemy && chat.topBlasphemy[user]) {
+        delete chat.topBlasphemy[user];
+      }
+
+      if (chat.topUsers && chat.topUsers[user]) {
+        delete chat.topUsers[user];
+      }
+
+      if (chat.whitelist && chat.whitelist.includes(user)) {
+        chat.whitelist = chat.whitelist.filter(u => u !== user);
+      }
+    }
+
     let profilePic;
     try {
       profilePic = await conn.profilePictureUrl(user, 'image');
@@ -300,13 +232,48 @@ export async function before(m, { conn, participants }) {
       ppBuffer = await (await fetch('https://telegra.ph/file/8ca14ef9fa43e99d1d196.jpg')).buffer();
     }
 
+    if (m.messageStubType === 28) {
+      let byeText;
+      if (chat.sBye) {
+        byeText = chat.sBye;
+      } else {
+        byeText = byeMessages[Math.floor(Math.random() * byeMessages.length)];
+      }
+
+      byeText = byeText
+        .replace(/@user/g, `@${user.split('@')[0]}`)
+        .replace(/@group/g, groupMetadata.subject)
+        .replace(/@count/g, groupMetadata.participants.length);
+
+      byeText += `\n\n👥 𝐌𝐞𝐦𝐛𝐫𝐢 𝐫𝐢𝐦𝐚𝐧𝐞𝐧𝐭𝐢: ${groupMetadata.participants.length}`;
+
+      const fakeBye = {
+        key: {
+          participants: '0@s.whatsapp.net',
+          fromMe: false,
+          id: '333Bye'
+        },
+        message: {
+          locationMessage: {
+            name: '𝐀𝐝𝐝𝐢𝐨 👋',
+            jpegThumbnail: ppBuffer.toString('base64'),
+            vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;Bye;;;\nFN:Bye\nEND:VCARD'
+          }
+        },
+        participant: '0@s.whatsapp.net'
+      };
+
+      await conn.sendMessage(m.chat, {
+        text: byeText,
+        mentions: [user]
+      }, { quoted: fakeBye });
+    }
+
     if (m.messageStubType === 27) {
-  
       let welcomeText;
       if (chat.sWelcome) {
         welcomeText = chat.sWelcome;
       } else {
-     
         const categories = Object.keys(welcomeMessages);
         const randomCategory = categories[Math.floor(Math.random() * categories.length)];
         const messages = welcomeMessages[randomCategory];
@@ -335,7 +302,7 @@ export async function before(m, { conn, participants }) {
           }
         },
         participant: '0@s.whatsapp.net'
-      }
+      };
 
       await conn.sendMessage(m.chat, {
         text: welcomeText,
