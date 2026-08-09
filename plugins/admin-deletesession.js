@@ -60,7 +60,7 @@ const handler = async (message, { conn }) => {
 ┃
 ┃ ${statusContent}
 ┃
-╰━━━━━━━━━━━━━━━━━━━━━━━━━━┈`;
+╰━━━━━━━━━━━━━━━━━━━━━━━┈`;
 
   
   const botName = global.db?.data?.nomedelbot || "𝟴𝟴𝟴 𝗕𝗢𝗧";
