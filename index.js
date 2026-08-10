@@ -12,7 +12,6 @@ process.env.SUPPRESS_BANNER = 'true';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(__dirname);
 
-
 const checkAndInstallModules = () => {
   const nodeModulesPath = join(__dirname, 'node_modules');
 
@@ -209,7 +208,7 @@ async function epicStartup() {
   console.clear();
   console.log('\x1b[32m' + '█'.repeat(70) + '\x1b[0m');
   await sleep(100);
-  
+
   await showNeonBorder(' SISTEMA IN AVVIO ', '\x1b[32m');
   await sleep(200);
 
@@ -272,7 +271,7 @@ async function epicStartup() {
   await sleep(60);
   await typeWriter('                     ▸ Rete: WhatsApp Web Sincronizzato con successo 💬', 30, '\x1b[32m'); 
   await sleep(150);
-  
+
   await typeWriter('\n                     [ SYSTEM ] 888-BOT È ONLINE ED OPERATIVO IN CHAT! 🟢', 20, '\x1b[1;\x1b[32m');
   await sleep(200);
 
