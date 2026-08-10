@@ -25,7 +25,6 @@ global.ignoredUsersGlobal = global.ignoredUsersGlobal || new Set()
 global.ignoredUsersGroup = global.ignoredUsersGroup || {}
 global.groupSpam = global.groupSpam || {}
 global.processedMessages = global.processedMessages || new Set()
-// Pulisce processedMessages ogni 5 minuti per evitare memory leak
 if (!global._processedMessagesCleanupInterval) {
     global._processedMessagesCleanupInterval = setInterval(() => {
         if (global.processedMessages && global.processedMessages.size > 1000) {

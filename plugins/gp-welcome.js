@@ -194,8 +194,16 @@ Buona permanenza.`
   ]
 };
 
+// Guardia anti-doppio: evita di inviare più volte il benvenuto per lo stesso
+// utente quando l'evento arriva più volte da WhatsApp.
+const lastWelcomeSent = new Set();
+
 export async function before(m, { conn, participants }) {
   if (!m.isGroup) return;
+  // Questo plugin gestisce SOLO il benvenuto (stubType 27).
+  // L'addio (stubType 28) è gestito da gp-bye.js: così il messaggio
+  // di addio viene inviato una sola volta, non due.
+  if (m.messageStubType !== 27) return;
 
   let chat = global.db.data.chats[m.chat];
   if (!chat) return;
@@ -204,19 +212,12 @@ export async function before(m, { conn, participants }) {
   let participants_new = m.messageStubParameters || [];
 
   for (let user of participants_new) {
-    if (m.messageStubType === 28) {
-      if (chat.topBlasphemy && chat.topBlasphemy[user]) {
-        delete chat.topBlasphemy[user];
-      }
-
-      if (chat.topUsers && chat.topUsers[user]) {
-        delete chat.topUsers[user];
-      }
-
-      if (chat.whitelist && chat.whitelist.includes(user)) {
-        chat.whitelist = chat.whitelist.filter(u => u !== user);
-      }
-    }
+    // Guardia anti-doppio: l'evento di benvenuto può arrivare più volte
+    // da WhatsApp, quindi evitiamo di inviare il messaggio due volte.
+    const dedupKey = `${m.chat}:${user}`;
+    if (lastWelcomeSent.has(dedupKey)) continue;
+    lastWelcomeSent.add(dedupKey);
+    setTimeout(() => lastWelcomeSent.delete(dedupKey), 5000);
 
     let profilePic;
     try {
@@ -232,82 +233,43 @@ export async function before(m, { conn, participants }) {
       ppBuffer = await (await fetch('https://telegra.ph/file/8ca14ef9fa43e99d1d196.jpg')).buffer();
     }
 
-    if (m.messageStubType === 28) {
-      let byeText;
-      if (chat.sBye) {
-        byeText = chat.sBye;
-      } else {
-        byeText = byeMessages[Math.floor(Math.random() * byeMessages.length)];
-      }
-
-      byeText = byeText
-        .replace(/@user/g, `@${user.split('@')[0]}`)
-        .replace(/@group/g, groupMetadata.subject)
-        .replace(/@count/g, groupMetadata.participants.length);
-
-      byeText += `\n\n👥 𝐌𝐞𝐦𝐛𝐫𝐢 𝐫𝐢𝐦𝐚𝐧𝐞𝐧𝐭𝐢: ${groupMetadata.participants.length}`;
-
-      const fakeBye = {
-        key: {
-          participants: '0@s.whatsapp.net',
-          fromMe: false,
-          id: '333Bye'
-        },
-        message: {
-          locationMessage: {
-            name: '𝐀𝐝𝐝𝐢𝐨 👋',
-            jpegThumbnail: ppBuffer.toString('base64'),
-            vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;Bye;;;\nFN:Bye\nEND:VCARD'
-          }
-        },
-        participant: '0@s.whatsapp.net'
-      };
-
-      await conn.sendMessage(m.chat, {
-        text: byeText,
-        mentions: [user]
-      }, { quoted: fakeBye });
+    let welcomeText;
+    if (chat.sWelcome) {
+      welcomeText = chat.sWelcome;
+    } else {
+      const categories = Object.keys(welcomeMessages);
+      const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+      const messages = welcomeMessages[randomCategory];
+      welcomeText = messages[Math.floor(Math.random() * messages.length)];
     }
 
-    if (m.messageStubType === 27) {
-      let welcomeText;
-      if (chat.sWelcome) {
-        welcomeText = chat.sWelcome;
-      } else {
-        const categories = Object.keys(welcomeMessages);
-        const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-        const messages = welcomeMessages[randomCategory];
-        welcomeText = messages[Math.floor(Math.random() * messages.length)];
-      }
+    welcomeText = welcomeText
+      .replace(/@user/g, `@${user.split('@')[0]}`)
+      .replace(/@group/g, groupMetadata.subject)
+      .replace(/@count/g, groupMetadata.participants.length)
+      .replace(/@desc/g, groupMetadata.desc?.toString() || 'Nessuna descrizione');
 
-      welcomeText = welcomeText
-        .replace(/@user/g, `@${user.split('@')[0]}`)
-        .replace(/@group/g, groupMetadata.subject)
-        .replace(/@count/g, groupMetadata.participants.length)
-        .replace(/@desc/g, groupMetadata.desc?.toString() || 'Nessuna descrizione');
+    welcomeText += `\n\n👥 𝐌𝐞𝐦𝐛𝐫𝐢 𝐧𝐞𝐥 𝐠𝐫𝐮𝐩𝐩𝐨: ${groupMetadata.participants.length}`;
 
-      welcomeText += `\n\n👥 𝐌𝐞𝐦𝐛𝐫𝐢 𝐧𝐞𝐥 𝐠𝐫𝐮𝐩𝐩𝐨: ${groupMetadata.participants.length}`;
+    const fakeWelcome = {
+      key: {
+        participants: '0@s.whatsapp.net',
+        fromMe: false,
+        id: '333Welcome'
+      },
+      message: {
+        locationMessage: {
+          name: '𝐁𝐞𝐧𝐯𝐞𝐧𝐮𝐭𝐨 👋',
+          jpegThumbnail: ppBuffer.toString('base64'),
+          vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;Welcome;;;\nFN:Welcome\nEND:VCARD'
+        }
+      },
+      participant: '0@s.whatsapp.net'
+    };
 
-      const fakeWelcome = {
-        key: {
-          participants: '0@s.whatsapp.net',
-          fromMe: false,
-          id: '333Welcome'
-        },
-        message: {
-          locationMessage: {
-            name: '𝐁𝐞𝐧𝐯𝐞𝐧𝐮𝐭𝐨 👋',
-            jpegThumbnail: ppBuffer.toString('base64'),
-            vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;Welcome;;;\nFN:Welcome\nEND:VCARD'
-          }
-        },
-        participant: '0@s.whatsapp.net'
-      };
-
-      await conn.sendMessage(m.chat, {
-        text: welcomeText,
-        mentions: [user]
-      }, { quoted: fakeWelcome });
-    }
+    await conn.sendMessage(m.chat, {
+      text: welcomeText,
+      mentions: [user]
+    }, { quoted: fakeWelcome });
   }
 }

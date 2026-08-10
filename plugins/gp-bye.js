@@ -15,6 +15,10 @@ const byeMessages = [
   `👋 @user se n'è andato/a. Non fare che ti richiamiamo!`
 ];
 
+// Guardia anti-doppio: evita di inviare più volte l'addio per lo stesso
+// utente quando l'evento arriva più volte da WhatsApp.
+const lastByeSent = new Set();
+
 export async function before(m, { conn, participants }) {
   if (!m.isGroup) return;
 
@@ -25,6 +29,11 @@ export async function before(m, { conn, participants }) {
   let participants_new = m.messageStubParameters || [];
 
   for (let user of participants_new) {
+    // Guardia anti-doppio
+    const dedupKey = `${m.chat}:${user}`;
+    if (lastByeSent.has(dedupKey)) continue;
+    lastByeSent.add(dedupKey);
+    setTimeout(() => lastByeSent.delete(dedupKey), 5000);
 
     if (m.messageStubType === 28) {
 
