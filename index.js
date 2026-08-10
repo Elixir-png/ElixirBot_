@@ -12,10 +12,6 @@ process.env.SUPPRESS_BANNER = 'true';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(__dirname);
 
-// Cartella sessione (default: 888BotSession). Usata per rilevare se esiste già
-// una sessione salvata e quindi attivare l'avvio rapido (senza animazione).
-const SESSION_FOLDER = process.env.BOT_SESSION || '888BotSession';
-const hasSavedSession = existsSync(join(process.cwd(), SESSION_FOLDER, 'creds.json'));
 
 const checkAndInstallModules = () => {
   const nodeModulesPath = join(__dirname, 'node_modules');
@@ -209,21 +205,8 @@ const sparkleLine = async () => {
   await sleep(40);
 };
 
-async function epicStartup(fast = false) {
+async function epicStartup() {
   console.clear();
-
-  // ── AVVIO RAPIDO ──
-  // Se la sessione esiste già il bot si collega subito: niente animazioni,
-  // solo un banner compatto stampato istantaneamente. In questo modo il bot
-  // risulta online immediatamente (evita anche i messaggi "in attesa" che
-  // WhatsApp mette in coda mentre il bot non è ancora connesso).
-  if (fast) {
-    console.log('\x1b[1;32m' + '█'.repeat(70) + '\x1b[0m');
-    console.log('\x1b[1;32m888-BOT\x1b[0m  \x1b[36m● \x1b[0m' + '\x1b[1;32mSessione rilevata — avvio rapido in corso...\x1b[0m');
-    console.log('\x1b[1;32m' + '█'.repeat(70) + '\x1b[0m');
-    return;
-  }
-
   console.log('\x1b[32m' + '█'.repeat(70) + '\x1b[0m');
   await sleep(100);
   
@@ -316,7 +299,7 @@ async function start(file) {
   if (isRunning) return;
   isRunning = true;
 
-  await epicStartup(hasSavedSession);
+  await epicStartup();
 
   const args = [join(__dirname, file), ...process.argv.slice(2)];
 
