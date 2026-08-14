@@ -54,13 +54,10 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
 │ https://chat.whatsapp.com/Dxfu8kYcAhaIVZIVdKwGRc
 │
 │ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟮
-│ https://chat.whatsapp.com/KALEdOncDa7Imw7NTLwYyw
+│ https://chat.whatsapp.com/Cej1V1MzaN68NZO3WHwwmo?s=cl&p=a&mlu=4
 │
 │ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟯
 │ https://chat.whatsapp.com/DjDBrPXWZLOCAoHMA1oNND
-│
-│ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟰
-│ https://chat.whatsapp.com/BTl1RY8cqR4BUeRQIyoAXD
 ╰───⭓`,
         mentions: allJids
     });
