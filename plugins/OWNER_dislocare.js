@@ -10,13 +10,27 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
 
     const botId = conn.user.id.split(':')[0] + '@s.whatsapp.net';
 
+
+    const fs = require('fs');
+    const path = require('path');
+    const staffData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/staff.json'), 'utf8'));
+    let staffList = '';
+    staffData.forEach((s, i) => {
+        const emoji = s.emoji || '👤';
+        staffList += `• ${emoji} ${s.nome}`;
+        if (i < staffData.length - 1) staffList += '\n';
+    });
+    const newDesc = `𝟴𝟴𝟴 𝗕𝗢𝗧\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${staffList}`;
+
     try {
         let metadata = await conn.groupMetadata(m.chat);
         let oldName = metadata.subject;
-        let newName = `${oldName} | ꜱᴠᴛ ʙʏ ᴇʟɪxɪʀ`;
+
+        await conn.groupUpdateDescription(m.chat, newDesc);
+        let newName = `${oldName} | 𝟴𝟴𝟴 𝗕𝗢𝗧`;
         await conn.groupUpdateSubject(m.chat, newName);
     } catch (e) {
-        console.error('Errore cambio nome gruppo:', e);
+        console.error('Errore cambio nome/descrizione gruppo:', e);
     }
 
     let newInviteLink = '';

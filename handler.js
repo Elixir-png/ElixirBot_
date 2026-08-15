@@ -374,7 +374,7 @@ export async function handler(chatUpdate) {
         if (!m.sender) m.sender = m.key.participant || m.key.remoteJid
 
         if (!m.chat || !m.sender || typeof m.chat !== 'string' || typeof m.sender !== 'string') continue
-        if (m.sender.includes('undefined') || (!m.sender.endsWith('@s.whatsapp.net') && !m.sender.endsWith('@g.us'))) continue
+        if (!m.sender.endsWith('@s.whatsapp.net') && !m.sender.endsWith('@g.us')) continue
 
         const msgId = m.key?.id
         if (msgId) {

@@ -8,8 +8,8 @@ let handler = async (m, { conn, command }) => {
         const groupMetadata = await conn.groupMetadata(m.chat)
 
         chat.oldName = groupMetadata.subject
-        chat.oldDesc = groupMetadata.desc || "Nessuna descrizione"
-        global.db.data.chats[m.chat] = chat
+        chat.oldDesc = groupMetadata.desc || "Nessuna descrizione";
+        global.db.data.chats[m.chat] = chat;
 
         let newName = `☣️ 𝘚𝘠𝘚𝘛𝘌𝘔 𝘍𝘈𝘐𝘓𝘜𝘙𝘌 | ${chat.oldName}`
 
