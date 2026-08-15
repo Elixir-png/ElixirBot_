@@ -15,17 +15,24 @@ let handler = async (m, { conn, usedPrefix, text }) => {
   const max = xpNext.max
   const needed = max - min
   const currentIn = exp - min
-  const percent = Math.floor((currentIn / needed) * 100)
+
+
+  const percentCalc = Math.floor((currentIn / needed) * 100)
+  const percent = Math.max(0, Math.min(100, percentCalc))
 
   const totalBars = 12
-  const filledBars = Math.floor((percent / 100) * totalBars)
+
+  const filledBars = Math.max(0, Math.min(totalBars, Math.floor((percent / 100) * totalBars)))
   const emptyBars = totalBars - filledBars
+
   const bar = '█'.repeat(filledBars) + '░'.repeat(emptyBars)
 
   const role = user.role || '🌱 Novizio'
   const messaggi = user.messaggi || 0
   const money = (Number(user.money) || 0) + (Number(user.bank) || 0)
   const rankData = user.rankData || {}
+
+  const xpMancanti = Math.max(0, needed - currentIn)
 
   const resultText = `📊 *POSIZIONE UTENTE*\n` +
     `━━━━━━━━━━━━━━━━━━\n` +
@@ -41,7 +48,7 @@ let handler = async (m, { conn, usedPrefix, text }) => {
     `💬 *Messaggi:* ${messaggi}\n` +
     `💰 *Soldi totali:* ${money}€\n` +
     `━━━━━━━━━━━━━━━━━━\n` +
-    `Mancano *${needed - currentIn} XP* al prossimo livello!`
+    `Mancano *${xpMancanti} XP* al prossimo livello!`
 
   await conn.sendMessage(m.chat, { text: resultText }, { quoted: m })
 }
