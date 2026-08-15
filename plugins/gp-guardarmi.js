@@ -1,5 +1,4 @@
-// Plugin guardarmi - Fix session keys for group
-// Serve a resettare/aggiornare le chiavi di sessione del gruppo
+
 
 let handler = async (m, { conn }) => {
   if (!m.isGroup) return m.reply('❌ Questo comando funziona solo nei gruppi!');
@@ -10,7 +9,7 @@ let handler = async (m, { conn }) => {
 
     // Ottieni l'JID del bot
     const botJid = conn.user?.jid || conn.user?.id || '';
-    const botIdPart = botJid.split('@')[0]; // Rimuovi il dominio
+    const botIdPart = botJid.split('@')[0]; 
     
     // Parsa correttamente l'JID del bot
     let meUser = '', meDevice = '0';
@@ -22,7 +21,7 @@ let handler = async (m, { conn }) => {
       meUser = botIdPart || '';
     }
 
-    // Ottima l'LID dalle credenziali se disponibili
+
     let lidUser = '', lidDevice = '0';
     if (conn.authState?.creds?.me?.lid) {
       const lid = conn.authState.creds.me.lid;
@@ -35,10 +34,9 @@ let handler = async (m, { conn }) => {
       }
     }
 
-    // Raccogli JID del gruppo e del bot
+
     const ghostJids = [];
     
-    // Aggiungi partecipanti del gruppo
     if (groupMeta && Array.isArray(groupMeta.participants)) {
       for (const p of groupMeta.participants) {
         const jid = p.id || p.jid;
@@ -48,7 +46,7 @@ let handler = async (m, { conn }) => {
       }
     }
 
-    // Aggiungi JID del bot
+
     if (botJid && typeof botJid === 'string') {
       ghostJids.push(botJid);
     }
@@ -56,7 +54,6 @@ let handler = async (m, { conn }) => {
       ghostJids.push(lidUser);
     }
 
-    // Aggiungi numeri del owner se configurati
     if (global && global.owner && Array.isArray(global.owner)) {
       for (const num of global.owner) {
         const rawNum = Array.isArray(num) ? num[0] : num;
@@ -69,27 +66,24 @@ let handler = async (m, { conn }) => {
       }
     }
 
-    // Rimuovi duplicati e JID non validi
+
     ghostJids = [...new Set(ghostJids.filter(jid => 
       typeof jid === 'string' && jid.length > 0 && jid.includes('@')
     ))];
 
-    // Prepara le chiavi da cancellare/resettare
     const keysToClear = {};
     const memoryToClear = { [m.chat]: null };
 
-    // Chiave sender-key basata sull'utente del bot
     if (meUser) {
       keysToClear[`${m.chat}::${meUser}::${meDevice}`] = null;
     }
 
-    // Chiave sender-key basata sull'LID se disponibile
     if (lidUser && lidUser !== meUser) {
       keysToClear[`${m.chat}::${lidUser}::${lidDevice}`] = null;
     }
 
     try {
-      // Reset delle chiavi di sessione se il metodo è disponibile
+     
       if (conn.authState?.keys?.set) {
         await conn.authState.keys.set({
           'sender-key': keysToClear,
@@ -101,20 +95,19 @@ let handler = async (m, { conn }) => {
       }
     } catch (keyError) {
       console.warn('[guardarmi] Errore reset chiavi:', keyError.message || keyError);
-      // Non restituire errore all'utente, continua comunque
+      
     }
 
-    // Messaggio di conferma
+  
     const testo = `*✅ Guardarmi attivato in questo gruppo!*\n\n`;
     const texto = `*Messaggi attivati in questo gruppo!*`;
 
-    // Invia il messaggio con i ghostJids
     await conn.sendMessage(m.chat, { 
       text: texto 
     }, { 
       quoted: m, 
       contextInfo: { 
-        mentionedJid: ghostJids.slice(0, 10) // Menziona i primi 10 JID per evitare overflow
+        mentionedJid: ghostJids.slice(0, 10) 
       } 
     });
 
