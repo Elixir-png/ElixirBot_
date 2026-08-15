@@ -3,17 +3,20 @@
 const manually = `𝐆𝐑𝐔𝐏𝐏𝐈 𝐔𝐅𝐅𝐈𝐂𝐈𝐀𝐋𝐈:
 
 ╭───⭓
-│ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟭
+│ 🗨️ ᒪᑌᑎᗩᖇᔕ
 │ https://chat.whatsapp.com/Dxfu8kYcAhaIVZIVdKwGRc
 │
-│ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟮
-│ https://chat.whatsapp.com/KALEdOncDa7Imw7NTLwYyw
-│
-│ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟯
+│ 🗨️ ꪶ爻ꫂ ղҽօղ ꪶ☾ꫂ
 │ https://chat.whatsapp.com/DjDBrPXWZLOCAoHMA1oNND
 │
-│ 🗨️ 𝗚𝗿𝘂𝗽𝗽𝗼 𝟰
-│ https://chat.whatsapp.com/BTl1RY8cqR4BUeRQIyoAXD
+│ 🗨️ 𝓖𝓸𝓬𝓬𝓲𝓸𝓵𝓮
+│ https://chat.whatsapp.com/JODMBEoCYRuCfxp9xhLjR1
+│
+│ 🗨️ Eception🖤⌛️‼️
+│ https://chat.whatsapp.com/DKcxx1fW5hp9gSmHzj4HPw
+│
+│ 🗨️ ᙭ᗩ𝑁𝐴𝑿
+│ https://chat.whatsapp.com/BkhhYNYyiaE19msAf5QDpc
 ╰───⭓`
 import { generateWAMessageFromContent } from '@realvare/baileys'
 const handler = async (m, { args, text }) => {
