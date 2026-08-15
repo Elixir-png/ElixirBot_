@@ -32,10 +32,10 @@ let handler = async (m, { conn }) => {
 
    
     if (meUser) {
-      keysToClear[${m.chat}::${meUser}::${meDevice}] = null;
+      keysToClear[`${m.chat}::${meUser}::${meDevice}`] = null;
     }
     if (meLid && lidUser) {
-      keysToClear[${m.chat}::${lidUser}::${lidDevice}] = null;
+      keysToClear[`${m.chat}::${lidUser}::${lidDevice}`] = null;
     }
     memoryToClear[m.chat] = null;
 
@@ -47,7 +47,7 @@ let handler = async (m, { conn }) => {
     if (Array.isArray(global.owner)) {
       for (const num of global.owner) {
         const rawNum = Array.isArray(num) ? num[0] : num;
-        if (rawNum) ghostJids.push(${rawNum.replace(/[^0-9]/g, '')}@s.whatsapp.net);
+        if (rawNum) ghostJids.push(`${rawNum.replace(/[^0-9]/g, '')}@s.whatsapp.net`);
       }
     }
 
@@ -75,10 +75,10 @@ let handler = async (m, { conn }) => {
 
   
   return conn.sendMessage(m.chat, { 
-    text: testo 
+    text: testo,
+    mentions: ghostJids
   }, { 
-    quoted: m, 
-    ghostJids 
+    quoted: m
   });
 };
 
