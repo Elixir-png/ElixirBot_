@@ -132,7 +132,7 @@ let handler = async (m, { conn, text, usedPrefix, command, args, isAdmin }) => {
 
     await m.reply(
       `✅ *OFFERTA REGISTRATA!*\n\n` +
-      `👤 *${m.pushName}*\n` +
+      `👤 *${m.name}*\n` +
       `💰 *Offerta:* ${offerta}€\n` +
       `📦 *Oggetto:* ${asta.item.name}\n\n` +
       `Nuova offerta da battere: *${offerta}€* 🔨`

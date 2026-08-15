@@ -28,7 +28,7 @@ let handler = async (m, { conn, text, usedPrefix, command, args }) => {
     return m.reply(
       `🛒 *NEGOZIO RPG*\n` +
       `━━━━━━━━━━━━━━━━━━\n` +
-      `👤 *${m.pushName}*\n` +
+      `👤 *${m.name}*\n` +
       `💰 *Soldi disponibili:* ${money}€\n` +
       `━━━━━━━━━━━━━━━━━━\n` +
       `${items}\n` +
@@ -100,7 +100,7 @@ let handler = async (m, { conn, text, usedPrefix, command, args }) => {
     return m.reply(
       `📦 *IL TUO INVENTARIO*\n` +
       `━━━━━━━━━━━━━━━━━━\n` +
-      `👤 *${m.pushName}*\n` +
+      `👤 *${m.name}*\n` +
       `${inventoryList}\n` +
       `${customRole}\n` +
       `━━━━━━━━━━━━━━━━━━`

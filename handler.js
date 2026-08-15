@@ -468,7 +468,7 @@ export async function handler(chatUpdate) {
         if (!global.db.data.users[normalizedSender]) {
             global.db.data.users[normalizedSender] = {
                 exp: 0, euro: 10, muto: false, registered: false,
-                name: m.pushName || '?', age: -1, regTime: -1,
+                name: m.name || '?', age: -1, regTime: -1,
                 banned: false, bank: 0, level: 0, role: 'Novizio',
                 firstTime: Date.now(), spam: 0, messaggi: 0, warn: 0,
                 warnCount: 0, blasphemy: 0, comandiEseguiti: 0,
@@ -997,7 +997,7 @@ export async function deleteUpdate(message) {
 }
 
 global.dfail = async (type, m, conn) => {
-    const nome = m.pushName || 'gab'
+    const nome = m.name || 'gab'
     const etarandom = Math.floor(Math.random() * 21) + 13
     const msg = {
         gab: '𝐐𝐮𝐞𝐬𝐭𝐨 𝐜𝐨𝐦𝐚𝐧𝐝𝐨 𝐞̀ 𝐝𝐢𝐬𝐩𝐨𝐧𝐢𝐛𝐢𝐥𝐞 𝐬𝐨𝐥𝐨 𝐩𝐞𝐫 𝐎𝐰𝐧𝐞𝐫 🕵🏻‍♂️',
