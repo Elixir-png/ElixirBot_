@@ -373,6 +373,24 @@ export async function handler(chatUpdate) {
         if (!m.chat) m.chat = m.key.remoteJid
         if (!m.sender) m.sender = m.key.participant || m.key.remoteJid
 
+        // Normalizza m.sender definitivamente: rimuove ogni traccia di "undefined"
+        if (typeof m.sender === 'string' && m.sender.toLowerCase() === 'undefined') {
+            m.sender = m.key.participant || m.key.remoteJid || ''
+        }
+        // Se m.sender è ancora vuoto o non valido, tenta il recovery
+        if (!m.sender || typeof m.sender !== 'string') {
+            m.sender = m.key.remoteJid || ''
+        }
+
+        // Assicurati che finisca sempre con un dominio WhatsApp valido
+        if (!m.sender.endsWith('@s.whatsapp.net') && !m.sender.endsWith('@g.us')) {
+            // Cerca di estrarre il numero e aggiungere @s.whatsapp.net
+            const extracted = m.sender.replace(/[^0-9]/g, '')
+            if (extracted) {
+                m.sender = extracted + '@s.whatsapp.net'
+            }
+        }
+
         if (!m.chat || !m.sender || typeof m.chat !== 'string' || typeof m.sender !== 'string') continue
         if (!m.sender.endsWith('@s.whatsapp.net') && !m.sender.endsWith('@g.us')) continue
 
