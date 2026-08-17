@@ -748,6 +748,8 @@ global.reloadHandler = async function (restatConn) {
   conn.ev.on('message.delete', conn.onDelete)
   conn.ev.on('call', conn.onCall)
   conn.ev.on('connection.update', conn.connectionUpdate)
+
+
   conn.ev.on('creds.update', conn.credsUpdate)
   isInit = false
   return true

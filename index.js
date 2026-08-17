@@ -355,7 +355,7 @@ async function start(file) {
         return;
       }
 
-      const delay = Math.min(3000 * restartAttempts, 15000);
+      const delay = Math.min(5000 * restartAttempts, 30000);
       console.log(`\x1b[32m↻ Riavvio automatico tra ${delay/1000} secondi... (tentativo ${restartAttempts}/${MAX_RESTART_ATTEMPTS})\x1b[0m\n`);
       setTimeout(() => {
         isRunning = false;
